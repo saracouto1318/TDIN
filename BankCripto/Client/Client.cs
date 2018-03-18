@@ -24,6 +24,10 @@ class Client
         Console.WriteLine(obj.Register(username, password, name));
         // Login user
         Console.WriteLine(obj.Login(username, password));
+
+        // Get user info
+        User user = obj.UserInformation("id");
+        Console.WriteLine("{0}, {1}, name {2}", user.username, user.password, user.name);
     }
 }
 
@@ -43,6 +47,10 @@ class AuthenticationObj : MarshalByRefObject, IUser
     }
 
     public string Register(string username, string password, string name) {
+        return null;
+    }
+
+    public User UserInformation(string sessionId) {
         return null;
     }
 }

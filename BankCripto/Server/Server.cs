@@ -14,8 +14,7 @@ class Server
 
 class AuthenticationObj : MarshalByRefObject, IUser
 {
-    public string Hello()
-    {
+    public string Hello() {
         return "Hello user :)";
     }
 
@@ -59,5 +58,9 @@ class AuthenticationObj : MarshalByRefObject, IUser
         // Store session
         string userSession = authService.StoreSession(username);
         return userSession;
+    }
+    
+    public User UserInformation(string sessionId) {
+        return new User("Username1", "Password1", "Name1");
     }
 }
