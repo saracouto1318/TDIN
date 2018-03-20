@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Runtime.Remoting;
 
-class Client
-{
-    static void Main(string[] args)
-    {
+class Client {
+    static void Main(string[] args) {
         Console.WriteLine("Client starting soon");
         RemotingConfiguration.Configure("Client.exe.config", false);
         AuthenticationObj obj = new AuthenticationObj();
@@ -31,10 +29,8 @@ class Client
     }
 }
 
-class AuthenticationObj : MarshalByRefObject, IUser
-{
-    public string Hello()
-    {
+class AuthenticationObj : MarshalByRefObject, IUser {
+    public string Hello() {
         return null;
     }
         

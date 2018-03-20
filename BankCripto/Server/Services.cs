@@ -27,28 +27,32 @@ public class UserAuthenticationService {
     }
 
     public bool LoginUser(string username, string password) {
-        // Check login pair against db entries
-        // Don't forget to hash it
-        return true;
+        ServiceDao dao = ServiceDao.GetInstance();
+        return dao.LoginUser(username, password);;
     }
 
-    public bool RegisterUser(string username, string password) {
+    public bool RegisterUser(string username, string password, string name) {
         if(!IsValidRegister(username, password))
             return false;
         
-        // Insert data into the db
-        return true;
+        ServiceDao dao = ServiceDao.GetInstance();
+        return dao.RegisterUser(username, password, name);
     }
 
     public string StoreSession(string username) {
         string userSession = System.Guid.NewGuid().ToString();
-        // Store session
+
         StoreSession(username, userSession);
         return userSession;
     }
 
-    public void StoreSession(string username, string sessionid) {
-        // Delete all session with username equal to the one given
-        // Insert session into the db
+    public void StoreSession(string username, string sessionId) {
+        ServiceDao dao = ServiceDao.GetInstance();
+        dao.StoreSession(username, sessionId);
+    }
+
+    public User GetUserInformation(string sessionId) {
+        ServiceDao dao = ServiceDao.GetInstance();
+        return dao.GetUserInformation(sessionId);
     }
 }

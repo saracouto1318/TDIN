@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Runtime.Remoting;
 
-class Server
-{
-    static void Main()
-    {
+class Server {
+    static void Main() {
         Console.WriteLine("Server starting soon");
         RemotingConfiguration.Configure("Server.exe.config", false);
         Console.WriteLine("Press return to exit");
@@ -12,8 +10,7 @@ class Server
     }
 }
 
-class AuthenticationObj : MarshalByRefObject, IUser
-{
+class AuthenticationObj : MarshalByRefObject, IUser {
     public string Hello() {
         return "Hello user :)";
     }
@@ -23,7 +20,8 @@ class AuthenticationObj : MarshalByRefObject, IUser
         Console.WriteLine("Password {0}", password);
 
         // Authenticate params
-        UserAuthenticationService authService = UserAuthenticationService.GetInstance();
+        UserAuthenticationService authService = 
+            UserAuthenticationService.GetInstance();
         bool isValid = authService.LoginUser(username, password);
 
         if(!isValid)
@@ -38,7 +36,8 @@ class AuthenticationObj : MarshalByRefObject, IUser
         Console.WriteLine("Username {0}", username);
 
         // Validate username
-        UserAuthenticationService authService = UserAuthenticationService.GetInstance();
+        UserAuthenticationService authService = 
+            UserAuthenticationService.GetInstance();
         bool isValid = authService.IsValidUsername(username);
 
         return isValid;
@@ -49,8 +48,9 @@ class AuthenticationObj : MarshalByRefObject, IUser
         Console.WriteLine("Password {0}", password);
 
         // Valdiate params
-        UserAuthenticationService authService = UserAuthenticationService.GetInstance();
-        bool isValid = authService.RegisterUser(username, password);
+        UserAuthenticationService authService = 
+            UserAuthenticationService.GetInstance();
+        bool isValid = authService.RegisterUser(username, password, name);
 
         if(!isValid)
             return null;
