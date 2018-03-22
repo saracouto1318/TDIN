@@ -19,7 +19,7 @@ CREATE TABLE Diginote(
 );
 
 CREATE TABLE TransactionDiginote(
-    transactionID int NOT NULL,
+    transactionID int NOT NULL PRIMARY KEY,
     diginoteID int NOT NULL,
     seller varchar(50) NOT NULL,
     buyer varchar(50) NOT NULL,
@@ -31,6 +31,14 @@ CREATE TABLE TransactionDiginote(
         ON DELETE SET NULL
         ON UPDATE CASCADE, 
     FOREIGN KEY (buyer) REFERENCES User(nickname)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE Session(
+    sessionID int NOT NULL PRIMARY KEY,
+    nickname varchar(50) NOT NULL,
+    FOREIGN KEY (nickname) REFERENCES User(nickname)
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
