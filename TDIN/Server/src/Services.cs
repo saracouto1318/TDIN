@@ -30,12 +30,20 @@ public class UserAuthenticationService {
         //ServiceDao dao = ServiceDao.GetInstance();
         //return dao.LoginUser(username, password);;
         //return Database.Database.GetInstance().LoginUser();
+
+        if(!Database.Database.GetInstance().CheckUser(username, password))
+            return false;
+
         return true;
     }
 
     public bool RegisterUser(string username, string password, string name) {
         if(!IsValidRegister(username, password))
             return false;
+
+        if (Database.Database.GetInstance().CheckUser(username, password))
+            return false;
+
         return Database.Database.GetInstance().InsertUser(name, username, password);
     }
 

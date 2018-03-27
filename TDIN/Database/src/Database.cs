@@ -15,7 +15,7 @@ namespace Database
         private SQLiteDataReader reader;
 
         public static string DBPath = "database.sql";
-        public static string SQLPath = "database.sql";
+        public static string SQLPath = "database.sqlite";
 
         public struct UserInfo
         {
@@ -80,6 +80,25 @@ namespace Database
                 connection.Close();
 
                 return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool CheckUser(string username, string password)
+        {
+            try
+            {
+                command.CommandText = "SELECT nickname FROM User WHERE nickname = @nick AND password = @pass ";
+                command.Parameters.Add(new SQLiteParameter("@nick", username));
+                command.Parameters.Add(new SQLiteParameter("@pass", password));
+                reader = command.ExecuteReader();
+
+                if (reader.Read())
+                    return true;
+                return false;
             }
             catch (Exception e)
             {

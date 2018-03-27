@@ -48,6 +48,8 @@ namespace BankClient
             string username = UsernameLog.Text;
             string password = PasswordLog.Text;
 
+            this.label1.Visible = true;
+
             AuthenticationObj authObj = Program.GetAuthObj();
 
             // Validate username
@@ -61,6 +63,12 @@ namespace BankClient
             {
                 Program.ChangeForm(this, new MainPage(session));
             }
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

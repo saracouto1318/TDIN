@@ -3,4 +3,3 @@ C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\bin\Debug\Shared.pdb
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.csproj.CoreCompileInputs.cache
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.dll
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.pdb
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.csprojResolveAssemblyReference.cache
