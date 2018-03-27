@@ -9,3 +9,9 @@ C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.cspro
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.csproj.CoreCompileInputs.cache
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared2.dll
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared2.pdb
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\bin\Debug\Shared2.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\bin\Debug\Shared2.pdb
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared.csprojResolveAssemblyReference.cache
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared.csproj.CoreCompileInputs.cache
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared2.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared2.pdb

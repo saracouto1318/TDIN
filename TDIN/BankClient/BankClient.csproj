@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shared">
-      <HintPath>..\Shared\bin\Debug\Shared.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -70,7 +67,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Client.exe.config" />
     <None Include="Properties\Settings.settings" />
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +80,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="src\BankClient.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{edfe9c7e-bcfd-4622-91f0-d33c74491cc4}</Project>
+      <Name>Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -27,16 +27,16 @@ public class UserAuthenticationService {
     }
 
     public bool LoginUser(string username, string password) {
-        ServiceDao dao = ServiceDao.GetInstance();
-        return dao.LoginUser(username, password);;
+        //ServiceDao dao = ServiceDao.GetInstance();
+        //return dao.LoginUser(username, password);;
+        //return Database.Database.GetInstance().LoginUser();
+        return true;
     }
 
     public bool RegisterUser(string username, string password, string name) {
         if(!IsValidRegister(username, password))
             return false;
-        
-        ServiceDao dao = ServiceDao.GetInstance();
-        return dao.RegisterUser(username, password, name);
+        return Database.Database.GetInstance().InsertUser(name, username, password);
     }
 
     public string StoreSession(string username) {
