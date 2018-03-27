@@ -1,1 +1,3 @@
 # TDIN
+
+    Para se usar a base de dados, tem que se adicionar o .dll que está na pasta Database às referências. Sempre que se quiser usar algo da pasta Database que é uma biblioteca de classes, basta ir buscar Database.dll que está na pasta Database/bin/Debug e adicionar às referências dos outros projetos. O mesmo acontece com as classes que se encontram em Shared (adicionar Shared.dll às referências dos outros mini-projetos)

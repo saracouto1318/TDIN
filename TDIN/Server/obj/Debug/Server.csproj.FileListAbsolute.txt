@@ -1,0 +1,17 @@
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\bin\Debug\TDIN.exe.config
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\bin\Debug\TDIN.exe
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\bin\Debug\TDIN.pdb
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\bin\Debug\Shared.dll
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\Server.csproj.CopyComplete
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\TDIN.exe
+C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\TDIN.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\TDIN.exe.config
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\TDIN.exe
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\TDIN.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csproj.CopyComplete
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\TDIN.exe
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\TDIN.pdb
