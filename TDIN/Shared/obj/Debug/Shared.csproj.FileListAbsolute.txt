@@ -1,17 +1,6 @@
-C:\Users\Sara Fernandes\Documents\TDIN\Shared2\bin\Debug\Shared2.dll
-C:\Users\Sara Fernandes\Documents\TDIN\Shared2\bin\Debug\Shared2.pdb
-C:\Users\Sara Fernandes\Documents\TDIN\Shared2\obj\Debug\Shared.csproj.CoreCompileInputs.cache
-C:\Users\Sara Fernandes\Documents\TDIN\Shared2\obj\Debug\Shared2.dll
-C:\Users\Sara Fernandes\Documents\TDIN\Shared2\obj\Debug\Shared2.pdb
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\bin\Debug\Shared2.dll
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\bin\Debug\Shared2.pdb
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.csprojResolveAssemblyReference.cache
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\bin\Debug\Shared.dll
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\bin\Debug\Shared.pdb
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.csproj.CoreCompileInputs.cache
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared2.dll
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared2.pdb
-C:\Users\vasco\Documents\TDIN\TDIN\Shared\bin\Debug\Shared2.dll
-C:\Users\vasco\Documents\TDIN\TDIN\Shared\bin\Debug\Shared2.pdb
-C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared.csprojResolveAssemblyReference.cache
-C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared.csproj.CoreCompileInputs.cache
-C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared2.dll
-C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared2.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.dll
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.csprojResolveAssemblyReference.cache

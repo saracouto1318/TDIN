@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1D08D02D-1351-4E99-ADD7-5A354BF9C771}</ProjectGuid>
+    <ProjectGuid>{2E22697F-FF33-4724-81B2-E3AAB432DF29}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>TDIN</RootNamespace>
-    <AssemblyName>TDIN</AssemblyName>
+    <RootNamespace>Server</RootNamespace>
+    <AssemblyName>Server</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,8 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Database">
+      <HintPath>..\Database\bin\Debug\Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Shared">
+      <HintPath>..\Shared\bin\Debug\Shared.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Xml.Linq" />
@@ -51,16 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Database\Database.csproj">
-      <Project>{29b3960d-778f-45aa-b1de-89d25878fc79}</Project>
-      <Name>Database</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Shared\Shared.csproj">
-      <Project>{edfe9c7e-bcfd-4622-91f0-d33c74491cc4}</Project>
-      <Name>Shared</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

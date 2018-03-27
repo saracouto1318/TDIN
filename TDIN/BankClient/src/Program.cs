@@ -14,7 +14,7 @@ namespace BankClient
         [STAThread]
         static void Main()
         {
-            RemotingConfiguration.Configure("App.config", false);
+            RemotingConfiguration.Configure("BankClient.exe.config", false);
             authObj = new AuthenticationObj();
 
             Application.EnableVisualStyles();

@@ -14,3 +14,6 @@ C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Client\obj\Debug\Client.cspro
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Client\obj\Debug\Client.csproj.CopyComplete
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Client\obj\Debug\Client.exe
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Client\obj\Debug\Client.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Client\bin\Debug\Shared.dll
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Client\bin\Debug\Shared.pdb

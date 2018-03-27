@@ -4,7 +4,7 @@ using System.Runtime.Remoting;
 class Server {
     static void Main() {
         Console.WriteLine("Server starting soon");
-        RemotingConfiguration.Configure("App.config", false);
+        RemotingConfiguration.Configure("Server.exe.config", false);
         Console.WriteLine("Press return to exit");
         Console.ReadLine();
     }

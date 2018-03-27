@@ -1,27 +1,16 @@
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\bin\Debug\TDIN.exe.config
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\bin\Debug\TDIN.exe
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\bin\Debug\TDIN.pdb
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\bin\Debug\Shared.dll
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\Server.csprojResolveAssemblyReference.cache
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\Server.csproj.CoreCompileInputs.cache
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\Server.csproj.CopyComplete
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\TDIN.exe
-C:\Users\Sara Fernandes\Documents\TDIN\TDIN\obj\Debug\TDIN.pdb
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\TDIN.exe.config
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\TDIN.exe
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\TDIN.pdb
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\Server.exe.config
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\Server.exe
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\Server.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\Database.dll
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\Shared.dll
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\System.Data.SQLite.dll
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\Database.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\Database.dll.config
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\Shared.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\System.Data.SQLite.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\bin\Debug\System.Data.SQLite.dll.config
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csproj.CopyComplete
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\TDIN.exe
-C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\TDIN.pdb
-C:\Users\vasco\Documents\TDIN\TDIN\Server\bin\Debug\TDIN.exe.config
-C:\Users\vasco\Documents\TDIN\TDIN\Server\bin\Debug\TDIN.exe
-C:\Users\vasco\Documents\TDIN\TDIN\Server\bin\Debug\TDIN.pdb
-C:\Users\vasco\Documents\TDIN\TDIN\Server\bin\Debug\Shared2.dll
-C:\Users\vasco\Documents\TDIN\TDIN\Server\bin\Debug\Shared2.pdb
-C:\Users\vasco\Documents\TDIN\TDIN\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
-C:\Users\vasco\Documents\TDIN\TDIN\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
-C:\Users\vasco\Documents\TDIN\TDIN\Server\obj\Debug\Server.csproj.CopyComplete
-C:\Users\vasco\Documents\TDIN\TDIN\Server\obj\Debug\TDIN.exe
-C:\Users\vasco\Documents\TDIN\TDIN\Server\obj\Debug\TDIN.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.exe
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.pdb

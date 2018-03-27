@@ -6,3 +6,6 @@ C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Database\obj\Debug\Database.c
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Database\obj\Debug\Database.csproj.CopyComplete
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Database\obj\Debug\Database.dll
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Database\obj\Debug\Database.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Database\bin\Debug\Database.dll.config
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Database\bin\Debug\System.Data.SQLite.pdb
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Database\bin\Debug\System.Data.SQLite.dll.config
