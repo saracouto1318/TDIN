@@ -248,5 +248,54 @@ namespace Database
                 return userInfo;
             }
         }
+
+        public bool ChangeName(string name, string nickname)
+        {
+            try
+            {
+                command.CommandText = "UPDATE User SET name=@name WHERE nickname=@nick";
+                command.Parameters.Add(new SQLiteParameter("@name", name));
+                command.Parameters.Add(new SQLiteParameter("@nick", nickname));
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool ChangeUsername(string newNickname, string oldNickname)
+        {
+            try
+            {
+                command.CommandText = "UPDATE User SET nickname=@nickNew WHERE nickname=@nickOld";
+                command.Parameters.Add(new SQLiteParameter("@nickNew", newNickname));
+                command.Parameters.Add(new SQLiteParameter("@nickOld", oldNickname));
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool ChangePassword(string password, string nickname)
+        {
+            try
+            {
+                command.CommandText = "UPDATE User SET password=@pass WHERE nickname=@nick";
+                command.Parameters.Add(new SQLiteParameter("@pass", password));
+                command.Parameters.Add(new SQLiteParameter("@nick", nickname));
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
     }
 }
