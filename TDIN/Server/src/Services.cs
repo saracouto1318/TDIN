@@ -41,9 +41,6 @@ public class UserAuthenticationService {
         if(!IsValidRegister(username, password))
             return false;
 
-        if (Database.Database.GetInstance().CheckUser(username, password))
-            return false;
-
         return Database.Database.GetInstance().InsertUser(name, username, password);
     }
 

@@ -42,7 +42,8 @@ namespace Database
         {
             if (!File.Exists(DBPath))
                 SQLiteConnection.CreateFile(DBPath);
-            
+
+            Console.Write(DBPath);
             connection = new SQLiteConnection("Data Source=" + DBPath + ";Version=3;");
 
             command = new SQLiteCommand(connection);
@@ -69,6 +70,7 @@ namespace Database
         {
             try
             {
+                Console.Write(name + " " + nickname + " " + password);
                 connection.Open();
 
                 command.CommandText = "INSERT INTO User(nickname, name, password) VALUES (@nick, @name, @password)";

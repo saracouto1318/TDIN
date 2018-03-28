@@ -45,9 +45,9 @@ namespace BankClient
             Console.WriteLine("Register");
 
             string name = NameOfUser.Text;
-            string username = UsernameLog.Text;
-            string password = PasswordLog.Text;
-
+            string username = UsernameReg.Text;
+            string password = PasswordReg.Text;
+            
             this.label1.Visible = true;
 
             AuthenticationObj authObj = Program.GetAuthObj();
