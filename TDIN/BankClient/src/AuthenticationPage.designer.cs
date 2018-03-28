@@ -89,6 +89,7 @@
             this.PasswordReg.Location = new System.Drawing.Point(132, 148);
             this.PasswordReg.Margin = new System.Windows.Forms.Padding(2);
             this.PasswordReg.Name = "PasswordReg";
+            this.PasswordReg.PasswordChar = '*';
             this.PasswordReg.Size = new System.Drawing.Size(176, 29);
             this.PasswordReg.TabIndex = 5;
             // 
@@ -144,6 +145,7 @@
             this.PasswordLog.Location = new System.Drawing.Point(121, 129);
             this.PasswordLog.Margin = new System.Windows.Forms.Padding(2);
             this.PasswordLog.Name = "PasswordLog";
+            this.PasswordLog.PasswordChar = '*';
             this.PasswordLog.Size = new System.Drawing.Size(176, 29);
             this.PasswordLog.TabIndex = 1;
             // 
