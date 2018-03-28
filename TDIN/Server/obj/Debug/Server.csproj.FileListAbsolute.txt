@@ -1,0 +1,2 @@
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
