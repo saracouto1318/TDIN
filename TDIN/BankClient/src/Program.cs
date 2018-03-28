@@ -20,7 +20,7 @@ namespace BankClient
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            new AuthenticationPage().Show();
+            new MainPage("1").Show();
 
             Application.Run();
         }
