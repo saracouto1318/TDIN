@@ -60,6 +60,8 @@ namespace BankClient
             this.label2.Text = "New Password";
             this.label1.Visible = true;
             this.label2.Visible = true;
+            this.textBox1.Visible = true;
+            this.textBox2.Visible = true;
             this.button2.Visible = false;
             this.button3.Visible = false;
             this.button1.Visible = true;
@@ -78,6 +80,8 @@ namespace BankClient
             this.label2.Text = "New Username";
             this.label1.Visible = true;
             this.label2.Visible = true;
+            this.textBox1.Visible = true;
+            this.textBox2.Visible = true;
             this.button1.Visible = false;
             this.button3.Visible = false;
             this.button2.Visible = true;
@@ -97,6 +101,8 @@ namespace BankClient
             this.label2.Text = "New Name";
             this.label1.Visible = true;
             this.label2.Visible = true;
+            this.textBox1.Visible = true;
+            this.textBox2.Visible = true;
             this.button1.Visible = false;
             this.button2.Visible = false;
             this.button3.Visible = true;
