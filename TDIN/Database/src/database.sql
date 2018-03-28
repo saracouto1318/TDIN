@@ -20,8 +20,8 @@ CREATE TABLE Diginote(
 CREATE TABLE TransactionDiginote(
     transactionID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     diginoteID int NOT NULL,
-    seller varchar(50) NOT NULL,
-    buyer varchar(50) NOT NULL,
+    seller varchar(50),
+    buyer varchar(50),
     price real NOT NULL,
     FOREIGN KEY (diginoteID) REFERENCES Diginote(serialNumber)
         ON DELETE SET NULL

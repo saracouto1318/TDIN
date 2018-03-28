@@ -26,6 +26,14 @@ namespace Database
             public int numTransactions;
         }
 
+        public struct TransactionInfo
+        {
+            public int ID;
+            public double value;
+            public string buyer;
+            public string seller;
+        }
+
         private Database()
         {
             StartDB();
@@ -221,6 +229,23 @@ namespace Database
             }
         }
 
+        public double GetValue()
+        {
+            double value = 0;
+            try{
+                command.CommandText = "SELECT power FROM Value";
+                reader = command.ExecuteReader();
+
+                if (reader.Read())
+                    value += reader.GetDouble(0);
+                return value;
+            }
+            catch(Exception e)
+            {
+                return value;
+            }
+        }
+
         public UserInfo GetUserInfo(string nickname)
         {
             UserInfo userInfo;
@@ -248,6 +273,42 @@ namespace Database
             }
             catch (Exception e) {
                 return userInfo;
+            }
+        }
+
+        public List<TransactionInfo> GetTransactions(string type, bool open, string nickname)
+        {
+            List<TransactionInfo> transactions = new List<TransactionInfo>();
+            
+            try
+            {
+                if(type == "all")
+                    command.CommandText = "SELECT * FROM Transaction WHERE buyer = @nick OR seller = @nick";
+                else if(type == "buy" && open)
+                    command.CommandText = "SELECT * FROM Transaction WHERE buyer = @nick AND seller IS NULL";
+                else if (type == "buy" && !open)
+                    command.CommandText = "SELECT * FROM Transaction WHERE buyer = @nick AND seller IS NOT NULL";
+                else if (type == "sell" && open)
+                    command.CommandText = "SELECT * FROM Transaction WHERE seller = @nick AND buyer IS NULL";
+                else if (type == "sell" && !open)
+                    command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller = @nick AND buyer IS NOT NULL";
+                command.Parameters.Add(new SQLiteParameter("@nick", nickname));
+                reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    TransactionInfo info;
+                    info.ID = reader.GetInt32(0);
+                    info.buyer = reader.GetString(3);
+                    info.seller = reader.GetString(2);
+                    info.value = reader.GetDouble(4) * this.GetValue();
+                }
+
+                return transactions;
+            }
+            catch (Exception e)
+            {
+                return null;
             }
         }
 
