@@ -1,3 +1,4 @@
+C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\bin\Debug\Shared.dll.config
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\bin\Debug\Shared.dll
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\bin\Debug\Shared.pdb
 C:\Users\Sara Fernandes\Documents\GitHub\TDIN\TDIN\Shared\obj\Debug\Shared.csproj.CoreCompileInputs.cache

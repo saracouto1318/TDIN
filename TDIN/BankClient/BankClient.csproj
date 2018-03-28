@@ -60,13 +60,37 @@
     <Compile Include="src\AuthenticationPage.designer.cs">
       <DependentUpon>AuthenticationPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\MainPage.cs">
+    <Compile Include="src\CreateEditOrder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\MainPage.Designer.cs">
-      <DependentUpon>MainPage.cs</DependentUpon>
+    <Compile Include="src\CreateEditOrder.Designer.cs">
+      <DependentUpon>CreateEditOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\EditProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\EditProfile.Designer.cs">
+      <DependentUpon>EditProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\OrdersList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\OrdersList.Designer.cs">
+      <DependentUpon>OrdersList.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Program.cs" />
+    <Compile Include="src\StatisticsPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\StatisticsPage.Designer.cs">
+      <DependentUpon>StatisticsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\UserMainPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\UserMainPage.Designer.cs">
+      <DependentUpon>UserMainPage.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -77,8 +101,20 @@
     <EmbeddedResource Include="src\AuthenticationPage.resx">
       <DependentUpon>AuthenticationPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\MainPage.resx">
-      <DependentUpon>MainPage.cs</DependentUpon>
+    <EmbeddedResource Include="src\CreateEditOrder.resx">
+      <DependentUpon>CreateEditOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\EditProfile.resx">
+      <DependentUpon>EditProfile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\OrdersList.resx">
+      <DependentUpon>OrdersList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\StatisticsPage.resx">
+      <DependentUpon>StatisticsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\UserMainPage.resx">
+      <DependentUpon>UserMainPage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
