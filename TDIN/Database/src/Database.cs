@@ -80,7 +80,7 @@ namespace Database
         
         public bool DeleteDB()
         {
-            command.CommandText = "DELETE FROM User; DELETE FROM Value; DELETE FROM Diginote; DELETE FROM TransactionDiginote; DELETE FROM Session";
+            command.CommandText = "DELETE FROM User; DELETE FROM Value; DELETE FROM Diginote; DELETE FROM Transactions; DELETE FROM TransactionDiginote; DELETE FROM Session";
 
             try
             {
@@ -369,23 +369,19 @@ namespace Database
 
         #region Transaction
 
-        public bool InsertTransaction(int serialNumber, int nDiginotes)
+        public bool InsertTransaction(int nDiginotes, string buyer, string seller)
         {
-            for (int i = 0; i < nDiginotes; i++)
-                command.CommandText += "INSERT INTO Transaction(diginoteID, seller, buyer, price, quantity) VALUES (@serial, @seller, @buyer, @price, @quantity)";
-
-            command.Parameters.Add(new SQLiteParameter("@serial", serialNumber));
-            command.Parameters.Add(new SQLiteParameter("@seller", null));
-            command.Parameters.Add(new SQLiteParameter("@buyer", null));
-            command.Parameters.Add(new SQLiteParameter("@price", nDiginotes * this.GetValue()));
-            command.Parameters.Add(new SQLiteParameter("@quantity", nDiginotes));
-
             try
             {
+                command.CommandText = "INSERT INTO Transactions(seller, buyer, price) VALUES (@seller, @buyer, @price)";
+                command.Parameters.Add(new SQLiteParameter("@seller", buyer));
+                command.Parameters.Add(new SQLiteParameter("@buyer", seller));
+                command.Parameters.Add(new SQLiteParameter("@price", nDiginotes * this.GetValue()));
+
                 transaction = connection.BeginTransaction();
                 command.ExecuteNonQuery();
                 transaction.Commit();
-
+ 
                 return true;
             }
             catch (SQLiteException e)
@@ -413,6 +409,13 @@ namespace Database
                 if (diginotes.Count < nDiginotes)
                     return false;
 
+                command.CommandText = "SELECT transactionID FROM Transactions WHERE diginoteID = @serial";
+                command.Parameters.Add(new SQLiteParameter("@serial", diginotes[0]));
+
+                int ID = 0;
+                if (reader.Read())
+                    ID += reader.GetDouble(0);
+
                 transaction = connection.BeginTransaction();
 
                 foreach (int diginote in diginotes)
@@ -422,11 +425,16 @@ namespace Database
                     command.Parameters.Add(new SQLiteParameter("@serial", diginote));
                     command.ExecuteNonQuery();
 
-                    command.CommandText = "UPDATE TransactionDiginote SET buyer=@buyer, seller=@seller, price=@price WHERE diginoteID=@serial";
+                    command.CommandText = "UPDATE Transactions SET buyer=@buyer, seller=@seller, price=@price WHERE Transactions.transactionID = (SELECT TransactionDiginote.transactionID FROM TransactionDiginote WHERE diginoteID=@serial)";
                     command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
                     command.Parameters.Add(new SQLiteParameter("@seller", seller));
                     command.Parameters.Add(new SQLiteParameter("@price", nDiginotes * this.GetValue()));
                     command.Parameters.Add(new SQLiteParameter("@serial", diginote));
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transID, @digiID)";
+                    command.Parameters.Add(new SQLiteParameter("@transID", ID));
+                    command.Parameters.Add(new SQLiteParameter("@digiID", diginote));
                     command.ExecuteNonQuery();
                 }
 
