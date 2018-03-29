@@ -47,7 +47,7 @@ class AuthenticationObj : MarshalByRefObject, IUser
         return null;
     }
 
-    public string Login(string username, string password)
+    public UserSession Login(string username, string password)
     {
         return null;
     }
@@ -57,7 +57,7 @@ class AuthenticationObj : MarshalByRefObject, IUser
         return false;
     }
 
-    public string Register(string username, string password, string name)
+    public UserSession Register(string username, string password, string name)
     {
         return null;
     }

@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,20 +8,17 @@ namespace BankClient
     {
         private enum MainPageState { ASYNC_CALL, IDDLE };
         private MainPageState status = MainPageState.IDDLE;
+        
+        private UserSession session;
+        private User user;
 
-        private string username = "";
-        private string name = "";
-        private string sessionId;
-
-        public MainPage(string sessionId)
+        public MainPage(UserSession sessionId)
         {
             InitializeComponent();
-        
-            this.sessionId = sessionId;
-
+            this.session = sessionId;
             GetUserInforamtionAsync();
         }
-
+        
         private async void GetUserInforamtionAsync()
         {
             status = MainPageState.ASYNC_CALL;
@@ -37,19 +28,14 @@ namespace BankClient
         }
 
         private void GetUserInformation() {
-            User user = Program.GetAuthObj().UserInformation(sessionId);
-            if(user != null)
-            {
-                username = user.username;
-                name = user.name;
-            }
+            user = Program.GetAuthObj().UserInformation(session.sessionId);
         }
 
         private void UpdateUserProfile()
         {
-            userName.Text = name;
-            NameLabel.Text = name;
-            UsernameLabel.Text = username;
+            userName.Text = user.name;
+            NameLabel.Text = user.name;
+            UsernameLabel.Text = user.username;
         }
 
         private void PasswordBtn_Click(object sender, EventArgs e)
@@ -111,21 +97,6 @@ namespace BankClient
             string newName = label2.Text;
 
             AuthenticationObj authObj = Program.GetAuthObj();
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
 
         }
     }

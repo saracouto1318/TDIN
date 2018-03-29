@@ -37,17 +37,23 @@ public class UserAuthenticationService {
         return Database.Database.GetInstance().InsertUser(name, username, password);
     }
 
-    public string StoreSession(string username) {
+    public UserSession StoreSession(string username) {
         string userSession = System.Guid.NewGuid().ToString();
-
-        StoreSession(username, userSession);
-        return userSession;
+        if (!StoreSession(username, userSession))
+            return null;
+        return new UserSession(username, userSession);
     }
 
-    public void StoreSession(string username, string sessionId) {
+    private bool StoreSession(string username, string sessionId) {
+        Database.Database.GetInstance().DeleteSession(username);
+        return Database.Database.GetInstance().InsertSession(username, sessionId);
     }
 
     public User GetUserInformation(string sessionId) {
-        return null;
+        string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        if (username == null)
+            return null;
+        User user = Database.Database.GetInstance().GetUserInfo(username);
+        return user;
     }
 }

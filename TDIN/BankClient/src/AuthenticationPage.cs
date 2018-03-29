@@ -34,12 +34,15 @@ namespace BankClient
                 return;
             }
             // Login user
-            String session = authObj.Login(username, password);
+            UserSession session = authObj.Login(username, password);
             if (session != null)
             {
                 Console.WriteLine("Session not null");
                 Program.ChangeForm(this, new MainPage(session));
+                return;
             }
+
+            Console.WriteLine("Shit login");
             label2.Visible = true;
         }
 
@@ -61,13 +64,15 @@ namespace BankClient
                 return;
             }
             // Register user
-            String session = authObj.Register(username, password, name);
+            UserSession session = authObj.Register(username, password, name);
             if (session != null)
             {
                 Console.WriteLine("Session not null");
                 Program.ChangeForm(this, new MainPage(session));
+                return;
             }
 
+            Console.WriteLine("Shit register");
             label1.Visible = true;
         }
 

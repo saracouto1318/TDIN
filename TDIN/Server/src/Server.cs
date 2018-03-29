@@ -16,7 +16,7 @@ public class AuthenticationObj : MarshalByRefObject, IUser
         return "Hello user :)";
     }
 
-    public string Login(string username, string password)
+    public UserSession Login(string username, string password)
     {
         Console.WriteLine("Username {0}", username);
         Console.WriteLine("Password {0}", password);
@@ -26,11 +26,17 @@ public class AuthenticationObj : MarshalByRefObject, IUser
             UserAuthenticationService.GetInstance();
         bool isValid = authService.LoginUser(username, password);
 
+        Console.WriteLine("Valid login: {0}", isValid);
+
         if (!isValid)
             return null;
 
         // Store session
-        string userSession = authService.StoreSession(username);
+        UserSession userSession = authService.StoreSession(username);
+        if (userSession == null)
+            Console.WriteLine("User session null");
+        else
+            Console.WriteLine("User session {0} {1}", userSession.sessionId, userSession.username);
         return userSession;
     }
 
@@ -46,7 +52,7 @@ public class AuthenticationObj : MarshalByRefObject, IUser
         return isValid;
     }
 
-    public string Register(string username, string password, string name)
+    public UserSession Register(string username, string password, string name)
     {
         Console.WriteLine("Username {0}", username);
         Console.WriteLine("Password {0}", password);
@@ -56,16 +62,22 @@ public class AuthenticationObj : MarshalByRefObject, IUser
             UserAuthenticationService.GetInstance();
         bool isValid = authService.RegisterUser(username, password, name);
 
+        Console.WriteLine("Valid register: {0}", isValid);
+
         if (!isValid)
             return null;
 
         // Store session
-        string userSession = authService.StoreSession(username);
+        UserSession userSession = authService.StoreSession(username);
+        if (userSession == null)
+            Console.WriteLine("User session null");
+        else
+            Console.WriteLine("User session {0} {1}", userSession.sessionId, userSession.username);
         return userSession;
     }
 
     public User UserInformation(string sessionId)
     {
-        return new User("Username1", "Password1", "Name1");
+        return new User("Username1", "Password1", "Name1", 0, 0);
     }
 }

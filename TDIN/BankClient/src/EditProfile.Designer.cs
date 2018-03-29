@@ -204,7 +204,6 @@
             this.button1.Text = "Edit Password";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -215,7 +214,6 @@
             this.button2.Text = "Edit Username";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Visible = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
@@ -226,7 +224,6 @@
             this.button3.Text = "Edit Name";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Visible = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // MainPage
             // 
