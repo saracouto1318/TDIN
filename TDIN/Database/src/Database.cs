@@ -65,7 +65,7 @@ namespace Database
                 command.CommandText = "DELETE FROM User; DELETE FROM Value; DELETE FROM Diginote; DELETE FROM TransactionDiginote; DELETE FROM Session";
                 command.ExecuteNonQuery();
                 transaction.Commit();
-
+                
                 return true;
             }
             catch (Exception e) {
@@ -88,7 +88,7 @@ namespace Database
 
                 command.ExecuteNonQuery();
                 connection.Close();
-
+                
                 return true;
             }
             catch (Exception e)
@@ -128,7 +128,7 @@ namespace Database
 
                 command.ExecuteNonQuery();
                 connection.Close();
-
+                
                 return true;
             }
             catch (Exception e) {
@@ -146,7 +146,7 @@ namespace Database
                     InsertDiginote(nickname);
 
                 transaction.Commit();
-
+                
                 return true;
             }
             catch (Exception e) {
@@ -254,7 +254,7 @@ namespace Database
             userInfo.password = "";
             userInfo.numDiginotes = 0;
             userInfo.numTransactions = 0;
-
+            
             try
             {
                 command.CommandText = "SELECT nickname, name, password, COUNT(serialNumber), COUNT(transactionID) FROM User, Diginote, Transaction WHERE User.nickname = @nick AND User.nickname = Diginote.nickname AND (Transaction.seller = User.nickname OR Transaction.buyer = User.nickname)";
@@ -268,7 +268,7 @@ namespace Database
                     userInfo.numDiginotes = reader.GetInt32(3);
                     userInfo.numTransactions = reader.GetInt32(4);
                 }
-
+                
                 return userInfo;
             }
             catch (Exception e) {

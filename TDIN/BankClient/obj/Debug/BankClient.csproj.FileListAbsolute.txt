@@ -7,8 +7,6 @@ C:\Users\Sara Fernandes\Documents\TDIN\BankClient\obj\Debug\BankClient.csproj.Co
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\bin\Debug\BankClient.exe.config
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\bin\Debug\BankClient.exe
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\bin\Debug\BankClient.pdb
-C:\Users\vasco\Documents\TDIN\TDIN\BankClient\bin\Debug\Shared2.dll
-C:\Users\vasco\Documents\TDIN\TDIN\BankClient\bin\Debug\Shared2.pdb
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.csprojResolveAssemblyReference.cache
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.Properties.Resources.resources
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.AuthenticationPage.resources
@@ -18,3 +16,10 @@ C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.csproj.CoreCo
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.csproj.CopyComplete
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.exe
 C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.pdb
+C:\Users\vasco\Documents\TDIN\TDIN\BankClient\bin\Debug\Shared.dll
+C:\Users\vasco\Documents\TDIN\TDIN\BankClient\bin\Debug\Shared.pdb
+C:\Users\vasco\Documents\TDIN\TDIN\BankClient\bin\Debug\Shared.dll.config
+C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.src.CreateEditOrder.resources
+C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.src.OrdersList.resources
+C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.src.StatisticsPage.resources
+C:\Users\vasco\Documents\TDIN\TDIN\BankClient\obj\Debug\BankClient.src.UserMainPage.resources

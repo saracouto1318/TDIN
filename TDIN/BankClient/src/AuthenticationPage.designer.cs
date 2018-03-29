@@ -225,6 +225,7 @@
             this.label2.Text = "This user doesn\'t exists";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.label2.Visible = false;
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // panel2
             // 
@@ -276,6 +277,7 @@
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

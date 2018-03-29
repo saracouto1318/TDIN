@@ -1,0 +1,6 @@
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\bin\Debug\Shared.dll.config
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\bin\Debug\Shared.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\bin\Debug\Shared.pdb
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared.csproj.CoreCompileInputs.cache
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Shared\obj\Debug\Shared.pdb

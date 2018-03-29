@@ -1,0 +1,17 @@
+C:\Users\vasco\Documents\TDIN\TDIN\Database\obj\Debug\Database.csprojResolveAssemblyReference.cache
+C:\Users\vasco\Documents\TDIN\TDIN\Database\obj\Debug\Database.csproj.CoreCompileInputs.cache
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\Database.dll.config
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\Database.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\Database.pdb
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\EntityFramework.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\System.Data.SQLite.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\EntityFramework.xml
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\System.Data.SQLite.xml
+C:\Users\vasco\Documents\TDIN\TDIN\Database\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\vasco\Documents\TDIN\TDIN\Database\obj\Debug\Database.csproj.CopyComplete
+C:\Users\vasco\Documents\TDIN\TDIN\Database\obj\Debug\Database.dll
+C:\Users\vasco\Documents\TDIN\TDIN\Database\obj\Debug\Database.pdb

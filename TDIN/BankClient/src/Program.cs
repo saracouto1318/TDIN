@@ -10,7 +10,7 @@ namespace BankClient
     static class Program
     {
         private static AuthenticationObj authObj;
-        
+
         [STAThread]
         static void Main()
         {
