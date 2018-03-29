@@ -5,7 +5,8 @@ CREATE TABLE User(
 );
 
 CREATE TABLE Value(
-    power real NOT NULL PRIMARY KEY
+    power real NOT NULL PRIMARY KEY DEFAULT(1),
+	quantity INT NOT NULL DEFAULT(0)
 );
 
 CREATE TABLE Diginote(
@@ -23,6 +24,7 @@ CREATE TABLE TransactionDiginote(
     seller varchar(50),
     buyer varchar(50),
     price real NOT NULL,
+	quantaty int NOT NULL,
     FOREIGN KEY (diginoteID) REFERENCES Diginote(serialNumber)
         ON DELETE SET NULL
         ON UPDATE CASCADE,
