@@ -166,7 +166,9 @@ namespace Database
         {
             User userInfo = new User();
 
-            command.CommandText = "SELECT nickname, name, password, COUNT(serialNumber), COUNT(transactionID) FROM User, Diginote, Transaction WHERE User.nickname = @nick AND User.nickname = Diginote.nickname AND (Transaction.seller = User.nickname OR Transaction.buyer = User.nickname)";
+            command.CommandText = "SELECT name " +
+                "FROM User " +
+                "WHERE nickname = @nick ";
             command.Parameters.Add(new SQLiteParameter("@nick", nickname));
 
             try
@@ -175,19 +177,20 @@ namespace Database
 
                 if (reader.Read())
                 {
-                    userInfo.username = reader.GetString(0);
-                    userInfo.name = reader.GetString(1);
-                    userInfo.password = reader.GetString(2);
-                    userInfo.numDiginotes = reader.GetInt32(3);
-                    userInfo.numTransactions = reader.GetInt32(4);
+                    userInfo.username = nickname;
+                    userInfo.name = reader.GetString(0);
+                    Console.WriteLine("User name from username {0} is {1}", nickname, userInfo.name);
                 }
 
                 reader.Close();
 
+                Console.WriteLine("User name from username {0} is {1}", nickname, userInfo.name);
                 return userInfo;
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
                 return userInfo;
             }
         }

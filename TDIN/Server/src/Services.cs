@@ -87,6 +87,7 @@ public class UserAuthenticationService {
     public User GetUserInformation(string sessionId)
     {
         string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        Console.WriteLine("Username name from session {0} is {1}", sessionId, username);
         if (username == null)
             return null;
         User user = Database.Database.GetInstance().GetUserInfo(username);
