@@ -5,7 +5,8 @@ CREATE TABLE User(
 );
 
 CREATE TABLE Value(
-    power real NOT NULL PRIMARY KEY DEFAULT(1),
+	ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    power real NOT NULL DEFAULT(1),
 	quantity INT NOT NULL DEFAULT(0)
 );
 
@@ -23,6 +24,7 @@ CREATE TABLE Transactions(
     seller varchar(50),
     buyer varchar(50),
     price real NOT NULL,
+	dateTime datetime NOT NULL,
     FOREIGN KEY (seller) REFERENCES User(nickname)
         ON DELETE SET NULL
         ON UPDATE CASCADE, 
