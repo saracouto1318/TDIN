@@ -66,4 +66,19 @@ class AuthenticationObj : MarshalByRefObject, IUser
     {
         return null;
     }
+
+    public bool ChangeUsername(string sessionId, string nUsername)
+    {
+        return false;
+    }
+
+    public bool ChangeName(string sessionId, string nName)
+    {
+        return false;
+    }
+
+    public bool ChangePassowrd(string sessionId, string password, string nPassword)
+    {
+        return false;
+    }
 }

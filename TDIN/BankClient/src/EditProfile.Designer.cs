@@ -30,20 +30,24 @@
         {
             this.userName = new System.Windows.Forms.Label();
             this.ProfielPanel = new System.Windows.Forms.Panel();
+            this.nPassLabel = new System.Windows.Forms.Label();
+            this.oldPassLabel = new System.Windows.Forms.Label();
+            this.nPassText = new System.Windows.Forms.TextBox();
+            this.oldPassText = new System.Windows.Forms.TextBox();
+            this.usernameText = new System.Windows.Forms.TextBox();
+            this.nameText = new System.Windows.Forms.TextBox();
             this.PasswordBtn = new System.Windows.Forms.Button();
-            this.UsernameBtn = new System.Windows.Forms.Button();
-            this.NameBtn = new System.Windows.Forms.Button();
+            this.usernameBtn = new System.Windows.Forms.Button();
+            this.nameBtn = new System.Windows.Forms.Button();
             this.lb1 = new System.Windows.Forms.Label();
-            this.UsernameLabel = new System.Windows.Forms.Label();
-            this.NameLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.usernameLabel = new System.Windows.Forms.Label();
+            this.nameLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.ProfielPanel.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // userName
@@ -53,67 +57,134 @@
             this.userName.Location = new System.Drawing.Point(0, 0);
             this.userName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.userName.Name = "userName";
-            this.userName.Size = new System.Drawing.Size(588, 32);
+            this.userName.Size = new System.Drawing.Size(800, 79);
             this.userName.TabIndex = 0;
             this.userName.Text = "Nome de utilizador";
             this.userName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ProfielPanel
             // 
+            this.ProfielPanel.Controls.Add(this.nPassLabel);
+            this.ProfielPanel.Controls.Add(this.oldPassLabel);
+            this.ProfielPanel.Controls.Add(this.nPassText);
+            this.ProfielPanel.Controls.Add(this.oldPassText);
+            this.ProfielPanel.Controls.Add(this.usernameText);
+            this.ProfielPanel.Controls.Add(this.nameText);
             this.ProfielPanel.Controls.Add(this.PasswordBtn);
-            this.ProfielPanel.Controls.Add(this.UsernameBtn);
-            this.ProfielPanel.Controls.Add(this.NameBtn);
+            this.ProfielPanel.Controls.Add(this.usernameBtn);
+            this.ProfielPanel.Controls.Add(this.nameBtn);
             this.ProfielPanel.Controls.Add(this.lb1);
-            this.ProfielPanel.Controls.Add(this.UsernameLabel);
-            this.ProfielPanel.Controls.Add(this.NameLabel);
-            this.ProfielPanel.Location = new System.Drawing.Point(5, 34);
+            this.ProfielPanel.Controls.Add(this.usernameLabel);
+            this.ProfielPanel.Controls.Add(this.nameLabel);
+            this.ProfielPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ProfielPanel.Location = new System.Drawing.Point(0, 143);
             this.ProfielPanel.Margin = new System.Windows.Forms.Padding(2);
             this.ProfielPanel.MinimumSize = new System.Drawing.Size(281, 158);
             this.ProfielPanel.Name = "ProfielPanel";
-            this.ProfielPanel.Size = new System.Drawing.Size(281, 158);
+            this.ProfielPanel.Size = new System.Drawing.Size(800, 307);
             this.ProfielPanel.TabIndex = 1;
+            // 
+            // nPassLabel
+            // 
+            this.nPassLabel.AutoSize = true;
+            this.nPassLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nPassLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.nPassLabel.Location = new System.Drawing.Point(142, 220);
+            this.nPassLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.nPassLabel.MinimumSize = new System.Drawing.Size(75, 20);
+            this.nPassLabel.Name = "nPassLabel";
+            this.nPassLabel.Size = new System.Drawing.Size(113, 20);
+            this.nPassLabel.TabIndex = 10;
+            this.nPassLabel.Text = "New Password";
+            this.nPassLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // oldPassLabel
+            // 
+            this.oldPassLabel.AutoSize = true;
+            this.oldPassLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.oldPassLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.oldPassLabel.Location = new System.Drawing.Point(149, 188);
+            this.oldPassLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.oldPassLabel.MinimumSize = new System.Drawing.Size(75, 20);
+            this.oldPassLabel.Name = "oldPassLabel";
+            this.oldPassLabel.Size = new System.Drawing.Size(106, 20);
+            this.oldPassLabel.TabIndex = 9;
+            this.oldPassLabel.Text = "Old Password";
+            this.oldPassLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // nPassText
+            // 
+            this.nPassText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nPassText.Location = new System.Drawing.Point(276, 217);
+            this.nPassText.Name = "nPassText";
+            this.nPassText.Size = new System.Drawing.Size(381, 26);
+            this.nPassText.TabIndex = 8;
+            // 
+            // oldPassText
+            // 
+            this.oldPassText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.oldPassText.Location = new System.Drawing.Point(276, 185);
+            this.oldPassText.Name = "oldPassText";
+            this.oldPassText.Size = new System.Drawing.Size(381, 26);
+            this.oldPassText.TabIndex = 7;
+            // 
+            // usernameText
+            // 
+            this.usernameText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.usernameText.Location = new System.Drawing.Point(276, 100);
+            this.usernameText.Name = "usernameText";
+            this.usernameText.Size = new System.Drawing.Size(267, 26);
+            this.usernameText.TabIndex = 6;
+            // 
+            // nameText
+            // 
+            this.nameText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nameText.Location = new System.Drawing.Point(276, 47);
+            this.nameText.Name = "nameText";
+            this.nameText.Size = new System.Drawing.Size(267, 26);
+            this.nameText.TabIndex = 5;
             // 
             // PasswordBtn
             // 
             this.PasswordBtn.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.PasswordBtn.FlatAppearance.BorderSize = 0;
             this.PasswordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.PasswordBtn.Location = new System.Drawing.Point(53, 115);
+            this.PasswordBtn.Location = new System.Drawing.Point(276, 248);
             this.PasswordBtn.Margin = new System.Windows.Forms.Padding(2);
             this.PasswordBtn.Name = "PasswordBtn";
-            this.PasswordBtn.Size = new System.Drawing.Size(154, 27);
+            this.PasswordBtn.Size = new System.Drawing.Size(381, 27);
             this.PasswordBtn.TabIndex = 2;
             this.PasswordBtn.Text = "Change Password";
             this.PasswordBtn.UseVisualStyleBackColor = false;
             this.PasswordBtn.Click += new System.EventHandler(this.PasswordBtn_Click);
             // 
-            // UsernameBtn
+            // usernameBtn
             // 
-            this.UsernameBtn.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.UsernameBtn.FlatAppearance.BorderSize = 0;
-            this.UsernameBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.UsernameBtn.Location = new System.Drawing.Point(151, 80);
-            this.UsernameBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.UsernameBtn.Name = "UsernameBtn";
-            this.UsernameBtn.Size = new System.Drawing.Size(56, 27);
-            this.UsernameBtn.TabIndex = 4;
-            this.UsernameBtn.Text = "Change";
-            this.UsernameBtn.UseVisualStyleBackColor = false;
-            this.UsernameBtn.Click += new System.EventHandler(this.UsernameBtn_Click);
+            this.usernameBtn.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.usernameBtn.FlatAppearance.BorderSize = 0;
+            this.usernameBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.usernameBtn.Location = new System.Drawing.Point(548, 100);
+            this.usernameBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.usernameBtn.Name = "usernameBtn";
+            this.usernameBtn.Size = new System.Drawing.Size(109, 26);
+            this.usernameBtn.TabIndex = 4;
+            this.usernameBtn.Text = "Change";
+            this.usernameBtn.UseVisualStyleBackColor = false;
+            this.usernameBtn.Click += new System.EventHandler(this.UsernameBtn_Click);
             // 
-            // NameBtn
+            // nameBtn
             // 
-            this.NameBtn.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.NameBtn.FlatAppearance.BorderSize = 0;
-            this.NameBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.NameBtn.Location = new System.Drawing.Point(151, 46);
-            this.NameBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.NameBtn.Name = "NameBtn";
-            this.NameBtn.Size = new System.Drawing.Size(56, 27);
-            this.NameBtn.TabIndex = 3;
-            this.NameBtn.Text = "Change";
-            this.NameBtn.UseVisualStyleBackColor = false;
-            this.NameBtn.Click += new System.EventHandler(this.NameBtn_Click);
+            this.nameBtn.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.nameBtn.FlatAppearance.BorderSize = 0;
+            this.nameBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.nameBtn.Location = new System.Drawing.Point(548, 47);
+            this.nameBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.nameBtn.Name = "nameBtn";
+            this.nameBtn.Size = new System.Drawing.Size(109, 26);
+            this.nameBtn.TabIndex = 3;
+            this.nameBtn.Text = "Change";
+            this.nameBtn.UseVisualStyleBackColor = false;
+            this.nameBtn.Click += new System.EventHandler(this.NameBtn_Click);
             // 
             // lb1
             // 
@@ -122,132 +193,94 @@
             this.lb1.Location = new System.Drawing.Point(0, 0);
             this.lb1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lb1.Name = "lb1";
-            this.lb1.Size = new System.Drawing.Size(281, 24);
+            this.lb1.Size = new System.Drawing.Size(800, 24);
             this.lb1.TabIndex = 2;
             this.lb1.Text = "Profile";
             this.lb1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // UsernameLabel
+            // usernameLabel
             // 
-            this.UsernameLabel.AutoSize = true;
-            this.UsernameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UsernameLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.UsernameLabel.Location = new System.Drawing.Point(50, 83);
-            this.UsernameLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.UsernameLabel.MinimumSize = new System.Drawing.Size(75, 20);
-            this.UsernameLabel.Name = "UsernameLabel";
-            this.UsernameLabel.Size = new System.Drawing.Size(77, 20);
-            this.UsernameLabel.TabIndex = 1;
-            this.UsernameLabel.Text = "Username";
-            this.UsernameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.usernameLabel.AutoSize = true;
+            this.usernameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.usernameLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.usernameLabel.Location = new System.Drawing.Point(172, 102);
+            this.usernameLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.usernameLabel.MinimumSize = new System.Drawing.Size(75, 20);
+            this.usernameLabel.Name = "usernameLabel";
+            this.usernameLabel.Size = new System.Drawing.Size(83, 20);
+            this.usernameLabel.TabIndex = 1;
+            this.usernameLabel.Text = "Username";
+            this.usernameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // NameLabel
+            // nameLabel
             // 
-            this.NameLabel.AutoSize = true;
-            this.NameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NameLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.NameLabel.Location = new System.Drawing.Point(50, 48);
-            this.NameLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.NameLabel.MinimumSize = new System.Drawing.Size(75, 20);
-            this.NameLabel.Name = "NameLabel";
-            this.NameLabel.Size = new System.Drawing.Size(75, 20);
-            this.NameLabel.TabIndex = 0;
-            this.NameLabel.Text = "Name";
-            this.NameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(428, 80);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Visible = false;
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 2;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(428, 118);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Visible = false;
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Visible = false;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(305, 82);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(104, 16);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Old Password";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Visible = false;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(299, 120);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(110, 16);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "New Password";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.nameLabel.AutoSize = true;
+            this.nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nameLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.nameLabel.Location = new System.Drawing.Point(180, 50);
+            this.nameLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.nameLabel.MinimumSize = new System.Drawing.Size(75, 20);
+            this.nameLabel.Name = "nameLabel";
+            this.nameLabel.Size = new System.Drawing.Size(75, 20);
+            this.nameLabel.TabIndex = 0;
+            this.nameLabel.Text = "Name";
+            this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(409, 158);
+            this.button1.Location = new System.Drawing.Point(3, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(78, 34);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Edit Password";
+            this.button1.Size = new System.Drawing.Size(260, 50);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "Main Page";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(409, 158);
+            this.button2.Location = new System.Drawing.Point(274, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(78, 34);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Edit Username";
+            this.button2.Size = new System.Drawing.Size(260, 50);
+            this.button2.TabIndex = 12;
+            this.button2.Text = "Orders";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Visible = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(409, 158);
+            this.button3.Location = new System.Drawing.Point(542, 3);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(78, 34);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "Edit Name";
+            this.button3.Size = new System.Drawing.Size(260, 50);
+            this.button3.TabIndex = 13;
+            this.button3.Text = "Statistics";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Visible = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // MainPage
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.button3);
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Location = new System.Drawing.Point(0, 82);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(800, 56);
+            this.panel1.TabIndex = 11;
+            // 
+            // EditProfile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(588, 456);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.ProfielPanel);
             this.Controls.Add(this.userName);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(604, 495);
-            this.Name = "MainPage";
+            this.Name = "EditProfile";
             this.Text = "Bank";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ProfielPanel.ResumeLayout(false);
             this.ProfielPanel.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -256,17 +289,20 @@
         private System.Windows.Forms.Label userName;
         private System.Windows.Forms.Panel ProfielPanel;
         private System.Windows.Forms.Button PasswordBtn;
-        private System.Windows.Forms.Button UsernameBtn;
-        private System.Windows.Forms.Button NameBtn;
+        private System.Windows.Forms.Button usernameBtn;
+        private System.Windows.Forms.Button nameBtn;
         private System.Windows.Forms.Label lb1;
-        private System.Windows.Forms.Label UsernameLabel;
-        private System.Windows.Forms.Label NameLabel;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label usernameLabel;
+        private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.TextBox nPassText;
+        private System.Windows.Forms.TextBox oldPassText;
+        private System.Windows.Forms.TextBox usernameText;
+        private System.Windows.Forms.TextBox nameText;
+        private System.Windows.Forms.Label nPassLabel;
+        private System.Windows.Forms.Label oldPassLabel;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Panel panel1;
     }
 }

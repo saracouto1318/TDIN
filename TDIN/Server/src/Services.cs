@@ -87,11 +87,35 @@ public class UserAuthenticationService {
     public User GetUserInformation(string sessionId)
     {
         string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
-        Console.WriteLine("Username name from session {0} is {1}", sessionId, username);
         if (username == null)
             return null;
         User user = Database.Database.GetInstance().GetUserInfo(username);
         return user;
+    }
+
+    public bool ChangeName(string sessionId, string nName)
+    {
+        string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        if (username == null)
+            return false;
+        return Database.Database.GetInstance().ChangeName(nName, username);
+    }
+
+    public bool ChangeUsername(string sessionId, string nUsername)
+    {
+        string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        if (username == null)
+            return false;
+        return Database.Database.GetInstance().ChangeUsername(nUsername, username);
+    }
+
+    public bool ChangePassword(string sessionId, string password, string nPassword)
+    {
+        string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        if (username == null || !LoginUser(username, password))
+            return false;
+        string nPassHash = GetHashString(nPassword);
+        return Database.Database.GetInstance().ChangePassword(nPassHash, username);
     }
 
     #endregion

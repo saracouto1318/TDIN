@@ -9,8 +9,6 @@ namespace BankClient
         private enum MainPageState { ASYNC_CALL, IDDLE };
         private MainPageState status = MainPageState.IDDLE;
         
-        private User user;
-
         public EditProfile()
         {
             InitializeComponent();
@@ -20,80 +18,104 @@ namespace BankClient
         private async void GetUserInforamtionAsync()
         {
             status = MainPageState.ASYNC_CALL;
-            await Task.Run(() => GetUserInformation());
-            UpdateUserProfile();
+            User user = null;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    user = Services.GetInstance().GetUserInformation();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Program.ChangeForm(this, new AuthenticationPage());
+                }
+            });
+            UpdateUserProfile(user);
             status = MainPageState.IDDLE;
         }
 
-        private void GetUserInformation() {
-            user = Program.GetAuthObj().UserInformation(Services.GetInstance().session.sessionId);
-        }
-
-        private void UpdateUserProfile()
+        private void UpdateUserProfile(User user)
         {
+            if(user == null)
+            {
+                return;
+            }
             userName.Text = user.name;
-            NameLabel.Text = user.name;
-            UsernameLabel.Text = user.username;
         }
 
         private void PasswordBtn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Change Password");
+            string password = oldPassText.Text;
+            string nPassowrd = nPassText.Text;
+            
+            if (nPassowrd == "" || password == nPassowrd)
+            {
+                return;
+            }
 
-            this.label1.Text = "Old Password";
-            this.label2.Text = "New Password";
-            this.label1.Visible = true;
-            this.label2.Visible = true;
-            this.textBox1.Visible = true;
-            this.textBox2.Visible = true;
-            this.button2.Visible = false;
-            this.button3.Visible = false;
-            this.button1.Visible = true;
-
-            string oldPass = label1.Text;
-            string newPass = label2.Text;
-
-            AuthenticationObj authObj = Program.GetAuthObj();
+            Services.GetInstance().ChangePassword(password, nPassowrd);
         }
 
         private void UsernameBtn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Change Username");
+            string nUsername = usernameText.Text;
+            User user;
 
-            this.label1.Text = "Old Username";
-            this.label2.Text = "New Username";
-            this.label1.Visible = true;
-            this.label2.Visible = true;
-            this.textBox1.Visible = true;
-            this.textBox2.Visible = true;
-            this.button1.Visible = false;
-            this.button3.Visible = false;
-            this.button2.Visible = true;
+            try
+            {
+                user = Services.GetInstance().GetUserInformation();
+            }
+            catch(Exception)
+            {
+                Program.ChangeForm(this, new AuthenticationPage());
+                return;
+            }
+            
+            if (nUsername == "" || user == null || nUsername == user.username)
+            {
+                return;
+            }
 
-            string oldUser = label1.Text;
-            string newUser = label2.Text;
-
-            AuthenticationObj authObj = Program.GetAuthObj();
+            Services.GetInstance().ChangeUsername(nUsername);
         }
 
         private void NameBtn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Change Name");
+            string nName = nameText.Text;
+            User user;
 
-            this.label1.Text = "Username";
-            this.label2.Text = "New Name";
-            this.label1.Visible = true;
-            this.label2.Visible = true;
-            this.textBox1.Visible = true;
-            this.textBox2.Visible = true;
-            this.button1.Visible = false;
-            this.button2.Visible = false;
-            this.button3.Visible = true;
+            try
+            {
+                user = Services.GetInstance().GetUserInformation();
+            }
+            catch (Exception)
+            {
+                Program.ChangeForm(this, new AuthenticationPage());
+                return;
+            }
 
-            string username = label1.Text;
-            string newName = label2.Text;
+            if (nName == "" || user == null || nName == user.name)
+            {
+                return;
+            }
 
-            AuthenticationObj authObj = Program.GetAuthObj();
+            Services.GetInstance().ChangeName(nName);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Program.ChangeForm(this, new UserMainPage());
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Program.ChangeForm(this, new OrdersList());
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Program.ChangeForm(this, new StatisticsPage());
         }
     }
 }

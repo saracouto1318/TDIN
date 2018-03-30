@@ -31,8 +31,8 @@
             this.userName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.quotation = new System.Windows.Forms.Label();
+            this.nDiginotes = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -72,23 +72,23 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Number of Diginotes";
             // 
-            // label3
+            // quotation
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(160, 141);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "label3";
+            this.quotation.AutoSize = true;
+            this.quotation.Location = new System.Drawing.Point(160, 141);
+            this.quotation.Name = "quotation";
+            this.quotation.Size = new System.Drawing.Size(13, 13);
+            this.quotation.TabIndex = 4;
+            this.quotation.Text = "0";
             // 
-            // label4
+            // nDiginotes
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(596, 141);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(35, 13);
-            this.label4.TabIndex = 5;
-            this.label4.Text = "label4";
+            this.nDiginotes.AutoSize = true;
+            this.nDiginotes.Location = new System.Drawing.Point(596, 141);
+            this.nDiginotes.Name = "nDiginotes";
+            this.nDiginotes.Size = new System.Drawing.Size(13, 13);
+            this.nDiginotes.TabIndex = 5;
+            this.nDiginotes.Text = "0";
             // 
             // button1
             // 
@@ -98,6 +98,7 @@
             this.button1.TabIndex = 6;
             this.button1.Text = "Edit Profile";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -145,8 +146,8 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.nDiginotes);
+            this.Controls.Add(this.quotation);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.userName);
@@ -162,8 +163,8 @@
         private System.Windows.Forms.Label userName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label quotation;
+        private System.Windows.Forms.Label nDiginotes;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;

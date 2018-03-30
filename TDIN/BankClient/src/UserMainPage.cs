@@ -15,17 +15,17 @@ namespace BankClient
         public UserMainPage()
         {
             InitializeComponent();
-            GetUserInformation();
+            GetUserInformationAsync();
         }
 
-        private async Task GetUserInformation()
+        private async void GetUserInformationAsync()
         {
+            User user = null;
             await Task.Run(() =>
             {
                 try
                 {
-                    User user = Services.GetInstance().GetUserInformation();
-                    Console.WriteLine("User {0}", user.name);
+                    user = Services.GetInstance().GetUserInformation();
                 }
                 catch(Exception e)
                 {
@@ -33,6 +33,23 @@ namespace BankClient
                     Program.ChangeForm(this, new AuthenticationPage());
                 }
             });
+            UpdateUserInformation(user);
+        }
+
+        private void UpdateUserInformation(User user)
+        {
+            if(user == null)
+            {
+                return;
+            }
+            userName.Text = user.name;
+            nDiginotes.Text = user.numDiginotes + "";
+            quotation.Text = "1.00$";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Program.ChangeForm(this, new EditProfile());
         }
     }
 }

@@ -83,6 +83,39 @@ namespace BankClient
             return user;
         }
 
+        public bool ChangeName(string nName)
+        {
+            if (Program.GetAuthObj().ChangeName(session.sessionId, nName))
+            {
+                user.name = nName;
+                // Notify change of name
+
+                return true;
+            }
+            return false;
+        }
+
+        public bool ChangeUsername(string nUsername)
+        {
+            if (Program.GetAuthObj().ChangeUsername(session.sessionId, nUsername))
+            {
+                user.username = nUsername;
+                // Notify change of username
+
+                return true;
+            }
+            return false;
+        }
+
+        public bool ChangePassword(string password, string nPassword)
+        {
+            if (Program.GetAuthObj().ChangePassowrd(session.sessionId, password, nPassword))
+            {
+                return true;
+            }
+            return false;
+        }
+
         #endregion
     }
 }

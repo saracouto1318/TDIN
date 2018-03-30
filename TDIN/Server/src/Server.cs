@@ -62,4 +62,25 @@ public class AuthenticationObj : MarshalByRefObject, IUser
             UserAuthenticationService.GetInstance();
         return authService.GetUserInformation(sessionId);
     }
+
+    public bool ChangeUsername(string sessionId, string nUsername)
+    {
+        UserAuthenticationService authService =
+            UserAuthenticationService.GetInstance();
+        return authService.ChangeUsername(sessionId, nUsername);
+    }
+
+    public bool ChangeName(string sessionId, string nName)
+    {
+        UserAuthenticationService authService =
+            UserAuthenticationService.GetInstance();
+        return authService.ChangeName(sessionId, nName);
+    }
+
+    public bool ChangePassowrd(string sessionId, string password, string nPassword)
+    {
+        UserAuthenticationService authService =
+            UserAuthenticationService.GetInstance();
+        return authService.ChangePassword(sessionId, password, nPassword);
+    }
 }

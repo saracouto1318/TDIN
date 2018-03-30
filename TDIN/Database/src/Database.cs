@@ -139,8 +139,6 @@ namespace Database
 
         public bool InsertUser(string name, string nickname, string password)
         {
-            Console.WriteLine("Insert user {0} {1} {2}", nickname, password, name);
-
             command.CommandText = "INSERT INTO User(nickname, name, password) VALUES (@nick, @name, @password)";
             command.Parameters.Add(new SQLiteParameter("@nick", nickname));
             command.Parameters.Add(new SQLiteParameter("@name", name));
@@ -179,12 +177,9 @@ namespace Database
                 {
                     userInfo.username = nickname;
                     userInfo.name = reader.GetString(0);
-                    Console.WriteLine("User name from username {0} is {1}", nickname, userInfo.name);
                 }
 
                 reader.Close();
-
-                Console.WriteLine("User name from username {0} is {1}", nickname, userInfo.name);
                 return userInfo;
             }
             catch (Exception e)
@@ -299,6 +294,7 @@ namespace Database
             }
             catch (Exception)
             {
+                reader.Close();
             }
 
             return null;
@@ -381,10 +377,12 @@ namespace Database
 
                 if (reader.Read())
                     value += reader.GetDouble(0);
+                reader.Close();
                 return value;
             }
             catch (SQLiteException e)
             {
+                reader.Close();
                 return value;
             }
         }
@@ -434,14 +432,21 @@ namespace Database
                     diginotes.Add(reader.GetInt32(0));
 
                 if (diginotes.Count < nDiginotes)
+                {
+                    reader.Close();
                     return false;
+                }
 
                 command.CommandText = "SELECT transactionID FROM Transactions WHERE diginoteID = @serial";
                 command.Parameters.Add(new SQLiteParameter("@serial", diginotes[0]));
 
+                reader = command.ExecuteReader();
+
                 int ID = 0;
                 if (reader.Read())
                     ID += reader.GetInt32(0);
+
+                reader.Close();
 
                 transaction = connection.BeginTransaction();
 
@@ -478,12 +483,15 @@ namespace Database
                 command.CommandText = "UPDATE Value SET quantity=@quantity WHERE ID=@ID";
                 command.Parameters.Add(new SQLiteParameter("@quantity", currentQuantity + 1));
                 command.Parameters.Add(new SQLiteParameter("@ID", reader.GetInt32(1)));
+                reader.Close();
+
                 command.ExecuteNonQuery();
 
                 return true;
             }
             catch (SQLiteException e)
             {
+                reader.Close();
                 transaction.Rollback();
                 return false;
             }
@@ -526,10 +534,12 @@ namespace Database
                     transactions.Add(info);
                 }
 
+                reader.Close();
                 return transactions;
             }
             catch (SQLiteException e)
             {
+                reader.Close();
                 return null;
             }
         }
