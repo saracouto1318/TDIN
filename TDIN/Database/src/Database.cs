@@ -350,7 +350,7 @@ namespace Database
 
         public bool ChangeDiginoteValue(double power)
         {
-            command.CommandText = "UPDATE Value SET power=@power, quantity=@quantity WHERE power=(SELECT power FROM Value)";
+            command.CommandText = "INSERT INTO Value(power, quantity) VALUES (@power,@quantity)";
             command.Parameters.Add(new SQLiteParameter("@power", power));
             command.Parameters.Add(new SQLiteParameter("@quantity", 0));
 
@@ -371,7 +371,7 @@ namespace Database
         public double GetValue()
         {
             double value = 0;
-            command.CommandText = "SELECT power FROM Value";
+            command.CommandText = "SELECT power FROM Value ORDER BY DESC LIMIT 1";
             try
             {
                 reader = command.ExecuteReader();
@@ -394,10 +394,13 @@ namespace Database
         {
             try
             {
-                command.CommandText = "INSERT INTO Transactions(seller, buyer, price) VALUES (@seller, @buyer, @price)";
+                command.CommandText = "INSERT INTO Transactions(seller, buyer, price, dateTime) VALUES (@seller, @buyer, @price, @time)";
                 command.Parameters.Add(new SQLiteParameter("@seller", buyer));
                 command.Parameters.Add(new SQLiteParameter("@buyer", seller));
                 command.Parameters.Add(new SQLiteParameter("@price", nDiginotes * this.GetValue()));
+
+                DateTime localDate = DateTime.Now;
+                command.Parameters.Add(new SQLiteParameter("@time", localDate));
 
                 transaction = connection.BeginTransaction();
                 command.ExecuteNonQuery();
@@ -433,9 +436,9 @@ namespace Database
                 command.CommandText = "SELECT transactionID FROM Transactions WHERE diginoteID = @serial";
                 command.Parameters.Add(new SQLiteParameter("@serial", diginotes[0]));
 
-                double ID = 0;
+                int ID = 0;
                 if (reader.Read())
-                    ID += reader.GetDouble(0);
+                    ID += reader.GetInt32(0);
 
                 transaction = connection.BeginTransaction();
 
@@ -461,7 +464,7 @@ namespace Database
 
                 transaction.Commit();
 
-                command.CommandText = "SELECT quantity FROM Value";
+                command.CommandText = "SELECT quantity, ID FROM Value ORDER BY DESC LIMIT 1";
                 reader = command.ExecuteReader();
 
                 int currentQuantity = 0;
@@ -469,8 +472,9 @@ namespace Database
                 if (reader.Read())
                     currentQuantity += reader.GetInt32(0);
 
-                command.CommandText = "UPDATE Value SET quantity=@quantity WHERE power=(SELECT power FROM Value)";
+                command.CommandText = "UPDATE Value SET quantity=@quantity WHERE ID=@ID";
                 command.Parameters.Add(new SQLiteParameter("@quantity", currentQuantity + 1));
+                command.Parameters.Add(new SQLiteParameter("@ID", reader.GetInt32(1)));
                 command.ExecuteNonQuery();
 
                 return true;
@@ -484,15 +488,15 @@ namespace Database
 
         public List<Transaction> GetTransactions(string type, bool open, string nickname)
         {
-            List<Transaction> aux = new List<Transaction>();
+            List<Transaction> transactions = new List<Transaction>();
             if (type == "all")
-                command.CommandText = "SELECT * FROM Transaction WHERE buyer = @nick OR seller = @nick LIMIT Transaction.quantity";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick OR seller = @nick LIMIT Transaction.quantity";
             else if (type == "buy" && open)
-                command.CommandText = "SELECT * FROM Transaction WHERE buyer = @nick AND seller IS NULL";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NULL";
             else if (type == "buy" && !open)
-                command.CommandText = "SELECT * FROM Transaction WHERE buyer = @nick AND seller IS NOT NULL";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NOT NULL";
             else if (type == "sell" && open)
-                command.CommandText = "SELECT * FROM Transaction WHERE seller = @nick AND buyer IS NULL";
+                command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NULL";
             else if (type == "sell" && !open)
                 command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller = @nick AND buyer IS NOT NULL";
             command.Parameters.Add(new SQLiteParameter("@nick", nickname));
@@ -505,25 +509,18 @@ namespace Database
 
                 while (reader.Read())
                 {
-                    info.ID = 0;
-                    info.buyer = reader.GetString(3);
-                    info.seller = reader.GetString(2);
-                    info.value = reader.GetDouble(4);
-                    info.quantity = reader.GetInt32(5);
-                    aux.Add(info);
-                }
+                    info.ID = reader.GetInt32(0);
+                    info.buyer = reader.GetString(2);
+                    info.seller = reader.GetString(1);
+                    info.value = reader.GetDouble(3);
 
-                List<Transaction> transactions = new List<Transaction>();
-                for (int i = 0; i < aux.Count;)
-                {
-                    info.ID = i + 1;
-                    info.buyer = aux[i].buyer;
-                    info.seller = aux[i].seller;
-                    info.value = aux[i].value;
-                    info.quantity = aux[i].quantity;
+                    command.CommandText = "SELECT COUNT(*) FROM TransactionDiginote WHERE transactionID=@ID";
+                    command.Parameters.Add(new SQLiteParameter("@ID", info.ID));
+
+                    reader = command.ExecuteReader();
+                    info.quantity = reader.GetInt32(0);
 
                     transactions.Add(info);
-                    i += aux[i].quantity;
                 }
 
                 return transactions;
@@ -541,7 +538,7 @@ namespace Database
                 for (int i = 0; i < quantity; i++)
                 {
                     transactionID += i;
-                    command.CommandText += "DELETE FROM TransactionDiginote WHERE TransactionID=@ID";
+                    command.CommandText += "DELETE FROM TransactionDiginote WHERE transactionID=@ID; DELETE FROM Transactions WHERE transactionID=@ID";
                     command.Parameters.Add(new SQLiteParameter("@ID", transactionID));
                     command.ExecuteNonQuery();
                 }
