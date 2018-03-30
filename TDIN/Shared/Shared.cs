@@ -4,7 +4,7 @@ using System.Runtime.Remoting;
 public interface IUser
 {
     UserSession Login(string username, string password);
-    bool IsValidUsername(string username);
+    bool IsUsernameAvailable(string username);
     UserSession Register(string username, string password, string name);
     User UserInformation(string sessionId);
 }

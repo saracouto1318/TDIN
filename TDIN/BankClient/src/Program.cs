@@ -52,7 +52,7 @@ class AuthenticationObj : MarshalByRefObject, IUser
         return null;
     }
 
-    public bool IsValidUsername(string username)
+    public bool IsUsernameAvailable(string username)
     {
         return false;
     }

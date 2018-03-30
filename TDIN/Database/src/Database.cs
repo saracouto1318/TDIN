@@ -37,8 +37,7 @@ namespace Database
                 justCreated = true;
                 SQLiteConnection.CreateFile(DBPath);
             }
-
-            Console.Write(DBPath);
+            
             connection = new SQLiteConnection("Data Source=" + DBPath + ";Version=3;");
 
             command = new SQLiteCommand(connection);
@@ -97,10 +96,28 @@ namespace Database
 
         #region User
 
+        public bool UserExists(string nickname)
+        {
+            command.CommandText = "SELECT nickname FROM User WHERE nickname = @nick ";
+            command.Parameters.Add(new SQLiteParameter("@nick", nickname));
+
+            try
+            {
+                reader = command.ExecuteReader();
+
+                bool exists = reader.Read();
+                reader.Close();
+                return exists;
+            }
+            catch (SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
         public bool CheckUser(string nickname, string password)
         {
-            Console.WriteLine("Check user {0} {1}", nickname, password);
-
             command.CommandText = "SELECT nickname FROM User WHERE nickname = @nick AND password = @pass ";
             command.Parameters.Add(new SQLiteParameter("@nick", nickname));
             command.Parameters.Add(new SQLiteParameter("@pass", password));
@@ -412,7 +429,7 @@ namespace Database
                 command.CommandText = "SELECT transactionID FROM Transactions WHERE diginoteID = @serial";
                 command.Parameters.Add(new SQLiteParameter("@serial", diginotes[0]));
 
-                int ID = 0;
+                double ID = 0;
                 if (reader.Read())
                     ID += reader.GetDouble(0);
 

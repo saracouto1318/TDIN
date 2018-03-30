@@ -19,37 +19,24 @@ namespace BankClient
 
         private void LoginBtn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Login");
-
             string username = UsernameLog.Text;
             string password = PasswordLog.Text;
 
             AuthenticationObj authObj = Program.GetAuthObj();
-
-            // Validate username
-            if (!authObj.IsValidUsername(username))
-            {
-                Console.WriteLine("Invalid username");
-                label2.Visible = true;
-                return;
-            }
+            
             // Login user
             UserSession session = authObj.Login(username, password);
             if (session != null)
             {
-                Console.WriteLine("Session not null");
                 Program.ChangeForm(this, new MainPage(session));
                 return;
             }
-
-            Console.WriteLine("Shit login");
+            
             label2.Visible = true;
         }
 
         private void RegisterBtn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Register");
-
             string name = NameOfUser.Text;
             string username = UsernameReg.Text;
             string password = PasswordReg.Text;
@@ -57,9 +44,8 @@ namespace BankClient
             AuthenticationObj authObj = Program.GetAuthObj();
 
             // Validate username
-            if(!authObj.IsValidUsername(username))
+            if(!authObj.IsUsernameAvailable(username))
             {
-                Console.WriteLine("Invalid username");
                 label1.Visible = true;
                 return;
             }
@@ -67,12 +53,10 @@ namespace BankClient
             UserSession session = authObj.Register(username, password, name);
             if (session != null)
             {
-                Console.WriteLine("Session not null");
                 Program.ChangeForm(this, new MainPage(session));
                 return;
             }
 
-            Console.WriteLine("Shit register");
             label1.Visible = true;
         }
 

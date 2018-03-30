@@ -18,61 +18,41 @@ public class AuthenticationObj : MarshalByRefObject, IUser
 
     public UserSession Login(string username, string password)
     {
-        Console.WriteLine("Username {0}", username);
-        Console.WriteLine("Password {0}", password);
-
         // Authenticate params
         UserAuthenticationService authService =
             UserAuthenticationService.GetInstance();
         bool isValid = authService.LoginUser(username, password);
-
-        Console.WriteLine("Valid login: {0}", isValid);
-
+        
         if (!isValid)
             return null;
 
         // Store session
         UserSession userSession = authService.StoreSession(username);
-        if (userSession == null)
-            Console.WriteLine("User session null");
-        else
-            Console.WriteLine("User session {0} {1}", userSession.sessionId, userSession.username);
         return userSession;
     }
 
-    public bool IsValidUsername(string username)
+    public bool IsUsernameAvailable(string username)
     {
-        Console.WriteLine("Username {0}", username);
-
         // Validate username
         UserAuthenticationService authService =
             UserAuthenticationService.GetInstance();
-        bool isValid = authService.IsValidUsername(username);
+        bool isValid = authService.IsUsernameAvailable(username);
 
         return isValid;
     }
 
     public UserSession Register(string username, string password, string name)
     {
-        Console.WriteLine("Username {0}", username);
-        Console.WriteLine("Password {0}", password);
-
         // Valdiate params
         UserAuthenticationService authService =
             UserAuthenticationService.GetInstance();
         bool isValid = authService.RegisterUser(username, password, name);
-
-        Console.WriteLine("Valid register: {0}", isValid);
-
+        
         if (!isValid)
             return null;
 
         // Store session
         UserSession userSession = authService.StoreSession(username);
-        if (userSession == null)
-            Console.WriteLine("User session null");
-        else
-            Console.WriteLine("User session {0} {1}", userSession.sessionId, userSession.username);
         return userSession;
     }
 
