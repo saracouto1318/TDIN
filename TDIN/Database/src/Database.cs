@@ -284,11 +284,15 @@ namespace Database
             try
             {
                 reader = command.ExecuteReader();
+                string username = null;
 
                 if (reader.Read())
                 {
-                    return reader.GetString(0);
+                    username = reader.GetString(0);
                 }
+
+                reader.Close();
+                return username;
             }
             catch (Exception)
             {

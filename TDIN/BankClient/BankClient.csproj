@@ -76,6 +76,7 @@
       <DependentUpon>OrdersList.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Program.cs" />
+    <Compile Include="src\Services.cs" />
     <Compile Include="src\StatisticsPage.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -4,18 +4,16 @@ using System.Windows.Forms;
 
 namespace BankClient
 {
-    public partial class MainPage : Form
+    public partial class EditProfile : Form
     {
         private enum MainPageState { ASYNC_CALL, IDDLE };
         private MainPageState status = MainPageState.IDDLE;
         
-        private UserSession session;
         private User user;
 
-        public MainPage(UserSession sessionId)
+        public EditProfile()
         {
             InitializeComponent();
-            this.session = sessionId;
             GetUserInforamtionAsync();
         }
         
@@ -28,7 +26,7 @@ namespace BankClient
         }
 
         private void GetUserInformation() {
-            user = Program.GetAuthObj().UserInformation(session.sessionId);
+            user = Program.GetAuthObj().UserInformation(Services.GetInstance().session.sessionId);
         }
 
         private void UpdateUserProfile()
@@ -76,7 +74,6 @@ namespace BankClient
             string newUser = label2.Text;
 
             AuthenticationObj authObj = Program.GetAuthObj();
-
         }
 
         private void NameBtn_Click(object sender, EventArgs e)
@@ -97,7 +94,6 @@ namespace BankClient
             string newName = label2.Text;
 
             AuthenticationObj authObj = Program.GetAuthObj();
-
         }
     }
 }

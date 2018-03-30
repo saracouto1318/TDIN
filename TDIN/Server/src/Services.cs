@@ -54,16 +54,12 @@ public class UserAuthenticationService {
     public bool LoginUser(string username, string password)
     {
         string passHash = GetHashString(password);
-        Console.WriteLine("PassHash {0}", passHash);
         return Database.Database.GetInstance().CheckUser(username, passHash);
     }
 
     public bool RegisterUser(string username, string password, string name)
     {
-        /*if(!IsValidRegister(username, password))
-            return false;*/
         string passHash = GetHashString(password);
-        Console.WriteLine("PassHash {0}", passHash);
         return Database.Database.GetInstance().InsertUser(name, username, passHash);
     }
 

@@ -1,4 +1,4 @@
-﻿namespace BankClient.src
+﻿namespace BankClient
 {
     partial class CreateEditOrder
     {
@@ -109,7 +109,7 @@
             this.userName.Text = "Order";
             this.userName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
-            if (this.type == "Buy" || this.type == "Sell")
+            /*if (this.type == "Buy" || this.type == "Sell")
             {
                 this.userName.Text = "Create Order";
 
@@ -124,7 +124,7 @@
             {
                 this.userName.Text = "Edit Order";
                 this.button1.Visible = true;
-            }
+            }*/
 
             // 
             // CreateEditOrder

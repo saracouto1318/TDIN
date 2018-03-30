@@ -1,4 +1,4 @@
-﻿namespace BankClient.src
+﻿namespace BankClient
 {
     partial class OrdersList
     {

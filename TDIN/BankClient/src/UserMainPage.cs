@@ -8,13 +8,31 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BankClient.src
+namespace BankClient
 {
     public partial class UserMainPage : Form
     {
         public UserMainPage()
         {
             InitializeComponent();
+            GetUserInformation();
+        }
+
+        private async Task GetUserInformation()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    User user = Services.GetInstance().GetUserInformation();
+                    Console.WriteLine("User {0}", user.name);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Program.ChangeForm(this, new AuthenticationPage());
+                }
+            });
         }
     }
 }

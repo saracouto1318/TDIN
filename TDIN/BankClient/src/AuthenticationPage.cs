@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BankClient
@@ -22,17 +15,14 @@ namespace BankClient
             string username = UsernameLog.Text;
             string password = PasswordLog.Text;
 
-            AuthenticationObj authObj = Program.GetAuthObj();
-            
-            // Login user
-            UserSession session = authObj.Login(username, password);
-            if (session != null)
+            if(Services.GetInstance().LoginUser(username, password))
             {
-                Program.ChangeForm(this, new MainPage(session));
-                return;
+                Program.ChangeForm(this, new UserMainPage());
             }
-            
-            label2.Visible = true;
+            else
+            {
+                label2.Visible = true;
+            }
         }
 
         private void RegisterBtn_Click(object sender, EventArgs e)
@@ -40,24 +30,16 @@ namespace BankClient
             string name = NameOfUser.Text;
             string username = UsernameReg.Text;
             string password = PasswordReg.Text;
-            
-            AuthenticationObj authObj = Program.GetAuthObj();
 
-            // Validate username
-            if(!authObj.IsUsernameAvailable(username))
+            if(Services.GetInstance().RegisterUser(username, password, name))
+            {
+                Program.ChangeForm(this, new UserMainPage());
+            }
+            else
             {
                 label1.Visible = true;
-                return;
-            }
-            // Register user
-            UserSession session = authObj.Register(username, password, name);
-            if (session != null)
-            {
-                Program.ChangeForm(this, new MainPage(session));
-                return;
             }
 
-            label1.Visible = true;
         }
 
         private void label1_Click(object sender, EventArgs e)

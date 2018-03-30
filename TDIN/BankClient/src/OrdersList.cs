@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BankClient.src
+namespace BankClient
 {
     public partial class OrdersList : Form
     {

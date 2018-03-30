@@ -58,6 +58,8 @@ public class AuthenticationObj : MarshalByRefObject, IUser
 
     public User UserInformation(string sessionId)
     {
-        return new User("Username1", "Password1", "Name1", 0, 0);
+        UserAuthenticationService authService =
+            UserAuthenticationService.GetInstance();
+        return authService.GetUserInformation(sessionId);
     }
 }

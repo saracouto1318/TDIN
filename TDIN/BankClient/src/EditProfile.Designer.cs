@@ -1,6 +1,6 @@
 ﻿namespace BankClient
 {
-    partial class MainPage
+    partial class EditProfile
     {
         /// <summary>
         /// Required designer variable.
