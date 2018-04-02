@@ -410,27 +410,15 @@ namespace Database
 
             try
             {
-                int digiAvaiable = 0;
-                _command.CommandText = "SELECT COUNT(*) FROM Diginote WHERE nickname = @source AND serialNumber NOT IN (SELECT diginoteID FROM TransactionDiginote)";
+                _command.CommandText = "SELECT serialNumber FROM Diginote WHERE nickname = @source AND serialNumber NOT IN (SELECT diginoteID FROM TransactionDiginote) ORDER BY serialNumber LIMIT @num";
                 _command.Parameters.Add(new SQLiteParameter("@source", username));
+                _command.Parameters.Add(new SQLiteParameter("@num", nDiginotes));
                 _reader = _command.ExecuteReader();
 
                 if (_reader.Read())
-                    digiAvaiable += _reader.GetInt32(0);
-
-               if(digiAvaiable >= nDiginotes)
-               {
-                    _command.CommandText = "SELECT serialNumber FROM Diginote WHERE nickname = @source ORDER BY serialNumber LIMIT @num";
-                    _command.Parameters.Add(new SQLiteParameter("@source", username));
-                    _command.Parameters.Add(new SQLiteParameter("@num", nDiginotes));
-
-                    _reader = _command.ExecuteReader();
-
-                    if (_reader.Read())
-                        while (_reader.Read())
-                            diginotes.Add(_reader.GetInt32(0));
-               }
-               
+                    while (_reader.Read())
+                        diginotes.Add(_reader.GetInt32(0));
+                
                 return diginotes;
             }
             catch(SQLiteException e)
