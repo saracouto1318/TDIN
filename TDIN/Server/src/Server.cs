@@ -38,8 +38,13 @@ public class Server {
         }
     }
 }
-public class AuthenticationObj : MarshalByRefObject, IUser
+public class AuthUser : MarshalByRefObject, IUser
 {
+    public override object InitializeLifetimeService()
+    {
+        return null;
+    }
+
     public string Hello()
     {
         return "Hello user :)";
