@@ -11,12 +11,14 @@ namespace BankClient
     static class Program
     {
         public static IUser virtualUser;
+        public static ITransaction virtualTransaction;
 
         [STAThread]
         static void Main()
         {
             RemotingConfiguration.Configure("BankClient.exe.config", false);
             virtualUser = (IUser)GetRemote.New(typeof(IUser));
+            //virtualTransaction = (ITransaction)GetRemote.New(typeof(ITransaction));
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

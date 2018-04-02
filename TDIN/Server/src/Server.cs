@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
 
 public class Server {
@@ -8,18 +9,8 @@ public class Server {
         Services.GetInstance();
         // Start remoting
         RemotingConfiguration.Configure("Server.exe.config", false);
-
-        while(true)
-        {
-            Console.Write("Diginote:");
-            string line = Console.ReadLine();
-            if (float.TryParse(line, out float nValue) && nValue > 0f)
-            {
-                bool success = Services.GetInstance().ChangeDiginoteValue(nValue);
-                Console.Write("Setting value to {0} with {1}", nValue, success ? "success" : "failure");
-            }
-            Console.WriteLine("Diginote Value: {0}", Services.GetInstance().GetDiginoteValue());
-        }
+        Console.WriteLine("Press any key to exit...");
+        Console.Read();
     }
 
     static void SetDiginoteValue()
@@ -38,18 +29,13 @@ public class Server {
         }
     }
 }
-public class AuthUser : MarshalByRefObject, IUser
+public class UserManager : MarshalByRefObject, IUser
 {
     public override object InitializeLifetimeService()
     {
         return null;
     }
-
-    public string Hello()
-    {
-        return "Hello user :)";
-    }
-
+    
     public UserSession Login(string username, string password)
     {
         // Authenticate params
@@ -116,5 +102,33 @@ public class AuthUser : MarshalByRefObject, IUser
         Services authService =
             Services.GetInstance();
         return authService.ChangePassword(sessionId, password, nPassword);
+    }
+}
+
+public class TransactionManager : MarshalByRefObject, ITransaction
+{
+    public event ValueHandler UpdatePower;
+    public event SellingHandler NewSellTransaction;
+    public event BuyingHandler NewBuyTransaction;
+    public event CompleteTransactionHandler CompleteTransaction;
+
+    public override object InitializeLifetimeService()
+    {
+        return null;
+    }
+
+    public float GetPower()
+    {
+        return Services.GetInstance().GetDiginoteValue();
+    }
+
+    public List<Transaction> GetMyTransactions(string sessionId)
+    {
+        return null;
+    }
+
+    public List<Transaction> GetOtherTransactions(string sessionId)
+    {
+        return null;
     }
 }

@@ -17,6 +17,8 @@ namespace BankClient
 
         public UserSession session;
         public User user;
+        public Intermediate inter;
+        public float power;
 
         private Services() { }
 
@@ -36,6 +38,7 @@ namespace BankClient
             if (uSession != null)
             {
                 session = uSession;
+                OnAuthentication();
                 return true;
             }
             return false;
@@ -54,10 +57,28 @@ namespace BankClient
             if (uSession != null)
             {
                 session = uSession;
+                OnAuthentication();
                 return true;
             }
 
             return false;
+        }
+
+        public void OnAuthentication()
+        {
+            // Get all the information necessary
+
+            // Subscribe to events
+            inter = new Intermediate();
+            inter.UpdatePower += OnPowerChange;
+            inter.NewSellTransaction += OnNewSeller;
+            inter.NewBuyTransaction += OnNewBuyer;
+            inter.CompleteTransaction += OnComplete;
+            Program.virtualTransaction = (ITransaction)GetRemote.New(typeof(ITransaction));
+            Program.virtualTransaction.UpdatePower += inter.FireUpdatePower;
+            Program.virtualTransaction.NewSellTransaction += inter.FireNewSellTransaction;
+            Program.virtualTransaction.NewBuyTransaction += inter.FireNewBuyTransaction;
+            Program.virtualTransaction.CompleteTransaction += inter.FireCompleteTransaction;
         }
 
         #endregion
@@ -110,6 +131,27 @@ namespace BankClient
                 return true;
             }
             return false;
+        }
+
+        #endregion
+
+        #region Transaction
+
+        public void OnPowerChange(float power)
+        {
+
+        }
+        public void OnNewSeller(int id, string username, string price, string quantity)
+        {
+
+        }
+        public void OnNewBuyer(int id, string username, string price, string quantity)
+        {
+
+        }
+        public void OnComplete(int id)
+        {
+
         }
 
         #endregion

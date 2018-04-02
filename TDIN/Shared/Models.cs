@@ -6,7 +6,6 @@ public class User : MarshalByRefObject {
     public string password;
     public string name;
     public int numDiginotes;
-    public int numTransactions;
 
     public User()
     {
@@ -14,7 +13,6 @@ public class User : MarshalByRefObject {
         username = "";
         password = "";
         numDiginotes = 0;
-        numTransactions = 0;
     }
 
     public User(string username, string password, string name, int numDiginotes, int numTransactions) {
@@ -22,7 +20,6 @@ public class User : MarshalByRefObject {
         this.username = username;
         this.password = password;
         this.numDiginotes = numDiginotes;
-        this.numTransactions = numTransactions;
     }
 }
 
