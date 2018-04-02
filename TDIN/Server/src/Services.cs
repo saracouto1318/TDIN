@@ -3,15 +3,18 @@ using System.Runtime.Remoting;
 using System.Security.Cryptography;
 using System.Text;
 
-public class UserAuthenticationService {
-    private static UserAuthenticationService instance;
+public class Services {
+    private static Services _instance;
+    private Database.Database _db;
 
-    private UserAuthenticationService() {}
+    private Services() {
+        _db = Database.Database.Initialize();
+    }
 
-    public static UserAuthenticationService GetInstance() {
-        if(instance == null)
-            instance = new UserAuthenticationService();
-        return instance;
+    public static Services GetInstance() {
+        if(_instance == null)
+            _instance = new Services();
+        return _instance;
     }
 
     #region Hash
@@ -37,7 +40,7 @@ public class UserAuthenticationService {
     public bool IsUsernameAvailable(string username)
     {
         // Check username against db entries
-        return !Database.Database.GetInstance().UserExists(username);
+        return !_db.UserExists(username);
     }
 
     public bool IsValidPassword(string password)
@@ -54,13 +57,13 @@ public class UserAuthenticationService {
     public bool LoginUser(string username, string password)
     {
         string passHash = GetHashString(password);
-        return Database.Database.GetInstance().CheckUser(username, passHash);
+        return _db.CheckUser(username, passHash);
     }
 
     public bool RegisterUser(string username, string password, string name)
     {
         string passHash = GetHashString(password);
-        return Database.Database.GetInstance().InsertUser(name, username, passHash);
+        return _db.InsertUser(name, username, passHash);
     }
 
     #endregion
@@ -76,8 +79,8 @@ public class UserAuthenticationService {
 
     private bool StoreSession(string username, string sessionId)
     {
-        Database.Database.GetInstance().DeleteSession(username);
-        return Database.Database.GetInstance().InsertSession(username, sessionId);
+        _db.DeleteSession(username);
+        return _db.InsertSession(username, sessionId);
     }
 
     #endregion
@@ -86,38 +89,56 @@ public class UserAuthenticationService {
 
     public User GetUserInformation(string sessionId)
     {
-        string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        string username = _db.GetUsernameBySession(sessionId);
         if (username == null)
             return null;
-        User user = Database.Database.GetInstance().GetUserInfo(username);
+        User user = _db.GetUserInfo(username);
         return user;
     }
 
     public bool ChangeName(string sessionId, string nName)
     {
-        string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        string username = _db.GetUsernameBySession(sessionId);
         if (username == null)
             return false;
-        return Database.Database.GetInstance().ChangeName(nName, username);
+        return _db.ChangeName(nName, username);
     }
 
     public bool ChangeUsername(string sessionId, string nUsername)
     {
-        string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        string username = _db.GetUsernameBySession(sessionId);
         if (username == null)
             return false;
-        return Database.Database.GetInstance().ChangeUsername(nUsername, username);
+        return _db.ChangeUsername(nUsername, username);
     }
 
     public bool ChangePassword(string sessionId, string password, string nPassword)
     {
-        string username = Database.Database.GetInstance().GetUsernameBySession(sessionId);
+        string username = _db.GetUsernameBySession(sessionId);
         if (username == null || !LoginUser(username, password))
             return false;
         string nPassHash = GetHashString(nPassword);
-        return Database.Database.GetInstance().ChangePassword(nPassHash, username);
+        return _db.ChangePassword(nPassHash, username);
     }
 
     #endregion
 
+    #region Diginotes
+
+    public bool ChangeDiginoteValue(float power)
+    {
+        bool success = _db.ChangeDiginoteValue(power);
+        if(success)
+        {
+            //Notify every subscribed client
+        }
+        return success;
+    }
+
+    public float GetDiginoteValue()
+    {
+        return _db.GetValue();
+    }
+
+    #endregion
 }

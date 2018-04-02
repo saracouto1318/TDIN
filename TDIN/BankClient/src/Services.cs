@@ -31,10 +31,8 @@ namespace BankClient
 
         public bool LoginUser(string username, string password)
         {
-            AuthenticationObj authObj = Program.GetAuthObj();
-
             // Login user
-            UserSession uSession = authObj.Login(username, password);
+            UserSession uSession = Program.virtualUser.Login(username, password);
             if (uSession != null)
             {
                 session = uSession;
@@ -45,16 +43,14 @@ namespace BankClient
 
         public bool RegisterUser(string username, string password, string name)
         {
-            AuthenticationObj authObj = Program.GetAuthObj();
-
             // Validate username
-            if (!authObj.IsUsernameAvailable(username))
+            if (!Program.virtualUser.IsUsernameAvailable(username))
             {
                 return false;
             }
 
             // Register user
-            UserSession uSession = authObj.Register(username, password, name);
+            UserSession uSession = Program.virtualUser.Register(username, password, name);
             if (uSession != null)
             {
                 session = uSession;
@@ -77,7 +73,7 @@ namespace BankClient
 
             if(user == null)
             {
-                user = Program.GetAuthObj().UserInformation(session.sessionId);
+                user = Program.virtualUser.UserInformation(session.sessionId);
             }
 
             return user;
@@ -85,7 +81,7 @@ namespace BankClient
 
         public bool ChangeName(string nName)
         {
-            if (Program.GetAuthObj().ChangeName(session.sessionId, nName))
+            if (Program.virtualUser.ChangeName(session.sessionId, nName))
             {
                 user.name = nName;
                 // Notify change of name
@@ -97,7 +93,7 @@ namespace BankClient
 
         public bool ChangeUsername(string nUsername)
         {
-            if (Program.GetAuthObj().ChangeUsername(session.sessionId, nUsername))
+            if (Program.virtualUser.ChangeUsername(session.sessionId, nUsername))
             {
                 user.username = nUsername;
                 // Notify change of username
@@ -109,7 +105,7 @@ namespace BankClient
 
         public bool ChangePassword(string password, string nPassword)
         {
-            if (Program.GetAuthObj().ChangePassowrd(session.sessionId, password, nPassword))
+            if (Program.virtualUser.ChangePassowrd(session.sessionId, password, nPassword))
             {
                 return true;
             }

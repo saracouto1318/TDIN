@@ -5,10 +5,7 @@ using System.Windows.Forms;
 namespace BankClient
 {
     public partial class EditProfile : Form
-    {
-        private enum MainPageState { ASYNC_CALL, IDDLE };
-        private MainPageState status = MainPageState.IDDLE;
-        
+    {        
         public EditProfile()
         {
             InitializeComponent();
@@ -17,7 +14,6 @@ namespace BankClient
         
         private async void GetUserInforamtionAsync()
         {
-            status = MainPageState.ASYNC_CALL;
             User user = null;
             await Task.Run(() =>
             {
@@ -32,7 +28,6 @@ namespace BankClient
                 }
             });
             UpdateUserProfile(user);
-            status = MainPageState.IDDLE;
         }
 
         private void UpdateUserProfile(User user)

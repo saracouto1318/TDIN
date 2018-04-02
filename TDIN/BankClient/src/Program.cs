@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting;
@@ -9,13 +10,13 @@ namespace BankClient
 {
     static class Program
     {
-        private static AuthenticationObj authObj;
+        public static IUser virtualUser;
 
         [STAThread]
         static void Main()
         {
             RemotingConfiguration.Configure("BankClient.exe.config", false);
-            authObj = new AuthenticationObj();
+            virtualUser = (IUser)GetRemote.New(typeof(IUser));
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -25,60 +26,37 @@ namespace BankClient
             Application.Run();
         }
 
-        public static AuthenticationObj GetAuthObj()
-        {
-            if (authObj != null)
-                authObj = new AuthenticationObj();
-            return authObj;
-        }
-
         public static void ChangeForm(Form activeForm, Form changeToForm)
         {
             activeForm.Close();
             changeToForm.Show();
         }
     }
-}
 
-class AuthenticationObj : MarshalByRefObject, IUser
-{
-    public string Hello()
+    class GetRemote
     {
-        return null;
-    }
+        private static IDictionary wellKnownTypes;
 
-    public UserSession Login(string username, string password)
-    {
-        return null;
-    }
+        public static object New(Type type)
+        {
+            if (wellKnownTypes == null)
+                InitTypeCache();
+            WellKnownClientTypeEntry entry = (WellKnownClientTypeEntry)wellKnownTypes[type];
+            if (entry == null)
+                throw new RemotingException("Type not found!");
+            return Activator.GetObject(type, entry.ObjectUrl);
+        }
 
-    public bool IsUsernameAvailable(string username)
-    {
-        return false;
-    }
-
-    public UserSession Register(string username, string password, string name)
-    {
-        return null;
-    }
-
-    public User UserInformation(string sessionId)
-    {
-        return null;
-    }
-
-    public bool ChangeUsername(string sessionId, string nUsername)
-    {
-        return false;
-    }
-
-    public bool ChangeName(string sessionId, string nName)
-    {
-        return false;
-    }
-
-    public bool ChangePassowrd(string sessionId, string password, string nPassword)
-    {
-        return false;
+        public static void InitTypeCache()
+        {
+            Hashtable types = new Hashtable();
+            foreach (WellKnownClientTypeEntry entry in RemotingConfiguration.GetRegisteredWellKnownClientTypes())
+            {
+                if (entry.ObjectType == null)
+                    throw new RemotingException("A configured type could not be found!");
+                types.Add(entry.ObjectType, entry);
+            }
+            wellKnownTypes = types;
+        }
     }
 }
