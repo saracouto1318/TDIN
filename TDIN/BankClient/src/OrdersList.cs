@@ -16,5 +16,20 @@ namespace BankClient
         {
             InitializeComponent();
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new UserMainPage());
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new OrdersList());
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new StatisticsPage());
+        }
     }
 }

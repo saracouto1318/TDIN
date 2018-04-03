@@ -12,11 +12,26 @@ namespace BankClient
 {
     public partial class CreateEditOrder : Form
     {
-        public string type;
-        public CreateEditOrder(string type)
+        public bool type;
+        public CreateEditOrder(bool type)
         {
             this.type = type;
             InitializeComponent();
         }
-    }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new UserMainPage());
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new OrdersList());
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new StatisticsPage());
+        }
+    }  
 }
