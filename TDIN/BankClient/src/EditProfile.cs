@@ -24,7 +24,7 @@ namespace BankClient
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    Program.ChangeForm(this, new AuthenticationPage());
+                    Program.context.ChangeForm(this, new AuthenticationPage());
                 }
             });
             UpdateUserProfile(user);
@@ -63,7 +63,7 @@ namespace BankClient
             }
             catch(Exception)
             {
-                Program.ChangeForm(this, new AuthenticationPage());
+                Program.context.ChangeForm(this, new AuthenticationPage());
                 return;
             }
             
@@ -86,7 +86,7 @@ namespace BankClient
             }
             catch (Exception)
             {
-                Program.ChangeForm(this, new AuthenticationPage());
+                Program.context.ChangeForm(this, new AuthenticationPage());
                 return;
             }
 
@@ -100,17 +100,17 @@ namespace BankClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Program.ChangeForm(this, new UserMainPage());
+            Program.context.ChangeForm(this, new UserMainPage());
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Program.ChangeForm(this, new OrdersList());
+            Program.context.ChangeForm(this, new OrdersList());
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Program.ChangeForm(this, new StatisticsPage());
+            Program.context.ChangeForm(this, new StatisticsPage());
         }
     }
 }

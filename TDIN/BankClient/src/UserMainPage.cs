@@ -30,7 +30,7 @@ namespace BankClient
                 catch(Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    Program.ChangeForm(this, new AuthenticationPage());
+                    Program.context.ChangeForm(this, new AuthenticationPage());
                 }
             });
             UpdateUserInformation(user);
@@ -49,7 +49,7 @@ namespace BankClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Program.ChangeForm(this, new EditProfile());
+            Program.context.ChangeForm(this, new EditProfile());
         }
     }
 }

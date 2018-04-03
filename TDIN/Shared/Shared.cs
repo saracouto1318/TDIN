@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.Remoting;
 
 public delegate void ValueHandler(float value);
-public delegate void SellingHandler(int id, string username, string price, string quantity);
-public delegate void BuyingHandler(int id, string username, string price, string quantity);
+public delegate void SellingHandler(int id, string username, float price, int quantity);
+public delegate void BuyingHandler(int id, string username, float price, int quantity);
 public delegate void CompleteTransactionHandler(int id);
 
 public interface IUser
@@ -43,12 +43,12 @@ public class Intermediate : MarshalByRefObject
         UpdatePower(power);
     }
 
-    public void FireNewSellTransaction(int id, string username, string price, string quantity)
+    public void FireNewSellTransaction(int id, string username, float price, int quantity)
     {
         NewSellTransaction(id, username, price, quantity);
     }
 
-    public void FireNewBuyTransaction(int id, string username, string price, string quantity)
+    public void FireNewBuyTransaction(int id, string username, float price, int quantity)
     {
         NewBuyTransaction(id, username, price, quantity);
     }

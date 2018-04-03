@@ -17,7 +17,7 @@ namespace BankClient
 
             if(Services.GetInstance().LoginUser(username, password))
             {
-                Program.ChangeForm(this, new UserMainPage());
+                Program.context.ChangeForm(this, new UserMainPage());
             }
             else
             {
@@ -33,7 +33,7 @@ namespace BankClient
 
             if(Services.GetInstance().RegisterUser(username, password, name))
             {
-                Program.ChangeForm(this, new UserMainPage());
+                Program.context.ChangeForm(this, new UserMainPage());
             }
             else
             {

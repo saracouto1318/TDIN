@@ -18,7 +18,9 @@ namespace BankClient
         public UserSession session;
         public User user;
         public Intermediate inter;
-        public float power;
+        public float power = -1f;
+        public List<Transaction> myTransactions;
+        public List<Transaction> otherTransactions;
 
         private Services() { }
 
@@ -67,6 +69,10 @@ namespace BankClient
         public void OnAuthentication()
         {
             // Get all the information necessary
+            GetUserInformation();
+            GetPower();
+            GetMyTransactions();
+            GetOtherTransactions();
 
             // Subscribe to events
             inter = new Intermediate();
@@ -137,21 +143,75 @@ namespace BankClient
 
         #region Transaction
 
+        public float GetPower()
+        {
+            if(power < 0)
+            {
+                power = Program.virtualTransaction.GetPower();
+            }
+            return power;
+        }
+
+        public List<Transaction> GetMyTransactions()
+        {
+            if (session == null)
+            {
+                throw new NotAuthorizedOperationException();
+            }
+            if(myTransactions == null)
+            {
+                myTransactions = Program.virtualTransaction.GetMyTransactions(session.sessionId);
+            }
+            return myTransactions;
+        }
+
+        public List<Transaction> GetOtherTransactions()
+        {
+            if (session == null)
+            {
+                throw new NotAuthorizedOperationException();
+            }
+            if (myTransactions == null)
+            {
+                otherTransactions = Program.virtualTransaction.GetOtherTransactions(session.sessionId);
+            }
+            return otherTransactions;
+        }
+
         public void OnPowerChange(float power)
         {
-
+            this.power = power;
         }
-        public void OnNewSeller(int id, string username, string price, string quantity)
+
+        public void OnNewSeller(int id, string username, float price, int quantity)
         {
-
+            Transaction transaction = new Transaction(id, null, username, price, quantity, DateTime.Now);
+            if (username == user.username)
+            {
+                myTransactions.Add(transaction);
+            }
+            else
+            {
+                otherTransactions.Add(transaction);
+            }
         }
-        public void OnNewBuyer(int id, string username, string price, string quantity)
+
+        public void OnNewBuyer(int id, string username, float price, int quantity)
         {
-
+            Transaction transaction = new Transaction(id, null, username, price, quantity, DateTime.Now);
+            if (username == user.username)
+            {
+                myTransactions.Add(transaction);
+            }
+            else
+            {
+                otherTransactions.Add(transaction);
+            }
         }
+
         public void OnComplete(int id)
         {
-
+            // I dunno
         }
 
         #endregion

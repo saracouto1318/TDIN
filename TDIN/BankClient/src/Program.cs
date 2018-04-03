@@ -12,26 +12,54 @@ namespace BankClient
     {
         public static IUser virtualUser;
         public static ITransaction virtualTransaction;
+        public static MyApplicationContext context;
 
         [STAThread]
         static void Main()
         {
             RemotingConfiguration.Configure("BankClient.exe.config", false);
             virtualUser = (IUser)GetRemote.New(typeof(IUser));
-            //virtualTransaction = (ITransaction)GetRemote.New(typeof(ITransaction));
+            virtualTransaction = (ITransaction)GetRemote.New(typeof(ITransaction));
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            new AuthenticationPage().Show();
+            context = new MyApplicationContext();
+            context.ShowForm(new AuthenticationPage());
 
-            Application.Run();
+            Application.Run(context);
+        }
+    }
+
+    class MyApplicationContext : ApplicationContext
+    {
+        private int formsCount;
+
+        public MyApplicationContext()
+        {
+            formsCount = 0;
         }
 
-        public static void ChangeForm(Form activeForm, Form changeToForm)
+        public void ShowForm(Form form)
         {
+            formsCount++;
+            form.FormClosed += OnCloseForm;
+            form.Show();
+        }
+
+        public void ChangeForm(Form activeForm, Form changeToForm)
+        {
+            ShowForm(changeToForm);
             activeForm.Close();
-            changeToForm.Show();
+        }
+
+        private void OnCloseForm(object sender, EventArgs e)
+        {
+            formsCount--;
+            if (Application.OpenForms.Count == 0)
+            {
+                Application.Exit();
+            }
         }
     }
 

@@ -37,7 +37,7 @@ public class Transaction : MarshalByRefObject
 {
     public int ID;
     public int quantity;
-    public double value;
+    public float value;
     public string buyer;
     public string seller;
     public DateTime date;
@@ -51,7 +51,7 @@ public class Transaction : MarshalByRefObject
         seller = "";
     }
 
-    public Transaction(int iD, int quantity, double value, string buyer, string seller, DateTime date)
+    public Transaction(int iD, string buyer, string seller, float value, int quantity, DateTime date)
     {
         ID = iD;
         this.quantity = quantity;

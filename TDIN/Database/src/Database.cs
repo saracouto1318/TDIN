@@ -94,7 +94,7 @@ namespace Database
                 _transaction.Commit();
                 return true;
             }
-            catch (SQLiteException e) {
+            catch (SQLiteException) {
                 _transaction.Rollback();
                 return false;
             }
@@ -209,7 +209,7 @@ namespace Database
                 _transaction.Commit();
                 return true;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 _transaction.Rollback();
                 return false;
@@ -228,7 +228,7 @@ namespace Database
                 _transaction.Commit();
                 return true;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 _transaction.Rollback();
                 return false;
@@ -248,7 +248,7 @@ namespace Database
                 _transaction.Commit();
                 return true;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 _transaction.Rollback();
                 return false;
@@ -273,7 +273,7 @@ namespace Database
                 // If number of affected rows is lower than 1 return false
                 return rowCount >= 1;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 _transaction.Rollback();
                 return false;
@@ -339,7 +339,7 @@ namespace Database
                 _transaction.Commit();
                 return true;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 _transaction.Rollback();
                 return false;
@@ -421,7 +421,7 @@ namespace Database
                 
                 return diginotes;
             }
-            catch(SQLiteException e)
+            catch(SQLiteException)
             {
                 _transaction.Rollback();
                 return diginotes;
@@ -471,7 +471,7 @@ namespace Database
 
                 return true;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 _transaction.Rollback();
                 return false;
@@ -519,7 +519,7 @@ namespace Database
 
                 return true;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 _reader.Close();
                 _transaction.Rollback();
@@ -553,7 +553,7 @@ namespace Database
                     info.ID = _reader.GetInt32(0);
                     info.buyer = _reader.GetString(2);
                     info.seller = _reader.GetString(1);
-                    info.value = _reader.GetDouble(3);
+                    info.value = _reader.GetFloat(3);
                     info.date = _reader.GetDateTime(4);
                     info.quantity = _reader.GetInt32(5);
                     
@@ -563,7 +563,7 @@ namespace Database
                 _reader.Close();
                 return transactions;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 _reader.Close();
                 return null;
@@ -580,7 +580,7 @@ namespace Database
                 
                 return true;
             }
-            catch (SQLiteException e)
+            catch (SQLiteException)
             {
                 return false;
             }
