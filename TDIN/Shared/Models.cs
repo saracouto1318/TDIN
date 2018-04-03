@@ -5,21 +5,24 @@ public class User : MarshalByRefObject {
     public string username;
     public string password;
     public string name;
-    public int numDiginotes;
+    public int availableDiginotes;
+    public int totalDiginotes;
 
     public User()
     {
         name = "";
         username = "";
         password = "";
-        numDiginotes = 0;
+        availableDiginotes = 0;
+        totalDiginotes = 0;
     }
 
-    public User(string username, string password, string name, int numDiginotes, int numTransactions) {
+    public User(string username, string password, string name, int availableDiginotes, int totalDiginotes, int numTransactions) {
         this.name = name;
         this.username = username;
         this.password = password;
-        this.numDiginotes = numDiginotes;
+        this.availableDiginotes = availableDiginotes;
+        this.totalDiginotes = totalDiginotes;
     }
 }
 

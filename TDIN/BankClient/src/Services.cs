@@ -87,6 +87,16 @@ namespace BankClient
             Program.virtualTransaction.CompleteTransaction += inter.FireCompleteTransaction;
         }
 
+        public void OnExit()
+        {
+            if (inter == null)
+                return;
+            Program.virtualTransaction.UpdatePower -= inter.FireUpdatePower;
+            Program.virtualTransaction.NewSellTransaction -= inter.FireNewSellTransaction;
+            Program.virtualTransaction.NewBuyTransaction -= inter.FireNewBuyTransaction;
+            Program.virtualTransaction.CompleteTransaction -= inter.FireCompleteTransaction;
+        }
+
         #endregion
 
         #region User
@@ -101,6 +111,7 @@ namespace BankClient
             if(user == null)
             {
                 user = Program.virtualUser.UserInformation(session.sessionId);
+                Console.WriteLine("{0} has {1}/{2} diginotes", user.name, user.availableDiginotes, user.totalDiginotes);
             }
 
             return user;

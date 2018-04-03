@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Remoting;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BankClient
@@ -58,6 +55,7 @@ namespace BankClient
             formsCount--;
             if (Application.OpenForms.Count == 0)
             {
+                Services.GetInstance().OnExit();
                 Application.Exit();
             }
         }

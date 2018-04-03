@@ -21,11 +21,13 @@ namespace BankClient
         private async void GetUserInformationAsync()
         {
             User user = null;
+            float power = 1f;
             await Task.Run(() =>
             {
                 try
                 {
                     user = Services.GetInstance().GetUserInformation();
+                    power = Services.GetInstance().GetPower();
                 }
                 catch(Exception e)
                 {
@@ -33,18 +35,18 @@ namespace BankClient
                     Program.context.ChangeForm(this, new AuthenticationPage());
                 }
             });
-            UpdateUserInformation(user);
+            UpdateUserInformation(user, power);
         }
 
-        private void UpdateUserInformation(User user)
+        private void UpdateUserInformation(User user, float power)
         {
             if(user == null)
             {
                 return;
             }
             userName.Text = user.name;
-            nDiginotes.Text = user.numDiginotes + "";
-            quotation.Text = "1.00$";
+            nDiginotes.Text = user.availableDiginotes + "/" + user.totalDiginotes;
+            quotation.Text = power + "$";
         }
 
         private void button1_Click(object sender, EventArgs e)

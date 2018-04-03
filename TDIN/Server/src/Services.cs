@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Security.Cryptography;
 using System.Text;
@@ -138,6 +139,26 @@ public class Services {
     public float GetDiginoteValue()
     {
         return _db.GetValue();
+    }
+
+    #endregion
+
+    #region Transaction
+
+    public List<Transaction> GetMyTransactions(string sessionId)
+    {
+        string username = _db.GetUsernameBySession(sessionId);
+        if (username == null)
+            return null;
+        return _db.GetTransactions(Database.TransactionType.ALL, true, username);
+    }
+
+    public List<Transaction> GetOtherTransactions(string sessionId)
+    {
+        string username = _db.GetUsernameBySession(sessionId);
+        if (username == null)
+            return null;
+        return _db.GetOtherTransactions(Database.TransactionType.ALL, true, username);
     }
 
     #endregion

@@ -124,11 +124,26 @@ public class TransactionManager : MarshalByRefObject, ITransaction
 
     public List<Transaction> GetMyTransactions(string sessionId)
     {
-        return null;
+        return Services.GetInstance().GetMyTransactions(sessionId);
     }
 
     public List<Transaction> GetOtherTransactions(string sessionId)
     {
-        return null;
+        return Services.GetInstance().GetOtherTransactions(sessionId);
+    }
+
+    public bool TrySellTransaction(string sessionId, float price, int quantity)
+    {
+        return false;
+    }
+
+    public bool TryBuyTransaction(string sessionId, float price, int quantity)
+    {
+        return false;
+    }
+
+    public bool TryCompleteTransaction(string sessionId, float price, int quantity)
+    {
+        return false;
     }
 }

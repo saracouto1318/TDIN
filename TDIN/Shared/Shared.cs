@@ -29,6 +29,9 @@ public interface ITransaction
     float GetPower();
     List<Transaction> GetMyTransactions(string sessionId);
     List<Transaction> GetOtherTransactions(string sessionId);
+    bool TrySellTransaction(string sessionId, float price, int quantity);
+    bool TryBuyTransaction(string sessionId, float price, int quantity);
+    bool TryCompleteTransaction(string sessionId, float price, int quantity);
 }
 
 public class Intermediate : MarshalByRefObject
