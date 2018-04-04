@@ -19,6 +19,7 @@ namespace Database
         public const string DB_PATH = "database.sqlite";
         public const string SQL_PATH = "database.sql";
         public const float DEFAULT_VALUE = 1.0f;
+        public const float INC_DEC_VALUE = 0.1f;
 
         private Database()
         {
@@ -532,10 +533,17 @@ namespace Database
         {
             try
             {
-                if(type.Equals(TransactionType.SELL))
-                    _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL AND quantity >= @num ORDER BY transactionID LIMIT 1";
-                else if(type.Equals(TransactionType.BUY))
-                    _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL AND quantity >= @num ORDER BY transactionID LIMIT 1";
+                if (type.Equals(TransactionType.SELL)) {
+                    _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL AND quantity >= @num AND buyer <> @seller ORDER BY transactionID LIMIT 1";
+                    _command.Parameters.Add(new SQLiteParameter("@seller", seller));
+                }
+                    
+                else if (type.Equals(TransactionType.BUY))
+                {
+                    _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL AND quantity >= @num AND seller <> @buyer ORDER BY transactionID LIMIT 1";
+                    _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
+                }
+
                 _command.Parameters.Add(new SQLiteParameter("@num", numDiginotes));
                 _reader = _command.ExecuteReader();
 
@@ -545,50 +553,66 @@ namespace Database
                     int ID = _reader.GetInt32(0);
                     string transactionBuyer = _reader.GetString(2);
                     string transactionSeller = _reader.GetString(1);
-                    DateTime date = _reader.GetDateTime(5);
-                    double price = _reader.GetDouble(3);
 
-                    _command.CommandText = "SELECT transactionID FROM Transactions WHERE transactionID > @ID";
-                    _command.Parameters.Add(new SQLiteParameter("@ID", ID));
-                    _reader = _command.ExecuteReader();
+                    if (newQuantity != 0)
+                    {                        
+                        DateTime date = _reader.GetDateTime(5);
 
-                    List<int> transactions = new List<int>();
-                    while (_reader.Read())
-                        transactions.Add(_reader.GetInt32(0));
+                        _command.CommandText = "SELECT transactionID FROM Transactions WHERE transactionID > @ID";
+                        _command.Parameters.Add(new SQLiteParameter("@ID", ID));
+                        _reader = _command.ExecuteReader();
 
-                    int IDaux = ID;
-                    foreach (int transaction in transactions)
-                    {
-                        IDaux += 2;
-                        
-                        _command.CommandText = "UPDATE Transactions SET transactionID = @ID WHERE Transactions.transactionID = @oldID";
-                        _command.Parameters.Add(new SQLiteParameter("@ID", IDaux));
-                        _command.Parameters.Add(new SQLiteParameter("@oldID", transaction));
+                        List<int> transactions = new List<int>();
+                        while (_reader.Read())
+                            transactions.Add(_reader.GetInt32(0));
 
-                        _transaction = _conn.BeginTransaction();
-                        _command.ExecuteNonQuery();
-                        _transaction.Commit();
+                        //change quotation
+                        /*float newQuote;
+                        if (type.Equals(TransactionType.SELL))
+                        {
+                            newQuote = GetValue() - INC_DEC_VALUE;
+                            ChangeDiginoteValue(newQuote);
+                        }
+                        else if (type.Equals(TransactionType.BUY))
+                        {
+                            newQuote = GetValue() + INC_DEC_VALUE;
+                            ChangeDiginoteValue(newQuote);
+                        }*/
+                            
+                        int IDaux = ID;
+                        foreach (int transaction in transactions)
+                        {
+                            IDaux += 2;
 
-                        _command.CommandText = "UPDATE TransactionDiginote SET transactionID = @ID WHERE TransactionDiginote.transactionID = @oldID";
-                        _command.Parameters.Add(new SQLiteParameter("@ID", IDaux));
-                        _command.Parameters.Add(new SQLiteParameter("@oldID", transaction));
+                            _command.CommandText = "UPDATE Transactions SET transactionID = @ID WHERE Transactions.transactionID = @oldID";
+                            _command.Parameters.Add(new SQLiteParameter("@ID", IDaux));
+                            _command.Parameters.Add(new SQLiteParameter("@oldID", transaction));
+
+                            _transaction = _conn.BeginTransaction();
+                            _command.ExecuteNonQuery();
+                            _transaction.Commit();
+
+                            _command.CommandText = "UPDATE TransactionDiginote SET transactionID = @ID WHERE TransactionDiginote.transactionID = @oldID";
+                            _command.Parameters.Add(new SQLiteParameter("@ID", IDaux));
+                            _command.Parameters.Add(new SQLiteParameter("@oldID", transaction));
+
+                            _transaction = _conn.BeginTransaction();
+                            _command.ExecuteNonQuery();
+                            _transaction.Commit();
+                        }
+
+                        _command.CommandText = "INSERT INTO Transactions(transactionID, seller, buyer, price, dateTime, quantity) VALUES (@ID, @seller, @buyer, @price, @time, @quantity)";
+                        _command.Parameters.Add(new SQLiteParameter("@ID", ID + 1));
+                        _command.Parameters.Add(new SQLiteParameter("@seller", transactionSeller));
+                        _command.Parameters.Add(new SQLiteParameter("@buyer", transactionBuyer));
+                        _command.Parameters.Add(new SQLiteParameter("@price", newQuantity * GetValue()));
+                        _command.Parameters.Add(new SQLiteParameter("@time", date));
+                        _command.Parameters.Add(new SQLiteParameter("@quantity", newQuantity));
 
                         _transaction = _conn.BeginTransaction();
                         _command.ExecuteNonQuery();
                         _transaction.Commit();
                     }
-
-                    _command.CommandText = "INSERT INTO Transactions(transactionID, seller, buyer, price, dateTime, quantity) VALUES (@ID, @seller, @buyer, @price, @time, @quantity)";
-                    _command.Parameters.Add(new SQLiteParameter("@ID", ID + 1));
-                    _command.Parameters.Add(new SQLiteParameter("@seller", transactionSeller));
-                    _command.Parameters.Add(new SQLiteParameter("@buyer", transactionBuyer));
-                    _command.Parameters.Add(new SQLiteParameter("@price", price));
-                    _command.Parameters.Add(new SQLiteParameter("@time", date));
-                    _command.Parameters.Add(new SQLiteParameter("@quantity", newQuantity));
-
-                    _transaction = _conn.BeginTransaction();
-                    _command.ExecuteNonQuery();
-                    _transaction.Commit();
 
                     if (type.Equals(TransactionType.SELL))
                         return CompleteTransaction(seller, transactionBuyer, numDiginotes, ID);
