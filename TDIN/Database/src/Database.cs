@@ -477,7 +477,7 @@ namespace Database
             }
         }
 
-        public bool InsertTransaction(int nDiginotes, string buyer, string seller)
+        public bool InsertTransaction(int nDiginotes, string buyer, string seller, TransactionType type)
         {
             float value = GetValue() * (float) nDiginotes;
             try
@@ -503,7 +503,7 @@ namespace Database
                 _command.ExecuteNonQuery();
                 _transaction.Commit();
 
-                if (seller != null)
+                if (type.Equals(TransactionType.SELL))
                 {
                     List<int> diginotes = CheckDiginotes(seller, nDiginotes);
 
@@ -518,7 +518,7 @@ namespace Database
                         _transaction.Commit();
                     }
                 }
-                return CheckTransactions(nDiginotes, seller, buyer);
+                return CheckTransactions(nDiginotes, seller, buyer, type);
             }
             catch (SQLiteException)
             {
@@ -528,13 +528,13 @@ namespace Database
             }
         }
 
-        public bool CheckTransactions(int numDiginotes, string seller, string buyer)
+        public bool CheckTransactions(int numDiginotes, string seller, string buyer, TransactionType type)
         {
             try
             {
-                if(seller != null)
+                if(type.Equals(TransactionType.SELL))
                     _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL AND quantity >= @num ORDER BY transactionID LIMIT 1";
-                else if(buyer != null)
+                else if(type.Equals(TransactionType.BUY))
                     _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL AND quantity >= @num ORDER BY transactionID LIMIT 1";
                 _command.Parameters.Add(new SQLiteParameter("@num", numDiginotes));
                 _reader = _command.ExecuteReader();
@@ -590,9 +590,9 @@ namespace Database
                     _command.ExecuteNonQuery();
                     _transaction.Commit();
 
-                    if (seller != null)
+                    if (type.Equals(TransactionType.SELL))
                         return CompleteTransaction(seller, transactionBuyer, numDiginotes, ID);
-                    else if(buyer != null)
+                    else if(type.Equals(TransactionType.BUY))
                         return CompleteTransaction(transactionSeller, buyer, numDiginotes, ID);
                 }
 
