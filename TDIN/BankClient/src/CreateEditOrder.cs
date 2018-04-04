@@ -16,6 +16,22 @@ namespace BankClient
         public CreateEditOrder(bool type)
         {
             this.type = type;
+
+            if (this.type)
+            {
+                this.label5.Visible = false;
+                this.textBox2.Visible = true;
+                this.button3.Visible = true;
+                this.button1.Visible = false;
+            }
+            else
+            {
+                this.textBox2.Visible = false;
+                this.label5.Visible = true;
+                this.button1.Visible = true;
+                this.button3.Visible = false;
+            }
+                
             InitializeComponent();
         }
 
