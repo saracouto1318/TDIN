@@ -611,20 +611,20 @@ namespace Database
             {
                 List<int> diginotes = CheckDiginotes(seller, nDiginotes);
 
+                _command.CommandText = "UPDATE Transactions SET buyer=@buyer, seller=@seller, price=@price WHERE Transactions.transactionID = (SELECT TransactionDiginote.transactionID FROM TransactionDiginote WHERE diginoteID=@serial)";
+                _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
+                _command.Parameters.Add(new SQLiteParameter("@seller", seller));
+                _command.Parameters.Add(new SQLiteParameter("@price", nDiginotes * this.GetValue()));
+                _command.Parameters.Add(new SQLiteParameter("@serial", diginotes[0]));
+
+                _transaction = _conn.BeginTransaction();
+                _command.ExecuteNonQuery();
+                _transaction.Commit();
+
                 foreach (int diginote in diginotes)
                 {
                     _command.CommandText = "UPDATE Diginote SET nickname=@dest WHERE serialNumber=@serial";
                     _command.Parameters.Add(new SQLiteParameter("@dest", buyer));
-                    _command.Parameters.Add(new SQLiteParameter("@serial", diginote));
-
-                    _transaction = _conn.BeginTransaction();
-                    _command.ExecuteNonQuery();
-                    _transaction.Commit();
-
-                    _command.CommandText = "UPDATE Transactions SET buyer=@buyer, seller=@seller, price=@price WHERE Transactions.transactionID = (SELECT TransactionDiginote.transactionID FROM TransactionDiginote WHERE diginoteID=@serial)";
-                    _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
-                    _command.Parameters.Add(new SQLiteParameter("@seller", seller));
-                    _command.Parameters.Add(new SQLiteParameter("@price", nDiginotes * this.GetValue()));
                     _command.Parameters.Add(new SQLiteParameter("@serial", diginote));
 
                     _transaction = _conn.BeginTransaction();
@@ -647,7 +647,23 @@ namespace Database
                 _transaction = _conn.BeginTransaction();
                 _command.ExecuteNonQuery();
                 _transaction.Commit();
-                
+
+               /* _command.CommandText = "UPDATE User SET funds=(SELECT funds FROM User WHERE nickname=@nick)+@funds WHERE nickname=@nick";
+                _command.Parameters.Add(new SQLiteParameter("@nick", seller));
+                _command.Parameters.Add(new SQLiteParameter("@funds", nDiginotes * this.GetValue()));
+
+                _transaction = _conn.BeginTransaction();
+                _command.ExecuteNonQuery();
+                _transaction.Commit();
+
+                _command.CommandText = "UPDATE User SET funds=(SELECT funds FROM User WHERE nickname=@nick)-@funds WHERE nickname=@nick";
+                _command.Parameters.Add(new SQLiteParameter("@nick", buyer));
+                _command.Parameters.Add(new SQLiteParameter("@funds", nDiginotes * this.GetValue()));
+
+                _transaction = _conn.BeginTransaction();
+                _command.ExecuteNonQuery();
+                _transaction.Commit();*/
+
                 return true;
             }
             catch (SQLiteException)
