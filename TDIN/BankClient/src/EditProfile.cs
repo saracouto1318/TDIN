@@ -49,7 +49,23 @@ namespace BankClient
                 return;
             }
 
-            Services.GetInstance().ChangePassword(password, nPassowrd);
+            string message = "Are you sure you want to edit your password?";
+            string caption = "Error Detected in Input";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            // Displays the MessageBox.
+            result = MessageBox.Show(message, caption, buttons);
+
+            if (result == System.Windows.Forms.DialogResult.No)
+            {
+                // Closes the parent form.
+                this.Close();
+            }
+            else
+            {
+                Services.GetInstance().ChangePassword(password, nPassowrd);
+            } 
         }
 
         private void UsernameBtn_Click(object sender, EventArgs e)
@@ -72,7 +88,23 @@ namespace BankClient
                 return;
             }
 
-            Services.GetInstance().ChangeUsername(nUsername);
+            string message = "Are you sure you want to edit your username?";
+            string caption = "Error Detected in Input";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            // Displays the MessageBox.
+            result = MessageBox.Show(message, caption, buttons);
+
+            if (result == System.Windows.Forms.DialogResult.No)
+            {
+                // Closes the parent form.
+                this.Close();
+            }
+            else
+            {
+                Services.GetInstance().ChangeUsername(nUsername);
+            }
         }
 
         private void NameBtn_Click(object sender, EventArgs e)
@@ -95,7 +127,23 @@ namespace BankClient
                 return;
             }
 
-            Services.GetInstance().ChangeName(nName);
+            string message = "Are you sure you want to edit your name?";
+            string caption = "Error Detected in Input";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            // Displays the MessageBox.
+            result = MessageBox.Show(message, caption, buttons);
+
+            if (result == System.Windows.Forms.DialogResult.No)
+            {
+                // Closes the parent form.
+                this.Close();
+            }
+            else
+            {
+                Services.GetInstance().ChangeName(nName);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

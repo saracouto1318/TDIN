@@ -13,10 +13,11 @@ namespace BankClient
     public partial class CreateEditOrder : Form
     {
         public bool type;
-        public CreateEditOrder(bool type)
+        public int ID;
+        public CreateEditOrder(bool type, int ID)
         {
             this.type = type;
-
+            this.ID = ID;
             if (this.type)
             {
                 this.label5.Visible = false;
@@ -48,6 +49,28 @@ namespace BankClient
         private void button4_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string message = "Are you sure you want to edit the quotation of your diginotes?";
+            string caption = "Error Detected in Input";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            // Displays the MessageBox.
+            result = MessageBox.Show(message, caption, buttons);
+
+            if (result == System.Windows.Forms.DialogResult.No)
+            {
+                // Closes the parent form.
+                this.Close();
+            }
+            else
+            {
+
+            }
+
         }
     }  
 }

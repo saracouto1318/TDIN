@@ -75,7 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Fakes Include="Fakes\System.Data.fakes" />
     <None Include="packages.config" />
     <None Include="src\Server.exe.config" />
   </ItemGroup>

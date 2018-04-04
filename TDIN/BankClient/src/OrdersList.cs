@@ -31,5 +31,31 @@ namespace BankClient
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new CreateEditOrder(false, 1)); //Mudar para o ID da Transação
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string message = "Are you sure you want to delete this order?";
+            string caption = "Error Detected in Input";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            // Displays the MessageBox.
+            result = MessageBox.Show(message, caption, buttons);
+
+            if (result == System.Windows.Forms.DialogResult.No)
+            {
+                // Closes the parent form.
+                this.Close();
+            }
+            else
+            {
+
+            }
+        }
     }
 }
