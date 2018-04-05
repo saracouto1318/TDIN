@@ -148,7 +148,7 @@ namespace Database
 
         public bool InsertUser(string name, string username, string password)
         {
-            _command.CommandText = "INSERT INTO User(nickname, name, password) VALUES (@nick, @name, @password)";
+            _command.CommandText = "INSERT INTO User(nickname, name, password, balance) VALUES (@nick, @name, @password, 0)";
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
             _command.Parameters.Add(new SQLiteParameter("@name", name));
             _command.Parameters.Add(new SQLiteParameter("@password", password));
@@ -192,6 +192,7 @@ namespace Database
                     userInfo.name = _reader.GetString(0);
                     userInfo.availableDiginotes = _reader.GetInt32(1);
                     userInfo.totalDiginotes = _reader.GetInt32(2);
+                    userInfo.balance = _reader.GetFloat(3);
                 }
 
                 _reader.Close();
@@ -266,7 +267,7 @@ namespace Database
 
         public bool AddingFunds(string username, double funds)
         {
-            _command.CommandText = "UPDATE User SET funds=(SELECT funds FROM User WHERE nickname = @nick) + @funds WHERE nickname=@nick";
+            _command.CommandText = "UPDATE User SET balance=(SELECT balance FROM User WHERE nickname = @nick) + @funds WHERE nickname=@nick";
             _command.Parameters.Add(new SQLiteParameter("@pass", funds));
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
 
@@ -286,7 +287,7 @@ namespace Database
 
         public bool RemovingFunds(string username, double funds)
         {
-            _command.CommandText = "UPDATE User SET funds=(SELECT funds FROM User WHERE nickname = @nick) - @funds WHERE nickname=@nick";
+            _command.CommandText = "UPDATE User SET balance=(SELECT balance FROM User WHERE nickname = @nick) - @funds WHERE nickname=@nick";
             _command.Parameters.Add(new SQLiteParameter("@pass", funds));
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
 
@@ -486,40 +487,30 @@ namespace Database
                 _command.CommandText = "SELECT transactionID FROM Transactions ORDER BY transactionID DESC LIMIT 1";
                 _reader = _command.ExecuteReader();
 
-                int ID = 0;
+                int ID = 1;
                 if (_reader.Read())
                     ID += _reader.GetInt32(0);
 
-                _command.CommandText = "INSERT INTO Transactions(transactionID, seller, buyer, price, dateTime, quantity) VALUES (@ID, @seller, @buyer, @price, @time, @quantity)";
-                _command.Parameters.Add(new SQLiteParameter("@ID", ID));
-                _command.Parameters.Add(new SQLiteParameter("@seller", seller));
-                _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
-                _command.Parameters.Add(new SQLiteParameter("@price", value));
+                _reader.Close();
 
-                DateTime localDate = DateTime.Now;
-                _command.Parameters.Add(new SQLiteParameter("@time", localDate));
-                _command.Parameters.Add(new SQLiteParameter("@quantity", nDiginotes));
-
-                _transaction = _conn.BeginTransaction();
-                _command.ExecuteNonQuery();
-                _transaction.Commit();
-
-                if (type.Equals(TransactionType.SELL))
+                if((type.Equals(TransactionType.BUY) && GetUserInfo(buyer).balance >= value) || (type.Equals(TransactionType.SELL) && CheckDiginotes(seller, nDiginotes).Count >= nDiginotes))
                 {
-                    List<int> diginotes = CheckDiginotes(seller, nDiginotes);
+                    _command.CommandText = "INSERT INTO Transactions(transactionID, seller, buyer, price, dateTime, quantity) VALUES (@ID, @seller, @buyer, @price, @time, @quantity)";
+                    _command.Parameters.Add(new SQLiteParameter("@ID", ID));
+                    _command.Parameters.Add(new SQLiteParameter("@seller", seller));
+                    _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
+                    _command.Parameters.Add(new SQLiteParameter("@price", value));
 
-                    foreach (int diginote in diginotes)
-                    {
-                        _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transID, @digiID)";
-                        _command.Parameters.Add(new SQLiteParameter("@transID", ID));
-                        _command.Parameters.Add(new SQLiteParameter("@digiID", diginote));
+                    DateTime localDate = DateTime.Now;
+                    _command.Parameters.Add(new SQLiteParameter("@time", localDate));
+                    _command.Parameters.Add(new SQLiteParameter("@quantity", nDiginotes));
 
-                        _transaction = _conn.BeginTransaction();
-                        _command.ExecuteNonQuery();
-                        _transaction.Commit();
-                    }
+                    _transaction = _conn.BeginTransaction();
+                    _command.ExecuteNonQuery();
+                    _transaction.Commit();
                 }
-                return CheckTransactions(nDiginotes, seller, buyer, type);
+                
+                return CheckTransactions(nDiginotes, seller, buyer, type, ID);
             }
             catch (SQLiteException)
             {
@@ -529,18 +520,18 @@ namespace Database
             }
         }
 
-        public bool CheckTransactions(int numDiginotes, string seller, string buyer, TransactionType type)
+        public bool CheckTransactions(int numDiginotes, string seller, string buyer, TransactionType type, int transactionID)
         {
             try
             {
                 if (type.Equals(TransactionType.SELL)) {
-                    _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL AND quantity >= @num AND buyer <> @seller ORDER BY transactionID LIMIT 1";
+                    _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL AND quantity >= @num AND buyer <> @seller ORDER BY transactionID LIMIT 1";
                     _command.Parameters.Add(new SQLiteParameter("@seller", seller));
                 }
                     
                 else if (type.Equals(TransactionType.BUY))
                 {
-                    _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL AND quantity >= @num AND seller <> @buyer ORDER BY transactionID LIMIT 1";
+                    _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL AND quantity >= @num AND seller <> @buyer ORDER BY transactionID LIMIT 1";
                     _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
                 }
 
@@ -550,7 +541,7 @@ namespace Database
                 if (_reader.Read())
                 {
                     int newQuantity = _reader.GetInt32(5) - numDiginotes;
-                    int ID = _reader.GetInt32(0);
+                    int compOrderID = _reader.GetInt32(0);
                     string transactionBuyer = _reader.GetString(2);
                     string transactionSeller = _reader.GetString(1);
 
@@ -559,7 +550,7 @@ namespace Database
                         DateTime date = _reader.GetDateTime(5);
 
                         _command.CommandText = "SELECT transactionID FROM Transactions WHERE transactionID > @ID";
-                        _command.Parameters.Add(new SQLiteParameter("@ID", ID));
+                        _command.Parameters.Add(new SQLiteParameter("@ID", transactionID));
                         _reader = _command.ExecuteReader();
 
                         List<int> transactions = new List<int>();
@@ -579,7 +570,7 @@ namespace Database
                             ChangeDiginoteValue(newQuote);
                         }*/
                             
-                        int IDaux = ID;
+                        int IDaux = transactionID;
                         foreach (int transaction in transactions)
                         {
                             IDaux += 2;
@@ -591,18 +582,10 @@ namespace Database
                             _transaction = _conn.BeginTransaction();
                             _command.ExecuteNonQuery();
                             _transaction.Commit();
-
-                            _command.CommandText = "UPDATE TransactionDiginote SET transactionID = @ID WHERE TransactionDiginote.transactionID = @oldID";
-                            _command.Parameters.Add(new SQLiteParameter("@ID", IDaux));
-                            _command.Parameters.Add(new SQLiteParameter("@oldID", transaction));
-
-                            _transaction = _conn.BeginTransaction();
-                            _command.ExecuteNonQuery();
-                            _transaction.Commit();
                         }
 
                         _command.CommandText = "INSERT INTO Transactions(transactionID, seller, buyer, price, dateTime, quantity) VALUES (@ID, @seller, @buyer, @price, @time, @quantity)";
-                        _command.Parameters.Add(new SQLiteParameter("@ID", ID + 1));
+                        _command.Parameters.Add(new SQLiteParameter("@ID", transactionID + 1));
                         _command.Parameters.Add(new SQLiteParameter("@seller", transactionSeller));
                         _command.Parameters.Add(new SQLiteParameter("@buyer", transactionBuyer));
                         _command.Parameters.Add(new SQLiteParameter("@price", newQuantity * GetValue()));
@@ -615,9 +598,9 @@ namespace Database
                     }
 
                     if (type.Equals(TransactionType.SELL))
-                        return CompleteTransaction(seller, transactionBuyer, numDiginotes, ID);
+                        return CompleteTransaction(type, seller, transactionBuyer, numDiginotes, transactionID, compOrderID);
                     else if(type.Equals(TransactionType.BUY))
-                        return CompleteTransaction(transactionSeller, buyer, numDiginotes, ID);
+                        return CompleteTransaction(type, transactionSeller, buyer, numDiginotes, transactionID, compOrderID);
                 }
 
                 return false;
@@ -629,17 +612,18 @@ namespace Database
             }
         }
 
-        public bool CompleteTransaction(string seller, string buyer, int nDiginotes, int transactionID)
+        public bool CompleteTransaction(TransactionType type, string seller, string buyer, int nDiginotes, int orderID, int compOrderID)
         {
             try
             {
                 List<int> diginotes = CheckDiginotes(seller, nDiginotes);
 
-                _command.CommandText = "UPDATE Transactions SET buyer=@buyer, seller=@seller, price=@price WHERE Transactions.transactionID = (SELECT TransactionDiginote.transactionID FROM TransactionDiginote WHERE diginoteID=@serial)";
+                _command.CommandText = "UPDATE Transactions SET buyer=@buyer, seller=@seller, price=@price WHERE transactionID = @orderID;UPDATE Transactions SET buyer=@buyer, seller=@seller, price=@price WHERE transactionID = @ID";
                 _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
                 _command.Parameters.Add(new SQLiteParameter("@seller", seller));
                 _command.Parameters.Add(new SQLiteParameter("@price", nDiginotes * this.GetValue()));
-                _command.Parameters.Add(new SQLiteParameter("@serial", diginotes[0]));
+                _command.Parameters.Add(new SQLiteParameter("@orderID", compOrderID));
+                _command.Parameters.Add(new SQLiteParameter("@ID", orderID));
 
                 _transaction = _conn.BeginTransaction();
                 _command.ExecuteNonQuery();
@@ -654,6 +638,14 @@ namespace Database
                     _transaction = _conn.BeginTransaction();
                     _command.ExecuteNonQuery();
                     _transaction.Commit();
+
+                    _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
+                    _command.Parameters.Add(new SQLiteParameter("@transactionID", orderID));
+                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
+
+                     _transaction = _conn.BeginTransaction();
+                     _command.ExecuteNonQuery();
+                     _transaction.Commit();
                 }
 
                 _command.CommandText = "SELECT quantity, ID FROM Value ORDER BY DESC LIMIT 1";
@@ -672,21 +664,9 @@ namespace Database
                 _command.ExecuteNonQuery();
                 _transaction.Commit();
 
-               /* _command.CommandText = "UPDATE User SET funds=(SELECT funds FROM User WHERE nickname=@nick)+@funds WHERE nickname=@nick";
-                _command.Parameters.Add(new SQLiteParameter("@nick", seller));
-                _command.Parameters.Add(new SQLiteParameter("@funds", nDiginotes * this.GetValue()));
-
-                _transaction = _conn.BeginTransaction();
-                _command.ExecuteNonQuery();
-                _transaction.Commit();
-
-                _command.CommandText = "UPDATE User SET funds=(SELECT funds FROM User WHERE nickname=@nick)-@funds WHERE nickname=@nick";
-                _command.Parameters.Add(new SQLiteParameter("@nick", buyer));
-                _command.Parameters.Add(new SQLiteParameter("@funds", nDiginotes * this.GetValue()));
-
-                _transaction = _conn.BeginTransaction();
-                _command.ExecuteNonQuery();
-                _transaction.Commit();*/
+                float value = nDiginotes * GetValue();
+                AddingFunds(seller, GetValue() + value);
+                RemovingFunds(buyer, GetValue() - value);
 
                 return true;
             }

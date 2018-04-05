@@ -1,7 +1,8 @@
 CREATE TABLE User(
     nickname varchar(50) NOT NULL PRIMARY KEY,
     name varchar(500) NOT NULL,
-    password varchar(100) NOT NULL
+    password varchar(100) NOT NULL,
+	balance real NOT NULL DEFAULT(0)
 );
 
 CREATE TABLE Value(
