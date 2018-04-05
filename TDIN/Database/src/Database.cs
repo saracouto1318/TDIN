@@ -445,39 +445,57 @@ namespace Database
             }
         }
 
-        public bool InsertTransaction(int nDiginotes, string buyer, string seller, TransactionType type, DateTime time)
+        public bool InsertTransaction(Transaction transaction, TransactionType type)
         {
-            List<Transaction> transactions = GetUnfufilledTransactions(nDiginotes, type);
+            List<Transaction> transactions = GetUnfufilledTransactions(transaction.quantity, type);
             foreach(Transaction t in transactions)
             {
-
+                CompleteTransaction(t, transaction.quantity, type);
+                transaction.quantity -= t.quantity;
+                if (transaction.quantity <= 0)
+                    return true;
             }
-
-            /*float value = GetValue() * nDiginotes;
+            
             try
             {
-                if((type.Equals(TransactionType.BUY) && GetUserInfo(buyer).balance >= value) || (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(seller, nDiginotes).Count >= nDiginotes))
+                float value = GetValue() * transaction.quantity;
+                if ((type.Equals(TransactionType.BUY) && GetUserInfo(transaction.buyer).balance >= value) || 
+                    (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(transaction.seller, transaction.quantity).Count >= transaction.quantity))
                 {
-                    _command.CommandText = "INSERT INTO Transactions(seller, buyer, price, dateTime, quantity) VALUES (@seller, @buyer, @price, @time, @quantity)";
-                    _command.Parameters.Add(new SQLiteParameter("@seller", seller));
-                    _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
-                    _command.Parameters.Add(new SQLiteParameter("@price", value));
-                    _command.Parameters.Add(new SQLiteParameter("@time", time));
-                    _command.Parameters.Add(new SQLiteParameter("@quantity", nDiginotes));
-                    
-                    _command.ExecuteNonQuery();
+                    return InsertTransactionDirect(transaction);
                 }
-                
-                return CheckTransactions(nDiginotes, seller, buyer, type);
+
+                return false;
+            }
+            catch (SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                return false;
+            }
+        }
+
+        private bool InsertTransactionDirect(Transaction transaction)
+        {
+            try
+            {
+                _command.CommandText = "INSERT INTO Transactions(seller, buyer, price, dateTime, quantity) VALUES (@seller, @buyer, @price, @time, @quantity)";
+                _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
+                _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
+                _command.Parameters.Add(new SQLiteParameter("@time", transaction.date));
+                _command.Parameters.Add(new SQLiteParameter("@quantity", transaction.quantity));
+
+                _command.ExecuteNonQuery();
+                return true;
             }
             catch (SQLiteException)
             {
                 return false;
-            }*/
-            return false;
+            }
         }
 
-        public List<Transaction> GetUnfufilledTransactions(int limit, TransactionType type)
+        private List<Transaction> GetUnfufilledTransactions(int limit, TransactionType type)
         {
             List<Transaction> transactions = new List<Transaction>();
             try
@@ -485,10 +503,18 @@ namespace Database
                 switch(type)
                 {
                     case TransactionType.BUY:
-                        _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL ORDER BY dateTime LIMIT @limit";
+                        _command.CommandText = 
+                            "SELECT tID, seller, buyer, date, quantity " +
+                            "FROM Transactions " +
+                            "WHERE buyer IS NULL " +
+                            "ORDER BY dateTime LIMIT @limit";
                         break;
                     case TransactionType.SELL:
-                        _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL ORDER BY dateTime LIMIT @limit";
+                        _command.CommandText =
+                            "SELECT Transactions.ID, seller, buyer, date, quantity " +
+                            "FROM Transactions " +
+                            "WHERE seller IS NULL " +
+                            "ORDER BY dateTime LIMIT @limit";
                         break;
                     default:
                         return transactions;
@@ -502,7 +528,10 @@ namespace Database
                     Transaction t = new Transaction
                     {
                         ID = _reader.GetInt32(0),
-                        quantity = _reader.GetInt32(5)
+                        seller = _reader.GetString(1),
+                        buyer = _reader.GetString(2),
+                        date = _reader.GetDateTime(3),
+                        quantity = _reader.GetInt32(4)
                     };
                     transactions.Add(t);
                 }
@@ -518,65 +547,8 @@ namespace Database
                 return transactions;
             }
         }
-
-        public bool CheckTransactions(int numDiginotes, string seller, string buyer, TransactionType type)
-        {
-            /*try
-            {
-                if (type.Equals(TransactionType.SELL)) {
-                    _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL AND quantity >= @num AND buyer <> @seller ORDER BY transactionID LIMIT 1";
-                    _command.Parameters.Add(new SQLiteParameter("@seller", seller));
-                }
-                    
-                else if (type.Equals(TransactionType.BUY))
-                {
-                    _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL AND quantity >= @num AND seller <> @buyer ORDER BY transactionID LIMIT 1";
-                    _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
-                }
-
-                _command.Parameters.Add(new SQLiteParameter("@num", numDiginotes));
-                _reader = _command.ExecuteReader();
-
-                if (_reader.Read())
-                {
-                    int newQuantity = _reader.GetInt32(5) - numDiginotes;
-                    int compOrderID = _reader.GetInt32(0);
-                    string transactionBuyer = _reader.GetString(2);
-                    string transactionSeller = _reader.GetString(1);
-
-                    if (newQuantity != 0)
-                    {                        
-                        //change quotation
-                        /*float newQuote;
-                        if (type.Equals(TransactionType.SELL))
-                        {
-                            newQuote = GetValue() - INC_DEC_VALUE;
-                            ChangeDiginoteValue(newQuote);
-                        }
-                        else if (type.Equals(TransactionType.BUY))
-                        {
-                            newQuote = GetValue() + INC_DEC_VALUE;
-                            ChangeDiginoteValue(newQuote);
-                        *//*
-                    }
-
-                    if (type.Equals(TransactionType.SELL))
-                        return CompleteTransaction(type, seller, transactionBuyer, numDiginotes, transactionID, compOrderID);
-                    else if(type.Equals(TransactionType.BUY))
-                        return CompleteTransaction(type, transactionSeller, buyer, numDiginotes, transactionID, compOrderID);
-                }
-
-                return false;
-            }
-            catch (SQLiteException e)
-            {
-                _transaction.Rollback();
-                return false;
-            }*/
-            return false;
-        }
-
-        public bool CompleteTransaction(int orderID, string buyer, string seller, float price, TransactionType type)
+        
+        public bool CompleteTransaction(Transaction transaction, int nDiginotes, TransactionType type)
         {
             try
             {
@@ -586,10 +558,10 @@ namespace Database
                 switch (type)
                 {
                     case TransactionType.BUY:
-                        success = UpdateTransaction(orderID, buyer, type);
+                        success = UpdateTransaction(transaction, nDiginotes, type);
                         break;
                     case TransactionType.SELL:
-                        success = UpdateTransaction(orderID, seller, type);
+                        success = UpdateTransaction(transaction, nDiginotes, type);
                         break;
                     default:
                         return false;
@@ -601,7 +573,7 @@ namespace Database
                     return false;
                 }
 
-                if(ChangeDiginoteOwner(orderID, buyer) <= 0)
+                if(ChangeDiginoteOwner(transaction.ID, transaction.buyer) <= 0)
                 {
                     _transaction.Rollback();
                     return false;
@@ -609,14 +581,14 @@ namespace Database
 
                 IncrementQuantity();
                 
-                success = AddingFunds(seller, price);
+                success = AddingFunds(transaction.seller, GetValue() * transaction.quantity);
                 if (!success)
                 {
                     _transaction.Rollback();
                     return false;
                 }
 
-                success = RemovingFunds(buyer, price);
+                success = RemovingFunds(transaction.buyer, GetValue() * transaction.quantity);
                 if (!success)
                 {
                     _transaction.Rollback();
@@ -634,26 +606,61 @@ namespace Database
             }
         }
 
-        private bool UpdateTransaction(int orderID, string username, TransactionType type)
+        private bool UpdateTransaction(Transaction transaction, int nDiginotes, TransactionType type)
         {
             try
             {
-                _transaction = _conn.BeginTransaction();
+                bool isInsertTransaction = false;
+                string sqlCommand = "UPDATE Transactions";
 
                 switch (type)
                 {
                     case TransactionType.BUY:
-                        _command.CommandText =
-                            "UPDATE Transactions SET buyer=@buyer WHERE transactionID = @orderID";
-                        _command.Parameters.Add(new SQLiteParameter("@buyer", username));
+                        sqlCommand += " SET buyer=@buyer";
+                        _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
                         break;
                     case TransactionType.SELL:
-                        _command.CommandText =
-                            "UPDATE Transactions SET seller=@seller WHERE transactionID = @orderID";
-                        _command.Parameters.Add(new SQLiteParameter("@seller", username));
+                        sqlCommand += " SET seller=@seller";
+                        _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
                         break;
                     default:
                         return false;
+                }
+
+                if(nDiginotes < transaction.quantity)
+                {
+                    sqlCommand += ", quantity=@quantity";
+                    _command.Parameters.Add(new SQLiteParameter("@quantity", nDiginotes));
+
+                    // Insert new transaction
+                    isInsertTransaction = true;
+                }
+
+                sqlCommand += " WHERE transactionID = @orderID";
+                _command.Parameters.Add(new SQLiteParameter("@orderID", transaction.ID));
+                _command.ExecuteNonQuery();
+
+                if(isInsertTransaction)
+                {
+                    Transaction t = new Transaction
+                    {
+                        quantity = transaction.quantity - nDiginotes,
+                        date = transaction.date
+                    };
+
+                    switch (type)
+                    {
+                        case TransactionType.BUY:
+                            t.seller = transaction.seller;
+                            break;
+                        case TransactionType.SELL:
+                            t.buyer = transaction.buyer;
+                            break;
+                        default:
+                            return false;
+                    }
+
+                    InsertTransactionDirect(t);
                 }
 
                 return true;
@@ -705,6 +712,7 @@ namespace Database
             }
         }
 
+
         public List<Transaction> GetTransactions(TransactionType type, bool open, string username)
         {
             List<Transaction> transactions = new List<Transaction>();
@@ -724,17 +732,17 @@ namespace Database
             {
                 _reader = _command.ExecuteReader();
 
-                Transaction info = new Transaction();
-
                 while (_reader.Read())
                 {
-                    info.ID = _reader.GetInt32(0);
-                    info.buyer = _reader.GetString(2);
-                    info.seller = _reader.GetString(1);
-                    info.value = _reader.GetFloat(3);
-                    info.date = _reader.GetDateTime(4);
-                    info.quantity = _reader.GetInt32(5);
-                    
+                    Transaction info = new Transaction
+                    {
+                        ID = _reader.GetInt32(0),
+                        buyer = _reader.GetString(2),
+                        seller = _reader.GetString(1),
+                        date = _reader.GetDateTime(3),
+                        quantity = _reader.GetInt32(4)
+                    };
+
                     transactions.Add(info);
                 }
 
@@ -767,16 +775,16 @@ namespace Database
             {
                 _reader = _command.ExecuteReader();
 
-                Transaction info = new Transaction();
-
                 while (_reader.Read())
                 {
-                    info.ID = _reader.GetInt32(0);
-                    info.buyer = _reader.GetString(2);
-                    info.seller = _reader.GetString(1);
-                    info.value = _reader.GetFloat(3);
-                    info.date = _reader.GetDateTime(4);
-                    info.quantity = _reader.GetInt32(5);
+                    Transaction info = new Transaction
+                    {
+                        ID = _reader.GetInt32(0),
+                        buyer = _reader.GetString(2),
+                        seller = _reader.GetString(1),
+                        date = _reader.GetDateTime(3),
+                        quantity = _reader.GetInt32(4)
+                    };
 
                     transactions.Add(info);
                 }

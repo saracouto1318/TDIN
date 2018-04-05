@@ -65,9 +65,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="src\database.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj">
       <Project>{ae8c29c0-cd52-4ff0-b619-546e018f2a2c}</Project>
       <Name>Shared</Name>

@@ -24,13 +24,15 @@ CREATE TABLE Transactions(
     transactionID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     seller varchar(50),
     buyer varchar(50),
-    price real NOT NULL,
 	dateTime datetime NOT NULL,
 	quantity int NOT NULL,
     FOREIGN KEY (seller) REFERENCES User(nickname)
         ON DELETE SET NULL
         ON UPDATE CASCADE, 
     FOREIGN KEY (buyer) REFERENCES User(nickname)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+	FOREIGN KEY (quotationID) REFERENCES Value(ID)
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );

@@ -194,9 +194,9 @@ namespace BankClient
             this.power = power;
         }
 
-        public void OnNewSeller(int id, string username, float price, int quantity)
+        public void OnNewSeller(int id, string username, int quantity)
         {
-            Transaction transaction = new Transaction(id, null, username, price, quantity, DateTime.Now);
+            Transaction transaction = new Transaction(id, null, username, quantity, DateTime.Now);
             if (username == user.username)
             {
                 myTransactions.Add(transaction);
@@ -207,9 +207,9 @@ namespace BankClient
             }
         }
 
-        public void OnNewBuyer(int id, string username, float price, int quantity)
+        public void OnNewBuyer(int id, string username, int quantity)
         {
-            Transaction transaction = new Transaction(id, null, username, price, quantity, DateTime.Now);
+            Transaction transaction = new Transaction(id, null, username, quantity, DateTime.Now);
             if (username == user.username)
             {
                 myTransactions.Add(transaction);
