@@ -525,13 +525,13 @@ namespace Database
             try
             {
                 if (type.Equals(TransactionType.SELL)) {
-                    _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL AND quantity >= @num AND buyer <> @seller ORDER BY transactionID LIMIT 1";
+                    _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL AND quantity >= @num AND buyer <> @seller ORDER BY transactionID LIMIT 1";
                     _command.Parameters.Add(new SQLiteParameter("@seller", seller));
                 }
                     
                 else if (type.Equals(TransactionType.BUY))
                 {
-                    _command.CommandText = "SELECT * FROM Transactions WHERE seller IS NULL AND quantity >= @num AND seller <> @buyer ORDER BY transactionID LIMIT 1";
+                    _command.CommandText = "SELECT * FROM Transactions WHERE buyer IS NULL AND quantity >= @num AND seller <> @buyer ORDER BY transactionID LIMIT 1";
                     _command.Parameters.Add(new SQLiteParameter("@buyer", buyer));
                 }
 
