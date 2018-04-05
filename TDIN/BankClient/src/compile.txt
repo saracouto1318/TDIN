@@ -1,3 +1,0 @@
-csc -t:exe -r:Shared.dll AuthenticationPage.cs AuthenticationPage.designer.cs CreateEditOrder.cs CreateEditOrder.Designer.cs EditProfile.cs EditProfile.Designer.cs OrdersList.cs OrdersList.Designer.cs Program.cs StatisticsPage.cs StatisticsPage.Designer.cs Services.cs UserMainPage.cs UserMainPage.Designer.cs
-
-csc -t:exe -r:Shared.dll -r:Database.dll -r:EntityFramework.dll -r:EntityFramework.sqlServer.dll -r:System.Data.SQLite.dll -r:System.Data.SQLite.EF6.dll -r:System.Data.SQLite.Linq.dll Server.cs Services.cs

@@ -21,7 +21,7 @@ CREATE TABLE Diginote(
 );
 
 CREATE TABLE Transactions(
-    transactionID INTEGER NOT NULL PRIMARY KEY,
+    transactionID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     seller varchar(50),
     buyer varchar(50),
     price real NOT NULL,
