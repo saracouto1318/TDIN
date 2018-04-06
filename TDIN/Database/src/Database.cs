@@ -169,7 +169,7 @@ namespace Database
         {
             User userInfo = new User();
 
-            _command.CommandText = "SELECT name, availableDig, totalDig FROM User " +
+            _command.CommandText = "SELECT name, availableDig, totalDig, balance FROM User " +
                 "INNER JOIN(SELECT COUNT(*) as availableDig FROM Diginote WHERE owner = 'vsp' AND serialNumber NOT IN(SELECT diginoteID FROM TransactionDiginote)) " +
                 "INNER JOIN(SELECT COUNT(*) AS totalDig FROM Diginote WHERE owner = 'vsp') " +
                 "WHERE nickname = @nick ";
@@ -504,14 +504,14 @@ namespace Database
                 {
                     case TransactionType.BUY:
                         _command.CommandText = 
-                            "SELECT tID, seller, buyer, date, quantity " +
+                            "SELECT transactionID, seller, buyer, date, quantity " +
                             "FROM Transactions " +
                             "WHERE buyer IS NULL " +
                             "ORDER BY dateTime LIMIT @limit";
                         break;
                     case TransactionType.SELL:
                         _command.CommandText =
-                            "SELECT Transactions.ID, seller, buyer, date, quantity " +
+                            "SELECT transactionID, seller, buyer, date, quantity " +
                             "FROM Transactions " +
                             "WHERE seller IS NULL " +
                             "ORDER BY dateTime LIMIT @limit";
@@ -573,7 +573,10 @@ namespace Database
                     return false;
                 }
 
-                if(ChangeDiginoteOwner(transaction.ID, transaction.buyer) <= 0)
+                if (!InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, nDiginotes)))
+                    return false;
+
+                if (ChangeDiginoteOwner(transaction.ID, transaction.buyer) <= 0)
                 {
                     _transaction.Rollback();
                     return false;
@@ -600,6 +603,28 @@ namespace Database
                 return true;
             }
             catch (SQLiteException)
+            {
+                _transaction.Rollback();
+                return false;
+            }
+        }
+
+        private bool InsertTransactionDiginote(int transactionID, List<int> diginotes)
+        {
+            try
+            {
+                foreach(int diginote in diginotes)
+                {
+                    _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
+                    _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
+                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
+
+                    _command.ExecuteNonQuery();
+                }
+                
+                return true;
+            }
+            catch(SQLiteException e)
             {
                 _transaction.Rollback();
                 return false;
