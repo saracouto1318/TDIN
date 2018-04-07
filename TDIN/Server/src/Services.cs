@@ -183,9 +183,19 @@ public class Services {
         List<Transaction> transactions = _db.GetUnfufilledTransactions(transaction.quantity, type);
         foreach (Transaction t in transactions)
         {
+            if(t.seller == null)
+            {
+                t.seller = user.username;
+            }
+            else if(t.buyer == null)
+            {
+                t.buyer = user.username;
+            }
+
             bool success = _db.CompleteTransaction(t, transaction.quantity, type);
             if (success)
             {
+                Console.WriteLine("Success completing transaction");
                 _db.IncrementQuantity();
                 transaction.quantity -= t.quantity;
                 if (transaction.quantity <= 0)

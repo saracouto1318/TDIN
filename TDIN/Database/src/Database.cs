@@ -179,7 +179,10 @@ namespace Database
             User userInfo = new User();
 
             _command.CommandText = "SELECT name, availableDig, totalDig, balance FROM User " +
-                "INNER JOIN(SELECT COUNT(*) as availableDig FROM Diginote WHERE owner = @nick AND serialNumber NOT IN(SELECT diginoteID FROM TransactionDiginote)) " +
+                "INNER JOIN(SELECT COUNT(*) as availableDig FROM Diginote WHERE owner = @nick AND serialNumber NOT IN ( " + 
+                    "SELECT diginoteID FROM TransactionDiginote, Transactions " +
+                        "WHERE Transactions.transactionID = TransactionDiginote.transactionID " +
+                        "AND((seller IS NULL AND buyer IS NOT NULL) OR(buyer IS NULL AND seller IS NOT NULL)))) " +
                 "INNER JOIN(SELECT COUNT(*) AS totalDig FROM Diginote WHERE owner = @nick) " +
                 "WHERE nickname = @nick ";
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
@@ -372,8 +375,7 @@ namespace Database
         {
             try
             {
-                _command.CommandText = "UPDATE Value SET quantity=quantity+1 WHERE ID=@ID";
-                _command.Parameters.Add(new SQLiteParameter("@ID", _reader.GetInt32(1)));
+                _command.CommandText = "UPDATE Value SET quantity=quantity+1 WHERE ID IN (SELECT ID FROM Value ORDER BY ID DESC LIMIT 1)";
 
                 _command.ExecuteNonQuery();
 
@@ -398,7 +400,12 @@ namespace Database
 
             try
             {
-                _command.CommandText = "SELECT serialNumber FROM Diginote WHERE owner = @source AND serialNumber NOT IN (SELECT diginoteID FROM TransactionDiginote) ORDER BY serialNumber LIMIT @num";
+                _command.CommandText = "SELECT serialNumber FROM Diginote " +
+                    "WHERE owner = @source AND serialNumber NOT IN ( " +
+                    "SELECT diginoteID FROM TransactionDiginote, Transactions " +
+                        "WHERE Transactions.transactionID = TransactionDiginote.transactionID " +
+                        "AND ((seller IS NULL AND buyer IS NOT NULL) OR (buyer IS NULL AND seller IS NOT NULL))) " +
+                    "ORDER BY serialNumber LIMIT @num";
                 _command.Parameters.Add(new SQLiteParameter("@source", username));
                 _command.Parameters.Add(new SQLiteParameter("@num", nDiginotes));
                 _reader = _command.ExecuteReader();
@@ -504,19 +511,7 @@ namespace Database
             try
             {
                 _transaction = _conn.BeginTransaction();
-                bool success = false;
-
-                switch (type)
-                {
-                    case TransactionType.BUY:
-                        success = UpdateTransaction(transaction, nDiginotes, type);
-                        break;
-                    case TransactionType.SELL:
-                        success = UpdateTransaction(transaction, nDiginotes, type);
-                        break;
-                    default:
-                        return false;
-                }
+                bool success = UpdateTransaction(transaction, nDiginotes, type);
 
                 if (!success)
                 {
@@ -525,13 +520,12 @@ namespace Database
                     return false;
                 }
 
-                if (type.Equals(TransactionType.SELL))
-                    if(!InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, nDiginotes)))
-                    {
-                        Console.WriteLine("Error on inserting transaction diginotes");
-                        _transaction.Rollback();
-                        return false;
-                    }
+                if (type == TransactionType.SELL && !InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, nDiginotes)))
+                {
+                    Console.WriteLine("Error on inserting transaction diginotes");
+                    _transaction.Rollback();
+                    return false;
+                }
 
                 if (ChangeDiginoteOwner(transaction.ID, transaction.buyer) <= 0)
                 {
@@ -581,12 +575,9 @@ namespace Database
                     (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(transaction.seller, transaction.quantity).Count >= transaction.quantity))
                 {
                     bool success = InsertTransactionDirect(transaction);
-                    Console.WriteLine(success);
                     if (success)
                     {
                         long rowID = _conn.LastInsertRowId;
-
-                        Console.WriteLine(rowID);
 
                         _transaction.Commit();
                         return rowID;
@@ -617,6 +608,8 @@ namespace Database
                 _command.Parameters.Add(new SQLiteParameter("@quantity", transaction.quantity));
 
                 _command.ExecuteNonQuery();
+
+                transaction.ID = (int)_conn.LastInsertRowId;
 
                 if(transaction.buyer == null)
                     return InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, transaction.quantity));
@@ -665,10 +658,12 @@ namespace Database
                 switch (type)
                 {
                     case TransactionType.BUY:
+                        Console.WriteLine("BUYER:" + transaction.buyer);
                         sqlCommand += " SET buyer=@buyer";
                         _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
                         break;
                     case TransactionType.SELL:
+                        Console.WriteLine("SELLER:" + transaction.seller);
                         sqlCommand += " SET seller=@seller";
                         _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
                         break;
@@ -678,6 +673,7 @@ namespace Database
 
                 if(nDiginotes < transaction.quantity)
                 {
+                    Console.WriteLine("QUANTITY:" + nDiginotes);
                     sqlCommand += ", quantity=@quantity";
                     _command.Parameters.Add(new SQLiteParameter("@quantity", nDiginotes));
 
@@ -686,10 +682,13 @@ namespace Database
                 }
 
                 sqlCommand += " WHERE transactionID = @orderID";
-                _command.Parameters.Add(new SQLiteParameter("@orderID", transaction.ID));
-                _command.ExecuteNonQuery();
 
-                if(isInsertTransaction)
+                _command.CommandText = sqlCommand;
+                _command.Parameters.Add(new SQLiteParameter("@orderID", transaction.ID));
+                Console.WriteLine("ID:" + transaction.ID);
+                int rows = _command.ExecuteNonQuery();
+
+                if (isInsertTransaction)
                 {
                     Transaction t = new Transaction
                     {
@@ -716,6 +715,12 @@ namespace Database
             }
             catch(SQLiteException e)
             {
+                Console.WriteLine(transaction.ID);
+                Console.WriteLine(transaction.seller);
+                Console.WriteLine(transaction.buyer);
+                Console.WriteLine(transaction.date);
+                Console.WriteLine(transaction.quantity);
+
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
@@ -727,7 +732,7 @@ namespace Database
         {
             try
             {
-                _command.CommandText = "UPDATE Diginote SET owner=@owner WHERE serialNumber = (SELECT diginoteID FROM TransactionDiginote WHERE transactionID = @orderID)";
+                _command.CommandText = "UPDATE Diginote SET owner=@owner WHERE serialNumber IN (SELECT diginoteID FROM TransactionDiginote WHERE transactionID = @orderID)";
                 _command.Parameters.Add(new SQLiteParameter("@owner", username));
                 _command.Parameters.Add(new SQLiteParameter("@orderID", orderID));
                 int changedRows = _command.ExecuteNonQuery();
@@ -737,6 +742,8 @@ namespace Database
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
+                Console.WriteLine(orderID);
+                Console.WriteLine(username);
 
                 return 0;
             }
