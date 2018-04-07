@@ -525,6 +525,14 @@ namespace Database
                     return false;
                 }
 
+                if (type.Equals(TransactionType.SELL))
+                    if(!InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, nDiginotes)))
+                    {
+                        Console.WriteLine("Error on inserting transaction diginotes");
+                        _transaction.Rollback();
+                        return false;
+                    }
+
                 if (ChangeDiginoteOwner(transaction.ID, transaction.buyer) <= 0)
                 {
                     Console.WriteLine("Error on change owner");
@@ -610,7 +618,9 @@ namespace Database
 
                 _command.ExecuteNonQuery();
 
-                return InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, transaction.quantity));
+                if(transaction.buyer == null)
+                    return InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, transaction.quantity));
+                return true;
             }
             catch (SQLiteException e)
             {
