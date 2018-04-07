@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.Remoting;
 
 public delegate void ValueHandler(float value);
-public delegate void SellingHandler(int id, string username, int quantity);
-public delegate void BuyingHandler(int id, string username, int quantity);
-public delegate void CompleteTransactionHandler(int id);
 
 public interface IUser
 {
@@ -23,43 +20,23 @@ public interface IUser
 public interface ITransaction
 {
     event ValueHandler UpdatePower;
-    event SellingHandler NewSellTransaction;
-    event BuyingHandler NewBuyTransaction;
-    event CompleteTransactionHandler CompleteTransaction;
     
     float GetPower();
     List<Transaction> GetMyTransactions(string sessionId);
     List<Transaction> GetOtherTransactions(string sessionId);
-    bool TrySellTransaction(string sessionId, float price, int quantity);
-    bool TryBuyTransaction(string sessionId, float price, int quantity);
-    bool TryCompleteTransaction(string sessionId, float price, int quantity);
+    int CheckCompleteBuyTransaction(string sessionId, Transaction transaction);
+    int CheckCompleteSellTransaction(string sessionId, Transaction transaction);
+    bool InsertBuyTransaction(string sessionId, Transaction transaction);
+    bool InsertSellTransaction(string sessionId, Transaction transaction);
 }
 
 public class Intermediate : MarshalByRefObject
 {
     public event ValueHandler UpdatePower;
-    public event SellingHandler NewSellTransaction;
-    public event BuyingHandler NewBuyTransaction;
-    public event CompleteTransactionHandler CompleteTransaction;
 
     public void FireUpdatePower(float power)
     {
         UpdatePower(power);
-    }
-
-    public void FireNewSellTransaction(int id, string username, int quantity)
-    {
-        NewSellTransaction(id, username, quantity);
-    }
-
-    public void FireNewBuyTransaction(int id, string username, int quantity)
-    {
-        NewBuyTransaction(id, username, quantity);
-    }
-
-    public void FireCompleteTransaction(int id)
-    {
-        CompleteTransaction(id);
     }
 
     public override object InitializeLifetimeService()

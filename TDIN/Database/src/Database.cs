@@ -416,7 +416,7 @@ namespace Database
 
         #region Transaction
 
-        public bool InsertTransaction(Transaction transaction, TransactionType type)
+        public int CheckCompleteNewTransaction(Transaction transaction, TransactionType type)
         {
             List<Transaction> transactions = GetUnfufilledTransactions(transaction.quantity, type);
             foreach(Transaction t in transactions)
@@ -424,13 +424,17 @@ namespace Database
                 CompleteTransaction(t, transaction.quantity, type);
                 transaction.quantity -= t.quantity;
                 if (transaction.quantity <= 0)
-                    return true;
+                    return 0;
             }
-            
+            return transaction.quantity;
+        }
+
+        public bool InsertTransaction(Transaction transaction, TransactionType type)
+        {
             try
             {
                 float value = GetValue() * transaction.quantity;
-                if ((type.Equals(TransactionType.BUY) && GetUser(transaction.buyer).balance >= value) || 
+                if ((type.Equals(TransactionType.BUY) && GetUser(transaction.buyer).balance >= value) ||
                     (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(transaction.seller, transaction.quantity).Count >= transaction.quantity))
                 {
                     return InsertTransactionDirect(transaction);
@@ -462,6 +466,28 @@ namespace Database
             }
             catch (SQLiteException)
             {
+                return false;
+            }
+        }
+
+        private bool InsertTransactionDiginote(int transactionID, List<int> diginotes)
+        {
+            try
+            {
+                foreach(int diginote in diginotes)
+                {
+                    _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
+                    _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
+                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
+
+                    _command.ExecuteNonQuery();
+                }
+                
+                return true;
+            }
+            catch(SQLiteException e)
+            {
+                _transaction.Rollback();
                 return false;
             }
         }
@@ -580,28 +606,6 @@ namespace Database
             }
         }
 
-        private bool InsertTransactionDiginote(int transactionID, List<int> diginotes)
-        {
-            try
-            {
-                foreach(int diginote in diginotes)
-                {
-                    _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
-                    _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
-                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
-
-                    _command.ExecuteNonQuery();
-                }
-                
-                return true;
-            }
-            catch(SQLiteException e)
-            {
-                _transaction.Rollback();
-                return false;
-            }
-        }
-
         private bool UpdateTransaction(Transaction transaction, int nDiginotes, TransactionType type)
         {
             try
@@ -707,7 +711,6 @@ namespace Database
                 return false;
             }
         }
-
 
         public List<Transaction> GetTransactions(TransactionType type, bool open, string username)
         {
@@ -815,7 +818,7 @@ namespace Database
         
         #region Funds
 
-        private bool AddingFunds(string username, double funds)
+        public bool AddingFunds(string username, double funds)
         {
             _command.CommandText = "UPDATE User SET balance=balance + @funds WHERE nickname=@nick";
             _command.Parameters.Add(new SQLiteParameter("@pass", funds));

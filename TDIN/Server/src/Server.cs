@@ -108,9 +108,6 @@ public class UserManager : MarshalByRefObject, IUser
 public class TransactionManager : MarshalByRefObject, ITransaction
 {
     public event ValueHandler UpdatePower;
-    public event SellingHandler NewSellTransaction;
-    public event BuyingHandler NewBuyTransaction;
-    public event CompleteTransactionHandler CompleteTransaction;
 
     public override object InitializeLifetimeService()
     {
@@ -131,19 +128,23 @@ public class TransactionManager : MarshalByRefObject, ITransaction
     {
         return Services.GetInstance().GetOtherTransactions(sessionId);
     }
-
-    public bool TrySellTransaction(string sessionId, float price, int quantity)
+    public int CheckCompleteBuyTransaction(string sessionId, Transaction transaction)
     {
-        return false;
+        return Services.GetInstance().CheckCompleteTransaction(sessionId, transaction, Database.TransactionType.BUY);
     }
 
-    public bool TryBuyTransaction(string sessionId, float price, int quantity)
+    public int CheckCompleteSellTransaction(string sessionId, Transaction transaction)
     {
-        return false;
+        return Services.GetInstance().CheckCompleteTransaction(sessionId, transaction, Database.TransactionType.SELL);
     }
 
-    public bool TryCompleteTransaction(string sessionId, float price, int quantity)
+    public bool InsertBuyTransaction(string sessionId, Transaction transaction)
     {
-        return false;
+        return Services.GetInstance().InsertTransaction(sessionId, transaction, Database.TransactionType.BUY);
+    }
+
+    public bool InsertSellTransaction(string sessionId, Transaction transaction)
+    {
+        return Services.GetInstance().InsertTransaction(sessionId, transaction, Database.TransactionType.SELL);
     }
 }

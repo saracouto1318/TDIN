@@ -167,5 +167,21 @@ public class Services {
         return _db.GetOtherTransactions(Database.TransactionType.ALL, true, username);
     }
 
+    public int CheckCompleteTransaction(string sessionId, Transaction transaction, Database.TransactionType type)
+    {
+        string username = _db.GetUsername(sessionId);
+        if (username == null)
+            return transaction.quantity;
+        return _db.CheckCompleteNewTransaction(transaction, type);
+    }
+
+    public bool InsertTransaction(string sessionId, Transaction transaction, Database.TransactionType type)
+    {
+        string username = _db.GetUsername(sessionId);
+        if (username == null)
+            return false;
+        return _db.InsertTransaction(transaction, type);
+    }
+
     #endregion
 }
