@@ -51,7 +51,7 @@
             this.button3.TabIndex = 14;
             this.button3.Text = "Create Order";
             this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // numDiginotes
             // 
@@ -83,7 +83,7 @@
             this.button2.TabIndex = 19;
             this.button2.Text = "Main Page";
             this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // button4
             // 
@@ -95,7 +95,7 @@
             this.button4.TabIndex = 21;
             this.button4.Text = "Statistics";
             this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button5
             // 
@@ -107,7 +107,7 @@
             this.button5.TabIndex = 20;
             this.button5.Text = "Orders";
             this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // userName
             // 
@@ -131,7 +131,7 @@
             this.price.Size = new System.Drawing.Size(25, 13);
             this.price.TabIndex = 23;
             this.price.Text = "0 $";
-            this.price.TextChanged += new System.EventHandler(this.price_Change);
+            this.price.TextChanged += new System.EventHandler(this.Price_Change);
             // 
             // label1
             // 

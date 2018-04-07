@@ -17,27 +17,27 @@ namespace BankClient
             InitializeComponent();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new UserMainPage());
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void Button7_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new OrdersList());
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void Button6_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new CreateOrder(false, 1)); //Mudar para o ID da Transação
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             string message = "Are you sure you want to delete this order?";
             string caption = "Error Detected in Input";

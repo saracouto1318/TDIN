@@ -138,7 +138,7 @@
             this.button1.TabIndex = 10;
             this.button1.Text = "Edit";
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // button2
             // 
@@ -150,7 +150,7 @@
             this.button2.TabIndex = 11;
             this.button2.Text = "Delete";
             this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // linkLabel4
             // 
@@ -221,7 +221,7 @@
             this.button5.TabIndex = 27;
             this.button5.Text = "Main Page";
             this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // button6
             // 
@@ -233,7 +233,7 @@
             this.button6.TabIndex = 29;
             this.button6.Text = "Statistics";
             this.button6.UseVisualStyleBackColor = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.button6.Click += new System.EventHandler(this.Button6_Click);
             // 
             // button7
             // 
@@ -245,7 +245,7 @@
             this.button7.TabIndex = 28;
             this.button7.Text = "Orders";
             this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button7.Click += new System.EventHandler(this.Button7_Click);
             // 
             // label8
             // 

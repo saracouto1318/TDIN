@@ -544,7 +544,7 @@ namespace Database
             }
         }
 
-        public bool InsertTransaction(Transaction transaction, TransactionType type)
+        public long InsertTransaction(Transaction transaction, TransactionType type)
         {
             try
             {
@@ -557,13 +557,15 @@ namespace Database
                     bool success = InsertTransactionDirect(transaction);
                     if(success)
                     {
+                        long rowID = _conn.LastInsertRowId;
+
                         _transaction.Commit();
-                        return true;
+                        return rowID;
                     }
                 }
 
                 _transaction.Rollback();
-                return false;
+                return -1;
             }
             catch (SQLiteException e)
             {
@@ -571,7 +573,7 @@ namespace Database
                 Console.WriteLine(e.StackTrace);
 
                 _transaction.Rollback();
-                return false;
+                return -1;
             }
         }
 
@@ -587,7 +589,7 @@ namespace Database
 
                 _command.ExecuteNonQuery();
 
-                if (!InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, nDiginotes)))
+                if (!InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, transaction.quantity)))
                     return false;
 
                 return true;

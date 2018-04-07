@@ -13,35 +13,44 @@ namespace BankClient
     public partial class CreateOrder : Form
     {
         public bool type;
-        public int ID;
+        public int id;
+
         public CreateOrder()
         {
             InitializeComponent();
-            this.quote.Text = Services.GetInstance().GetPower().ToString() + " $";
+            quote.Text = Services.GetInstance().GetPower().ToString() + " $";
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        public CreateOrder(bool type, int id)
+        {
+            InitializeComponent();
+            this.type = type;
+            this.id = id;
+            quote.Text = Services.GetInstance().GetPower().ToString() + " $";
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new UserMainPage());
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new OrdersList());
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Button4_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             int numDiginotes = int.Parse(this.numDiginotes.Text, System.Globalization.CultureInfo.InvariantCulture);
             //Insert transaction
         }
 
-        private void price_Change(object sender, EventArgs e)
+        private void Price_Change(object sender, EventArgs e)
         {
             float price = float.Parse(this.numDiginotes.Text, System.Globalization.CultureInfo.InvariantCulture) * float.Parse(this.quote.Text, System.Globalization.CultureInfo.InvariantCulture);
             this.price.Text = price.ToString() + " $";

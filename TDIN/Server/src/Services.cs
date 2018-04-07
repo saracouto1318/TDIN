@@ -189,12 +189,12 @@ public class Services {
         return transaction.quantity;
     }
 
-    public bool InsertTransaction(string sessionId, Transaction transaction, TransactionType type)
+    public int InsertTransaction(string sessionId, Transaction transaction, TransactionType type)
     {
         string username = _db.GetUsername(sessionId);
         if (username == null)
-            return false;
-        return _db.InsertTransaction(transaction, type);
+            return -1;
+        return (int)_db.InsertTransaction(transaction, type);
     }
 
     #endregion
