@@ -1,63 +1,101 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BankClient.src
+namespace BankClient
 {
     public partial class EditOrder : Form
     {
-        public EditOrder(int ID, int numDiginotes)
+        private int id;
+        private int nDiginotes;
+        private TransactionType type;
+
+        public EditOrder(int id, int nDiginotes, TransactionType type)
         {
             InitializeComponent();
-            this.diginotes.Text = numDiginotes.ToString();
+            this.id = id;
+            this.nDiginotes = nDiginotes;
+            this.type = type;
+            diginotes.Text = nDiginotes.ToString();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void MainPage_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new UserMainPage());
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void Orders_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new OrdersList());
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Statistics_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void EditOrder_Click(object sender, EventArgs e)
         {
             float quote = float.Parse(this.quote.Text, System.Globalization.CultureInfo.InvariantCulture);
+
+            if (quote <= 0)
+            {
+                CreateOkBox("Invalid quotation", "Error");
+                Program.context.ChangeForm(this, new UserMainPage());
+                return;
+            }
+
             string message = "Are you sure you want to edit the quotation?";
             string caption = "Edit Quotation";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show(message, caption, buttons);
+
+            if (result == DialogResult.Yes)
+            {
+                //Edit quote
+                if(id < 0)
+                {
+                    int insertedId = Services.GetInstance().InsertTransaction(nDiginotes, type);
+                    if(insertedId < 0)
+                    {
+                        CreateOkBox("Error creating the new transaction", "Error");
+                        Program.context.ChangeForm(this, new UserMainPage());
+                    }
+                    else
+                    {
+                        CreateOkBox("Success", "Create transaction");
+                        Program.context.ChangeForm(this, new UserMainPage());
+                    }
+                }
+            }
+        }
+
+        private void CreateOkBox(string message, string caption)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.OK;
             DialogResult result;
 
             // Displays the MessageBox.
             result = MessageBox.Show(message, caption, buttons);
-
-            if (result == System.Windows.Forms.DialogResult.No)
-            {
-                // Closes the parent form.
-                this.Close();
-            }
-            else
-            {
-                //Edit quote
-            }
+        }
+        
+        private void Quote_TextChanged(object sender, EventArgs e)
+        {
+            Price_Change();
         }
 
-        private void price_Change(object sender, EventArgs e)
+        private void Price_Change()
         {
-            float price = float.Parse(this.diginotes.Text, System.Globalization.CultureInfo.InvariantCulture) * float.Parse(this.quote.Text, System.Globalization.CultureInfo.InvariantCulture);
+            float price;
+            try
+            {
+                price =
+                    nDiginotes *
+                    float.Parse(quote.Text, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch (Exception)
+            {
+                price = 0;
+            }
             this.price.Text = price.ToString() + " $";
         }
     }

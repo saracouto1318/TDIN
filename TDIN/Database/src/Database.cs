@@ -101,6 +101,13 @@ namespace Database
             }
         }
 
+        public static string SafeGetString(SQLiteDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+                return reader.GetString(colIndex);
+            return null;
+        }
+
         #region User
 
         public bool UserExists(string username)
@@ -182,7 +189,7 @@ namespace Database
                 if (_reader.Read())
                 {
                     userInfo.username = username;
-                    userInfo.name = _reader.GetString(0);
+                    userInfo.name = SafeGetString(_reader, 0);
                     userInfo.availableDiginotes = _reader.GetInt32(1);
                     userInfo.totalDiginotes = _reader.GetInt32(2);
                     userInfo.balance = _reader.GetFloat(3);
@@ -284,7 +291,7 @@ namespace Database
 
                 if (_reader.Read())
                 {
-                    username = _reader.GetString(0);
+                    username = SafeGetString(_reader, 0);
                 }
 
                 _reader.Close();
@@ -443,14 +450,14 @@ namespace Database
                 {
                     case TransactionType.BUY:
                         _command.CommandText =
-                            "SELECT transactionID, seller, buyer, date, quantity " +
+                            "SELECT transactionID, seller, buyer, dateTime, quantity " +
                             "FROM Transactions " +
                             "WHERE buyer IS NULL " +
                             "ORDER BY dateTime LIMIT @limit";
                         break;
                     case TransactionType.SELL:
                         _command.CommandText =
-                            "SELECT transactionID, seller, buyer, date, quantity " +
+                            "SELECT transactionID, seller, buyer, dateTime, quantity " +
                             "FROM Transactions " +
                             "WHERE seller IS NULL " +
                             "ORDER BY dateTime LIMIT @limit";
@@ -464,14 +471,13 @@ namespace Database
 
                 while (_reader.Read())
                 {
-                    Transaction t = new Transaction
-                    {
-                        ID = _reader.GetInt32(0),
-                        seller = _reader.GetString(1),
-                        buyer = _reader.GetString(2),
-                        date = _reader.GetDateTime(3),
-                        quantity = _reader.GetInt32(4)
-                    };
+                    Transaction t = new Transaction();
+                    t.ID = _reader.GetInt32(0);
+                    t.seller = SafeGetString(_reader, 1);
+                    t.buyer = SafeGetString(_reader, 2);
+                    t.date = _reader.GetDateTime(3);
+                    t.quantity = _reader.GetInt32(4);
+
                     transactions.Add(t);
                 }
 
@@ -555,9 +561,12 @@ namespace Database
                     (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(transaction.seller, transaction.quantity).Count >= transaction.quantity))
                 {
                     bool success = InsertTransactionDirect(transaction);
-                    if(success)
+                    Console.WriteLine(success);
+                    if (success)
                     {
                         long rowID = _conn.LastInsertRowId;
+
+                        Console.WriteLine(rowID);
 
                         _transaction.Commit();
                         return rowID;
@@ -581,11 +590,23 @@ namespace Database
         {
             try
             {
-                _command.CommandText = "INSERT INTO Transactions(seller, buyer, price, dateTime, quantity) VALUES (@seller, @buyer, @price, @time, @quantity)";
+                _command.CommandText = "INSERT INTO Transactions(seller, buyer, dateTime, quantity) VALUES (@seller, @buyer, @time, @quantity)";
                 _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
                 _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
                 _command.Parameters.Add(new SQLiteParameter("@time", transaction.date));
                 _command.Parameters.Add(new SQLiteParameter("@quantity", transaction.quantity));
+
+                /*
+                no such column: date
+                em System.Data.SQLite.SQLite3.Prepare(SQLiteConnection cnn, String strSql, SQLiteStatement previous, UInt32 timeoutMS, String& strRemain)
+                em System.Data.SQLite.SQLiteCommand.BuildNextCommand()
+                em System.Data.SQLite.SQLiteCommand.GetStatement(Int32 index)
+                em System.Data.SQLite.SQLiteDataReader.NextResult()
+                em System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+                em System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+                em System.Data.SQLite.SQLiteCommand.ExecuteReader()
+                em Database.Database.GetUnfufilledTransactions(Int32 limit, TransactionType type) em C:\Users\vasco\Documents\TDIN\TDIN\Database\src\Database.cs:line 463
+                */
 
                 _command.ExecuteNonQuery();
 
@@ -594,8 +615,11 @@ namespace Database
 
                 return true;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 return false;
             }
         }
@@ -617,7 +641,9 @@ namespace Database
             }
             catch(SQLiteException e)
             {
-                _transaction.Rollback();
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 return false;
             }
         }
@@ -694,7 +720,7 @@ namespace Database
         {
             try
             {
-                _command.CommandText = "UPDATE Diginote SET nickname=@owner WHERE serialNumber = (SELECT diginoteID FROM TransactionDiginote WHERE transactionID = @orderID)";
+                _command.CommandText = "UPDATE Diginote SET owner=@owner WHERE serialNumber = (SELECT diginoteID FROM TransactionDiginote WHERE transactionID = @orderID)";
                 _command.Parameters.Add(new SQLiteParameter("@owner", username));
                 _command.Parameters.Add(new SQLiteParameter("@orderID", orderID));
                 int changedRows = _command.ExecuteNonQuery();
@@ -733,8 +759,8 @@ namespace Database
                     Transaction info = new Transaction
                     {
                         ID = _reader.GetInt32(0),
-                        buyer = _reader.GetString(2),
-                        seller = _reader.GetString(1),
+                        seller = SafeGetString(_reader, 1),
+                        buyer = SafeGetString(_reader, 2),
                         date = _reader.GetDateTime(3),
                         quantity = _reader.GetInt32(4)
                     };
@@ -776,8 +802,8 @@ namespace Database
                     Transaction info = new Transaction
                     {
                         ID = _reader.GetInt32(0),
-                        buyer = _reader.GetString(2),
-                        seller = _reader.GetString(1),
+                        seller = SafeGetString(_reader, 1),
+                        buyer = SafeGetString(_reader, 2),
                         date = _reader.GetDateTime(3),
                         quantity = _reader.GetInt32(4)
                     };
@@ -818,7 +844,7 @@ namespace Database
         public bool AddingFunds(string username, double funds)
         {
             _command.CommandText = "UPDATE User SET balance=balance + @funds WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@pass", funds));
+            _command.Parameters.Add(new SQLiteParameter("@funds", funds));
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
@@ -835,7 +861,7 @@ namespace Database
         private bool RemovingFunds(string username, double funds)
         {
             _command.CommandText = "UPDATE User SET balance=balance - @funds WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@pass", funds));
+            _command.Parameters.Add(new SQLiteParameter("@funds", funds));
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try

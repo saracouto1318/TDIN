@@ -169,9 +169,16 @@ public class Services {
 
     public int CheckCompleteTransaction(string sessionId, Transaction transaction, TransactionType type)
     {
-        string username = _db.GetUsername(sessionId);
-        if (username == null)
+        User user = GetUserInformation(sessionId);
+        if (user == null)
             return transaction.quantity;
+
+        if(user == null || 
+            (user.availableDiginotes < transaction.quantity && type == TransactionType.SELL) || 
+            (user.balance < transaction.quantity * GetDiginoteValue() && type == TransactionType.BUY))
+        {
+            return -1;
+        }
 
         List<Transaction> transactions = _db.GetUnfufilledTransactions(transaction.quantity, type);
         foreach (Transaction t in transactions)

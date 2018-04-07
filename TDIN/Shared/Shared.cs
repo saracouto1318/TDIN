@@ -25,7 +25,7 @@ public interface ITransaction
     List<Transaction> GetMyTransactions(string sessionId);
     List<Transaction> GetOtherTransactions(string sessionId);
     int CheckCompleteTransaction(string sessionId, Transaction transaction, TransactionType type);
-    bool InsertTransaction(string sessionId, Transaction transaction, TransactionType type);
+    int InsertTransaction(string sessionId, Transaction transaction, TransactionType type);
 }
 
 public class Intermediate : MarshalByRefObject

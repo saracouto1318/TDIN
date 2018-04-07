@@ -1,59 +1,83 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BankClient
 {
     public partial class CreateOrder : Form
     {
-        public bool type;
-        public int id;
+        public TransactionType type;
 
-        public CreateOrder()
-        {
-            InitializeComponent();
-            quote.Text = Services.GetInstance().GetPower().ToString() + " $";
-        }
-
-        public CreateOrder(bool type, int id)
+        public CreateOrder(TransactionType type)
         {
             InitializeComponent();
             this.type = type;
-            this.id = id;
             quote.Text = Services.GetInstance().GetPower().ToString() + " $";
         }
 
-        private void Button2_Click(object sender, EventArgs e)
+        private void MainPage_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new UserMainPage());
         }
 
-        private void Button5_Click(object sender, EventArgs e)
+        private void Orderes_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new OrdersList());
         }
 
-        private void Button4_Click(object sender, EventArgs e)
+        private void Statistics_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }
 
-        private void Button3_Click(object sender, EventArgs e)
+        private void Create_Click(object sender, EventArgs e)
         {
-            int numDiginotes = int.Parse(this.numDiginotes.Text, System.Globalization.CultureInfo.InvariantCulture);
+            int nDiginotes = int.Parse(this.numDiginotes.Text, System.Globalization.CultureInfo.InvariantCulture);
+
             //Insert transaction
+            nDiginotes = Services.GetInstance().CheckCompleteTransaction(nDiginotes, type);
+            if(nDiginotes < 0)
+            {
+                CreateOkBox("You don't have the required funds to execute this transactions", "Error");
+                Program.context.ChangeForm(this, new UserMainPage());
+            }
+            else if(nDiginotes == 0)
+            {
+                CreateOkBox("Success, your transaction has been completed", "Completed Transaction");
+                Program.context.ChangeForm(this, new UserMainPage());
+            }
+            else if(nDiginotes > 0)
+            {
+                Program.context.ChangeForm(this, new EditOrder(-1, nDiginotes, type));
+            }
         }
 
-        private void Price_Change(object sender, EventArgs e)
+        private void NumDiginotes_TextChanged(object sender, EventArgs e)
         {
-            float price = float.Parse(this.numDiginotes.Text, System.Globalization.CultureInfo.InvariantCulture) * float.Parse(this.quote.Text, System.Globalization.CultureInfo.InvariantCulture);
+            Price_Change();
+        }
+
+        private void Price_Change()
+        {
+            float price;
+            try
+            {
+                price = 
+                    float.Parse(numDiginotes.Text, System.Globalization.CultureInfo.InvariantCulture) * 
+                    Services.GetInstance().power;
+            } catch(Exception)
+            {
+                price = 0;
+            }
             this.price.Text = price.ToString() + " $";
+        }
+
+        private void CreateOkBox(string message, string caption)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.OK;
+            DialogResult result;
+
+            // Displays the MessageBox.
+            result = MessageBox.Show(message, caption, buttons);
         }
     }  
 }

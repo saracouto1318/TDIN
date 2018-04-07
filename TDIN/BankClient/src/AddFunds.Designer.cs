@@ -50,8 +50,7 @@
             this.add.TabIndex = 20;
             this.add.Text = "Add";
             this.add.UseVisualStyleBackColor = false;
-            this.add.Visible = false;
-            this.add.Click += new System.EventHandler(this.add_Click);
+            this.add.Click += new System.EventHandler(this.Add_Click);
             // 
             // fundsAdded
             // 
@@ -59,7 +58,6 @@
             this.fundsAdded.Name = "fundsAdded";
             this.fundsAdded.Size = new System.Drawing.Size(100, 20);
             this.fundsAdded.TabIndex = 19;
-            this.fundsAdded.Visible = false;
             // 
             // Funds
             // 
@@ -70,7 +68,6 @@
             this.Funds.Size = new System.Drawing.Size(54, 18);
             this.Funds.TabIndex = 18;
             this.Funds.Text = "Funds";
-            this.Funds.Visible = false;
             // 
             // userName
             // 
@@ -94,7 +91,7 @@
             this.button4.TabIndex = 23;
             this.button4.Text = "Orders";
             this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button5
             // 
@@ -106,7 +103,7 @@
             this.button5.TabIndex = 24;
             this.button5.Text = "Statistics";
             this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // button6
             // 
@@ -118,7 +115,7 @@
             this.button6.TabIndex = 22;
             this.button6.Text = "Main Page";
             this.button6.UseVisualStyleBackColor = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.button6.Click += new System.EventHandler(this.Button6_Click);
             // 
             // AddFunds
             // 

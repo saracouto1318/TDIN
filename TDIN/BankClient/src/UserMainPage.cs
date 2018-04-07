@@ -50,7 +50,7 @@ namespace BankClient
             balance.Text = user.balance + "$";
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void EditProfile_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new EditProfile());
         }
@@ -58,6 +58,16 @@ namespace BankClient
         private void AddFunds_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new AddFunds());
+        }
+
+        private void BuyButton_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new CreateOrder(TransactionType.BUY));
+        }
+
+        private void SellButton_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new CreateOrder(TransactionType.SELL));
         }
     }
 }

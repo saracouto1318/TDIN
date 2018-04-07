@@ -17,25 +17,50 @@ namespace BankClient
             InitializeComponent();
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void Button6_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new UserMainPage());
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void Button4_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new OrdersList());
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }
 
-        private void add_Click(object sender, EventArgs e)
+        private void Add_Click(object sender, EventArgs e)
         {
-            float funds = float.Parse(this.fundsAdded.Text, System.Globalization.CultureInfo.InvariantCulture);
-            Services.GetInstance().AddingFunds(funds);
+            try
+            {
+                float funds = float.Parse(this.fundsAdded.Text, System.Globalization.CultureInfo.InvariantCulture);
+                if(!Services.GetInstance().AddingFunds(funds))
+                {
+                    CreateOkBox("Server error while adding funds to your account", "Error");
+                }
+                else
+                {
+                    CreateOkBox("Success", "Add Funds");
+                }
+            } catch(Exception)
+            {
+                CreateOkBox("Error adding funds to your account", "Error");
+            }
+
+            fundsAdded.Text = "";
         }
+
+        private void CreateOkBox(string message, string caption)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.OK;
+            DialogResult result;
+
+            // Displays the MessageBox.
+            result = MessageBox.Show(message, caption, buttons);
+        }
+
     }
 }

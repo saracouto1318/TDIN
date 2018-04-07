@@ -145,6 +145,7 @@ namespace BankClient
         {
             if (Program.virtualUser.AddingFunds(session.sessionId, funds))
             {
+                user.balance += funds;
                 return true;
             }
             return false;
@@ -186,22 +187,51 @@ namespace BankClient
             return Program.virtualTransaction.GetOtherTransactions(session.sessionId);
         }
         
-        public int CheckCompleteTransaction(Transaction transaction, TransactionType type)
+        public int CheckCompleteTransaction(int nDiginotes, TransactionType type)
         {
             if (session == null)
             {
                 throw new NotAuthorizedOperationException();
             }
-            return Program.virtualTransaction.CheckCompleteTransaction(session.sessionId, transaction, type);
+
+            Transaction t = NewTransaction(nDiginotes, type);
+            if (t == null)
+                return nDiginotes;
+            return Program.virtualTransaction.CheckCompleteTransaction(session.sessionId, t, type);
         }
 
-        public bool InsertTransaction(Transaction transaction, TransactionType type)
+        public int InsertTransaction(int nDiginotes, TransactionType type)
         {
             if (session == null)
             {
                 throw new NotAuthorizedOperationException();
             }
-            return Program.virtualTransaction.InsertTransaction(session.sessionId, transaction, type);
+
+            Transaction t = NewTransaction(nDiginotes, type);
+            if (t == null)
+                return -1;
+            return Program.virtualTransaction.InsertTransaction(session.sessionId, t, type);
+        }
+
+        private Transaction NewTransaction(int nDiginotes, TransactionType type)
+        {
+            Transaction t = new Transaction
+            {
+                quantity = nDiginotes,
+                date = DateTime.Now
+            };
+            switch (type)
+            {
+                case TransactionType.BUY:
+                    t.buyer = GetUserInformation().username;
+                    break;
+                case TransactionType.SELL:
+                    t.seller = GetUserInformation().username;
+                    break;
+                default:
+                    return null;
+            }
+            return t;
         }
 
         #endregion

@@ -139,7 +139,7 @@ public class TransactionManager : MarshalByRefObject, ITransaction
         return Services.GetInstance().CheckCompleteTransaction(sessionId, transaction, type);
     }
 
-    public bool InsertTransaction(string sessionId, Transaction transaction, TransactionType type)
+    public int InsertTransaction(string sessionId, Transaction transaction, TransactionType type)
     {
         return Services.GetInstance().InsertTransaction(sessionId, transaction, type);
     }
