@@ -172,7 +172,21 @@ public class Services {
         string username = _db.GetUsername(sessionId);
         if (username == null)
             return transaction.quantity;
-        return _db.CheckCompleteNewTransaction(transaction, type);
+
+        List<Transaction> transactions = _db.GetUnfufilledTransactions(transaction.quantity, type);
+        foreach (Transaction t in transactions)
+        {
+            bool success = _db.CompleteTransaction(t, transaction.quantity, type);
+            if (success)
+            {
+                _db.IncrementQuantity();
+                transaction.quantity -= t.quantity;
+                if (transaction.quantity <= 0)
+                    return 0;
+            }
+        }
+
+        return transaction.quantity;
     }
 
     public bool InsertTransaction(string sessionId, Transaction transaction, TransactionType type)

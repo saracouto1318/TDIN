@@ -359,6 +359,26 @@ namespace Database
             }
         }
 
+        public bool IncrementQuantity()
+        {
+            try
+            {
+                _command.CommandText = "UPDATE Value SET quantity=quantity+1 WHERE ID=@ID";
+                _command.Parameters.Add(new SQLiteParameter("@ID", _reader.GetInt32(1)));
+
+                _command.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                return false;
+            }
+        }
+
         #endregion
 
         #region Diginote
@@ -413,92 +433,16 @@ namespace Database
         #endregion
 
         #region Transaction
-
-        public int CheckCompleteNewTransaction(Transaction transaction, TransactionType type)
-        {
-            List<Transaction> transactions = GetUnfufilledTransactions(transaction.quantity, type);
-            foreach(Transaction t in transactions)
-            {
-                CompleteTransaction(t, transaction.quantity, type);
-                transaction.quantity -= t.quantity;
-                if (transaction.quantity <= 0)
-                    return 0;
-            }
-            return transaction.quantity;
-        }
-
-        public bool InsertTransaction(Transaction transaction, TransactionType type)
-        {
-            try
-            {
-                float value = GetValue() * transaction.quantity;
-                if ((type.Equals(TransactionType.BUY) && GetUser(transaction.buyer).balance >= value) ||
-                    (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(transaction.seller, transaction.quantity).Count >= transaction.quantity))
-                {
-                    return InsertTransactionDirect(transaction);
-                }
-
-                return false;
-            }
-            catch (SQLiteException e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-
-                return false;
-            }
-        }
-
-        private bool InsertTransactionDirect(Transaction transaction)
-        {
-            try
-            {
-                _command.CommandText = "INSERT INTO Transactions(seller, buyer, price, dateTime, quantity) VALUES (@seller, @buyer, @price, @time, @quantity)";
-                _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
-                _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
-                _command.Parameters.Add(new SQLiteParameter("@time", transaction.date));
-                _command.Parameters.Add(new SQLiteParameter("@quantity", transaction.quantity));
-
-                _command.ExecuteNonQuery();
-                return true;
-            }
-            catch (SQLiteException)
-            {
-                return false;
-            }
-        }
-
-        private bool InsertTransactionDiginote(int transactionID, List<int> diginotes)
-        {
-            try
-            {
-                foreach(int diginote in diginotes)
-                {
-                    _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
-                    _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
-                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
-
-                    _command.ExecuteNonQuery();
-                }
-                
-                return true;
-            }
-            catch(SQLiteException e)
-            {
-                _transaction.Rollback();
-                return false;
-            }
-        }
-
-        private List<Transaction> GetUnfufilledTransactions(int limit, TransactionType type)
+        
+        public List<Transaction> GetUnfufilledTransactions(int limit, TransactionType type)
         {
             List<Transaction> transactions = new List<Transaction>();
             try
             {
-                switch(type)
+                switch (type)
                 {
                     case TransactionType.BUY:
-                        _command.CommandText = 
+                        _command.CommandText =
                             "SELECT transactionID, seller, buyer, date, quantity " +
                             "FROM Transactions " +
                             "WHERE buyer IS NULL " +
@@ -533,7 +477,8 @@ namespace Database
 
                 _reader.Close();
                 return transactions;
-            } catch(SQLiteException e)
+            }
+            catch (SQLiteException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
@@ -542,8 +487,8 @@ namespace Database
                 return transactions;
             }
         }
-        
-        private bool CompleteTransaction(Transaction transaction, int nDiginotes, TransactionType type)
+
+        public bool CompleteTransaction(Transaction transaction, int nDiginotes, TransactionType type)
         {
             try
             {
@@ -562,14 +507,11 @@ namespace Database
                         return false;
                 }
 
-                if(!success)
+                if (!success)
                 {
                     _transaction.Rollback();
                     return false;
                 }
-
-                if (!InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, nDiginotes)))
-                    return false;
 
                 if (ChangeDiginoteOwner(transaction.ID, transaction.buyer) <= 0)
                 {
@@ -577,8 +519,6 @@ namespace Database
                     return false;
                 }
 
-                IncrementQuantity();
-                
                 success = AddingFunds(transaction.seller, GetValue() * transaction.quantity);
                 if (!success)
                 {
@@ -598,6 +538,82 @@ namespace Database
                 return true;
             }
             catch (SQLiteException)
+            {
+                _transaction.Rollback();
+                return false;
+            }
+        }
+
+        public bool InsertTransaction(Transaction transaction, TransactionType type)
+        {
+            try
+            {
+                _transaction = _conn.BeginTransaction();
+
+                float value = GetValue() * transaction.quantity;
+                if ((type.Equals(TransactionType.BUY) && GetUser(transaction.buyer).balance >= value) ||
+                    (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(transaction.seller, transaction.quantity).Count >= transaction.quantity))
+                {
+                    bool success = InsertTransactionDirect(transaction);
+                    if(success)
+                    {
+                        _transaction.Commit();
+                        return true;
+                    }
+                }
+
+                _transaction.Rollback();
+                return false;
+            }
+            catch (SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                _transaction.Rollback();
+                return false;
+            }
+        }
+
+        private bool InsertTransactionDirect(Transaction transaction)
+        {
+            try
+            {
+                _command.CommandText = "INSERT INTO Transactions(seller, buyer, price, dateTime, quantity) VALUES (@seller, @buyer, @price, @time, @quantity)";
+                _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
+                _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
+                _command.Parameters.Add(new SQLiteParameter("@time", transaction.date));
+                _command.Parameters.Add(new SQLiteParameter("@quantity", transaction.quantity));
+
+                _command.ExecuteNonQuery();
+
+                if (!InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, nDiginotes)))
+                    return false;
+
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        private bool InsertTransactionDiginote(int transactionID, List<int> diginotes)
+        {
+            try
+            {
+                foreach(int diginote in diginotes)
+                {
+                    _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
+                    _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
+                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
+
+                    _command.ExecuteNonQuery();
+                }
+                
+                return true;
+            }
+            catch(SQLiteException e)
             {
                 _transaction.Rollback();
                 return false;
@@ -688,25 +704,6 @@ namespace Database
                 Console.WriteLine(e.StackTrace);
 
                 return 0;
-            }
-        }
-
-        private bool IncrementQuantity()
-        {
-            try
-            {
-                _command.CommandText = "UPDATE Value SET quantity=quantity+1 WHERE ID=@ID";
-                _command.Parameters.Add(new SQLiteParameter("@ID", _reader.GetInt32(1)));
-
-                _command.ExecuteNonQuery();
-
-                return true;
-            } catch(SQLiteException e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-
-                return false;
             }
         }
 
