@@ -153,14 +153,17 @@ namespace Database
 
         public bool InsertUser(string name, string username, string password)
         {
-            _command.CommandText = "INSERT INTO User(nickname, name, password, balance) VALUES (@nick, @name, @password, 0)";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
-            _command.Parameters.Add(new SQLiteParameter("@name", name));
-            _command.Parameters.Add(new SQLiteParameter("@password", password));
-
             try
             {
+                _command.CommandText = "INSERT INTO User(nickname, name, password, balance) VALUES (@nick, @name, @password, 0)";
+                _command.Parameters.Add(new SQLiteParameter("@nick", username));
+                _command.Parameters.Add(new SQLiteParameter("@name", name));
+                _command.Parameters.Add(new SQLiteParameter("@password", password));
+
                 int rowCount = _command.ExecuteNonQuery();
+
+                InsertDiginotes(username, 10);
+
                 // If number of affected rows is lower than 1 return false
                 return rowCount >= 1;
             }
@@ -176,10 +179,9 @@ namespace Database
             User userInfo = new User();
 
             _command.CommandText = "SELECT name, availableDig, totalDig, balance FROM User " +
-                "INNER JOIN(SELECT COUNT(*) as availableDig FROM Diginote WHERE owner = 'vsp' AND serialNumber NOT IN(SELECT diginoteID FROM TransactionDiginote)) " +
-                "INNER JOIN(SELECT COUNT(*) AS totalDig FROM Diginote WHERE owner = 'vsp') " +
+                "INNER JOIN(SELECT COUNT(*) as availableDig FROM Diginote WHERE owner = @nick AND serialNumber NOT IN(SELECT diginoteID FROM TransactionDiginote)) " +
+                "INNER JOIN(SELECT COUNT(*) AS totalDig FROM Diginote WHERE owner = @nick) " +
                 "WHERE nickname = @nick ";
-
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
@@ -396,7 +398,7 @@ namespace Database
 
             try
             {
-                _command.CommandText = "SELECT serialNumber FROM Diginote WHERE nickname = @source AND serialNumber NOT IN (SELECT diginoteID FROM TransactionDiginote) ORDER BY serialNumber LIMIT @num";
+                _command.CommandText = "SELECT serialNumber FROM Diginote WHERE owner = @source AND serialNumber NOT IN (SELECT diginoteID FROM TransactionDiginote) ORDER BY serialNumber LIMIT @num";
                 _command.Parameters.Add(new SQLiteParameter("@source", username));
                 _command.Parameters.Add(new SQLiteParameter("@num", nDiginotes));
                 _reader = _command.ExecuteReader();
@@ -406,8 +408,11 @@ namespace Database
                 _reader.Close();
                 return diginotes;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 _reader.Close();
                 return diginotes;
             }
@@ -515,12 +520,14 @@ namespace Database
 
                 if (!success)
                 {
+                    Console.WriteLine("Error on update");
                     _transaction.Rollback();
                     return false;
                 }
 
                 if (ChangeDiginoteOwner(transaction.ID, transaction.buyer) <= 0)
                 {
+                    Console.WriteLine("Error on change owner");
                     _transaction.Rollback();
                     return false;
                 }
@@ -528,6 +535,7 @@ namespace Database
                 success = AddingFunds(transaction.seller, GetValue() * transaction.quantity);
                 if (!success)
                 {
+                    Console.WriteLine("Error on adding funds");
                     _transaction.Rollback();
                     return false;
                 }
@@ -535,6 +543,7 @@ namespace Database
                 success = RemovingFunds(transaction.buyer, GetValue() * transaction.quantity);
                 if (!success)
                 {
+                    Console.WriteLine("Error on removing funds");
                     _transaction.Rollback();
                     return false;
                 }
@@ -543,8 +552,11 @@ namespace Database
 
                 return true;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 _transaction.Rollback();
                 return false;
             }
@@ -596,24 +608,9 @@ namespace Database
                 _command.Parameters.Add(new SQLiteParameter("@time", transaction.date));
                 _command.Parameters.Add(new SQLiteParameter("@quantity", transaction.quantity));
 
-                /*
-                no such column: date
-                em System.Data.SQLite.SQLite3.Prepare(SQLiteConnection cnn, String strSql, SQLiteStatement previous, UInt32 timeoutMS, String& strRemain)
-                em System.Data.SQLite.SQLiteCommand.BuildNextCommand()
-                em System.Data.SQLite.SQLiteCommand.GetStatement(Int32 index)
-                em System.Data.SQLite.SQLiteDataReader.NextResult()
-                em System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
-                em System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
-                em System.Data.SQLite.SQLiteCommand.ExecuteReader()
-                em Database.Database.GetUnfufilledTransactions(Int32 limit, TransactionType type) em C:\Users\vasco\Documents\TDIN\TDIN\Database\src\Database.cs:line 463
-                */
-
                 _command.ExecuteNonQuery();
 
-                if (!InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, transaction.quantity)))
-                    return false;
-
-                return true;
+                return InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, transaction.quantity));
             }
             catch (SQLiteException e)
             {
@@ -628,9 +625,9 @@ namespace Database
         {
             try
             {
+                _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
                 foreach(int diginote in diginotes)
                 {
-                    _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
                     _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
                     _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
 
