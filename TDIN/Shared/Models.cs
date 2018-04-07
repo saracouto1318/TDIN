@@ -39,6 +39,8 @@ public class UserSession : MarshalByRefObject {
     }
 }
 
+public enum TransactionType { ALL, SELL, BUY };
+
 public class Transaction : MarshalByRefObject
 {
     public int ID;

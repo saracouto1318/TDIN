@@ -156,7 +156,7 @@ public class Services {
         string username = _db.GetUsername(sessionId);
         if (username == null)
             return null;
-        return _db.GetTransactions(Database.TransactionType.ALL, true, username);
+        return _db.GetTransactions(TransactionType.ALL, true, username);
     }
 
     public List<Transaction> GetOtherTransactions(string sessionId)
@@ -164,10 +164,10 @@ public class Services {
         string username = _db.GetUsername(sessionId);
         if (username == null)
             return null;
-        return _db.GetOtherTransactions(Database.TransactionType.ALL, true, username);
+        return _db.GetOtherTransactions(TransactionType.ALL, true, username);
     }
 
-    public int CheckCompleteTransaction(string sessionId, Transaction transaction, Database.TransactionType type)
+    public int CheckCompleteTransaction(string sessionId, Transaction transaction, TransactionType type)
     {
         string username = _db.GetUsername(sessionId);
         if (username == null)
@@ -175,7 +175,7 @@ public class Services {
         return _db.CheckCompleteNewTransaction(transaction, type);
     }
 
-    public bool InsertTransaction(string sessionId, Transaction transaction, Database.TransactionType type)
+    public bool InsertTransaction(string sessionId, Transaction transaction, TransactionType type)
     {
         string username = _db.GetUsername(sessionId);
         if (username == null)

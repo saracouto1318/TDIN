@@ -103,7 +103,7 @@
             this.button1.TabIndex = 6;
             this.button1.Text = "Edit Profile";
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // button2
             // 
@@ -178,7 +178,7 @@
             this.addFunds.TabIndex = 13;
             this.addFunds.Text = "Add Funds";
             this.addFunds.UseVisualStyleBackColor = false;
-            this.addFunds.Click += new System.EventHandler(this.addFunds_Click);
+            this.addFunds.Click += new System.EventHandler(this.AddFunds_Click);
             // 
             // UserMainPage
             // 

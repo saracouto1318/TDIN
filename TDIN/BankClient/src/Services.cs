@@ -77,14 +77,8 @@ namespace BankClient
             // Subscribe to events
             inter = new Intermediate();
             inter.UpdatePower += OnPowerChange;
-            inter.NewSellTransaction += OnNewSeller;
-            inter.NewBuyTransaction += OnNewBuyer;
-            inter.CompleteTransaction += OnComplete;
             Program.virtualTransaction = (ITransaction)GetRemote.New(typeof(ITransaction));
             Program.virtualTransaction.UpdatePower += inter.FireUpdatePower;
-            Program.virtualTransaction.NewSellTransaction += inter.FireNewSellTransaction;
-            Program.virtualTransaction.NewBuyTransaction += inter.FireNewBuyTransaction;
-            Program.virtualTransaction.CompleteTransaction += inter.FireCompleteTransaction;
         }
 
         public void OnExit()
@@ -92,9 +86,6 @@ namespace BankClient
             if (inter == null)
                 return;
             Program.virtualTransaction.UpdatePower -= inter.FireUpdatePower;
-            Program.virtualTransaction.NewSellTransaction -= inter.FireNewSellTransaction;
-            Program.virtualTransaction.NewBuyTransaction -= inter.FireNewBuyTransaction;
-            Program.virtualTransaction.CompleteTransaction -= inter.FireCompleteTransaction;
         }
 
         #endregion
@@ -172,17 +163,18 @@ namespace BankClient
             return power;
         }
 
+        public void OnPowerChange(float power)
+        {
+            this.power = power;
+        }
+        
         public List<Transaction> GetMyTransactions()
         {
             if (session == null)
             {
                 throw new NotAuthorizedOperationException();
             }
-            if(myTransactions == null)
-            {
-                myTransactions = Program.virtualTransaction.GetMyTransactions(session.sessionId);
-            }
-            return myTransactions;
+            return Program.virtualTransaction.GetMyTransactions(session.sessionId);
         }
 
         public List<Transaction> GetOtherTransactions()
@@ -191,47 +183,25 @@ namespace BankClient
             {
                 throw new NotAuthorizedOperationException();
             }
-            if (myTransactions == null)
+            return Program.virtualTransaction.GetOtherTransactions(session.sessionId);
+        }
+        
+        public int CheckCompleteTransaction(Transaction transaction, TransactionType type)
+        {
+            if (session == null)
             {
-                otherTransactions = Program.virtualTransaction.GetOtherTransactions(session.sessionId);
+                throw new NotAuthorizedOperationException();
             }
-            return otherTransactions;
+            return Program.virtualTransaction.CheckCompleteTransaction(session.sessionId, transaction, type);
         }
 
-        public void OnPowerChange(float power)
+        public bool InsertTransaction(Transaction transaction, TransactionType type)
         {
-            this.power = power;
-        }
-
-        public void OnNewSeller(int id, string username, int quantity)
-        {
-            Transaction transaction = new Transaction(id, null, username, quantity, DateTime.Now);
-            if (username == user.username)
+            if (session == null)
             {
-                myTransactions.Add(transaction);
+                throw new NotAuthorizedOperationException();
             }
-            else
-            {
-                otherTransactions.Add(transaction);
-            }
-        }
-
-        public void OnNewBuyer(int id, string username, int quantity)
-        {
-            Transaction transaction = new Transaction(id, null, username, quantity, DateTime.Now);
-            if (username == user.username)
-            {
-                myTransactions.Add(transaction);
-            }
-            else
-            {
-                otherTransactions.Add(transaction);
-            }
-        }
-
-        public void OnComplete(int id)
-        {
-            // I dunno
+            return Program.virtualTransaction.InsertTransaction(session.sessionId, transaction, type);
         }
 
         #endregion

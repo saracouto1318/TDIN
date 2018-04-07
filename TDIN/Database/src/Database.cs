@@ -5,8 +5,6 @@ using System.IO;
 
 namespace Database
 {
-    public enum TransactionType { ALL, SELL, BUY };
-
     public class Database
     {
         public static Database instance;
