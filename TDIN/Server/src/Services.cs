@@ -58,7 +58,7 @@ public class Services {
     public bool LoginUser(string username, string password)
     {
         string passHash = GetHashString(password);
-        return _db.CheckUser(username, passHash);
+        return _db.ValidateUser(username, passHash);
     }
 
     public bool RegisterUser(string username, string password, string name)
@@ -90,16 +90,16 @@ public class Services {
 
     public User GetUserInformation(string sessionId)
     {
-        string username = _db.GetUsernameBySession(sessionId);
+        string username = _db.GetUsername(sessionId);
         if (username == null)
             return null;
-        User user = _db.GetUserInfo(username);
+        User user = _db.GetUser(username);
         return user;
     }
 
     public bool ChangeName(string sessionId, string nName)
     {
-        string username = _db.GetUsernameBySession(sessionId);
+        string username = _db.GetUsername(sessionId);
         if (username == null)
             return false;
         return _db.ChangeName(nName, username);
@@ -107,7 +107,7 @@ public class Services {
 
     public bool ChangeUsername(string sessionId, string nUsername)
     {
-        string username = _db.GetUsernameBySession(sessionId);
+        string username = _db.GetUsername(sessionId);
         if (username == null)
             return false;
         return _db.ChangeUsername(nUsername, username);
@@ -115,7 +115,7 @@ public class Services {
 
     public bool ChangePassword(string sessionId, string password, string nPassword)
     {
-        string username = _db.GetUsernameBySession(sessionId);
+        string username = _db.GetUsername(sessionId);
         if (username == null || !LoginUser(username, password))
             return false;
         string nPassHash = GetHashString(nPassword);
@@ -124,7 +124,7 @@ public class Services {
 
     public bool AddingFunds(string sessionId, float funds)
     {
-        string username = _db.GetUsernameBySession(sessionId);
+        string username = _db.GetUsername(sessionId);
         return _db.AddingFunds(username, funds);
     }
 
@@ -153,7 +153,7 @@ public class Services {
 
     public List<Transaction> GetMyTransactions(string sessionId)
     {
-        string username = _db.GetUsernameBySession(sessionId);
+        string username = _db.GetUsername(sessionId);
         if (username == null)
             return null;
         return _db.GetTransactions(Database.TransactionType.ALL, true, username);
@@ -161,7 +161,7 @@ public class Services {
 
     public List<Transaction> GetOtherTransactions(string sessionId)
     {
-        string username = _db.GetUsernameBySession(sessionId);
+        string username = _db.GetUsername(sessionId);
         if (username == null)
             return null;
         return _db.GetOtherTransactions(Database.TransactionType.ALL, true, username);

@@ -125,7 +125,7 @@ namespace Database
             }
         }
 
-        public bool CheckUser(string username, string password)
+        public bool ValidateUser(string username, string password)
         {
             _command.CommandText = "SELECT nickname FROM User WHERE nickname = @nick AND password = @pass ";
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
@@ -165,7 +165,8 @@ namespace Database
                 return false;
             }
         }
-        public User GetUserInfo(string username)
+
+        public User GetUser(string username)
         {
             User userInfo = new User();
 
@@ -251,40 +252,6 @@ namespace Database
             }
         }
 
-        public bool AddingFunds(string username, double funds)
-        {
-            _command.CommandText = "UPDATE User SET balance=balance + @funds WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@pass", funds));
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
-
-            try
-            {
-                _command.ExecuteNonQuery();
-                return true;
-            }
-            catch (SQLiteException)
-            {
-                return false;
-            }
-        }
-
-        public bool RemovingFunds(string username, double funds)
-        {
-            _command.CommandText = "UPDATE User SET balance=balance - @funds WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@pass", funds));
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
-
-            try
-            {
-                _command.ExecuteNonQuery();
-                return true;
-            }
-            catch (SQLiteException)
-            {
-                return false;
-            }
-        }
-
         #endregion
 
         #region Session
@@ -307,7 +274,7 @@ namespace Database
             }
         }
 
-        public string GetUsernameBySession(string session)
+        public string GetUsername(string session)
         {
             _command.CommandText = "SELECT nickname FROM Session WHERE sessionID = @session";
             _command.Parameters.Add(new SQLiteParameter("@session", session));
@@ -349,31 +316,7 @@ namespace Database
 
         #endregion
 
-        #region Diginote
-
-        public bool InsertDiginote(string username)
-        {
-            _command.CommandText = "INSERT INTO Diginote(owner, facialValue) VALUES (@owner, @facialValue)";
-            _command.Parameters.Add(new SQLiteParameter("@owner", username));
-            _command.Parameters.Add(new SQLiteParameter("@facialValue", 1));
-
-            try
-            {
-                _command.ExecuteNonQuery();
-                return true;
-            }
-            catch (SQLiteException)
-            {
-                return false;
-            }
-        }
-
-        public bool InsertDiginotes(string username, int nDiginotes)
-        {
-            for (int i = 0; i < nDiginotes; i++)
-                InsertDiginote(username);
-            return true;
-        }
+        #region Value
 
         public bool ChangeDiginoteValue(float power)
         {
@@ -420,7 +363,7 @@ namespace Database
 
         #endregion
 
-        #region Transaction
+        #region Diginote
 
         public List<int> GetAvailableDiginotes(string username, int nDiginotes)
         {
@@ -438,12 +381,40 @@ namespace Database
                 _reader.Close();
                 return diginotes;
             }
-            catch(SQLiteException)
+            catch (SQLiteException)
             {
                 _reader.Close();
                 return diginotes;
             }
         }
+
+        private bool InsertDiginote(string username)
+        {
+            _command.CommandText = "INSERT INTO Diginote(owner, facialValue) VALUES (@owner, @facialValue)";
+            _command.Parameters.Add(new SQLiteParameter("@owner", username));
+            _command.Parameters.Add(new SQLiteParameter("@facialValue", 1));
+
+            try
+            {
+                _command.ExecuteNonQuery();
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        private bool InsertDiginotes(string username, int nDiginotes)
+        {
+            for (int i = 0; i < nDiginotes; i++)
+                InsertDiginote(username);
+            return true;
+        }
+
+        #endregion
+
+        #region Transaction
 
         public bool InsertTransaction(Transaction transaction, TransactionType type)
         {
@@ -459,7 +430,7 @@ namespace Database
             try
             {
                 float value = GetValue() * transaction.quantity;
-                if ((type.Equals(TransactionType.BUY) && GetUserInfo(transaction.buyer).balance >= value) || 
+                if ((type.Equals(TransactionType.BUY) && GetUser(transaction.buyer).balance >= value) || 
                     (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(transaction.seller, transaction.quantity).Count >= transaction.quantity))
                 {
                     return InsertTransactionDirect(transaction);
@@ -548,7 +519,7 @@ namespace Database
             }
         }
         
-        public bool CompleteTransaction(Transaction transaction, int nDiginotes, TransactionType type)
+        private bool CompleteTransaction(Transaction transaction, int nDiginotes, TransactionType type)
         {
             try
             {
@@ -832,6 +803,44 @@ namespace Database
                _command.Parameters.Add(new SQLiteParameter("@ID", transactionID));
                _command.ExecuteNonQuery();
                 
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        #endregion
+        
+        #region Funds
+
+        private bool AddingFunds(string username, double funds)
+        {
+            _command.CommandText = "UPDATE User SET balance=balance + @funds WHERE nickname=@nick";
+            _command.Parameters.Add(new SQLiteParameter("@pass", funds));
+            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+
+            try
+            {
+                _command.ExecuteNonQuery();
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        private bool RemovingFunds(string username, double funds)
+        {
+            _command.CommandText = "UPDATE User SET balance=balance - @funds WHERE nickname=@nick";
+            _command.Parameters.Add(new SQLiteParameter("@pass", funds));
+            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+
+            try
+            {
+                _command.ExecuteNonQuery();
                 return true;
             }
             catch (SQLiteException)
