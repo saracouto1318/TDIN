@@ -50,12 +50,12 @@ namespace BankClient
             balance.Text = user.balance + "$";
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new EditProfile());
         }
 
-        private void addFunds_Click(object sender, EventArgs e)
+        private void AddFunds_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new AddFunds());
         }

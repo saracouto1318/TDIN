@@ -52,6 +52,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="Properties\Settings.Designer.cs" />
+    <Compile Include="src\AddFunds.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\AddFunds.Designer.cs">
+      <DependentUpon>AddFunds.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\AuthenticationPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,6 +106,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx" />
+    <EmbeddedResource Include="src\AddFunds.resx">
+      <DependentUpon>AddFunds.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\AuthenticationPage.resx">
       <DependentUpon>AuthenticationPage.cs</DependentUpon>
     </EmbeddedResource>

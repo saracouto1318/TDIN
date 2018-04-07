@@ -64,44 +64,49 @@ public class UserManager : MarshalByRefObject, IUser
     public UserSession Register(string username, string password, string name)
     {
         // Valdiate params
-        Services authService =
+        Services service =
             Services.GetInstance();
-        bool isValid = authService.RegisterUser(username, password, name);
+        bool isValid = service.RegisterUser(username, password, name);
         
         if (!isValid)
             return null;
 
         // Store session
-        UserSession userSession = authService.StoreSession(username);
+        UserSession userSession = service.StoreSession(username);
         return userSession;
     }
 
     public User UserInformation(string sessionId)
     {
-        Services authService =
+        Services service =
             Services.GetInstance();
-        return authService.GetUserInformation(sessionId);
+        return service.GetUserInformation(sessionId);
     }
 
     public bool ChangeUsername(string sessionId, string nUsername)
     {
-        Services authService =
+        Services service =
             Services.GetInstance();
-        return authService.ChangeUsername(sessionId, nUsername);
+        return service.ChangeUsername(sessionId, nUsername);
     }
 
     public bool ChangeName(string sessionId, string nName)
     {
-        Services authService =
+        Services service =
             Services.GetInstance();
-        return authService.ChangeName(sessionId, nName);
+        return service.ChangeName(sessionId, nName);
     }
 
     public bool ChangePassowrd(string sessionId, string password, string nPassword)
     {
-        Services authService =
+        Services service =
             Services.GetInstance();
-        return authService.ChangePassword(sessionId, password, nPassword);
+        return service.ChangePassword(sessionId, password, nPassword);
+    }
+
+    public bool AddingFunds(string sessionId, float funds)
+    {
+        return Services.GetInstance().AddingFunds(sessionId, funds);
     }
 }
 
@@ -128,23 +133,14 @@ public class TransactionManager : MarshalByRefObject, ITransaction
     {
         return Services.GetInstance().GetOtherTransactions(sessionId);
     }
-    public int CheckCompleteBuyTransaction(string sessionId, Transaction transaction)
+
+    public int CheckCompleteTransaction(string sessionId, Transaction transaction, TransactionType type)
     {
-        return Services.GetInstance().CheckCompleteTransaction(sessionId, transaction, Database.TransactionType.BUY);
+        return Services.GetInstance().CheckCompleteTransaction(sessionId, transaction, type);
     }
 
-    public int CheckCompleteSellTransaction(string sessionId, Transaction transaction)
+    public bool InsertTransaction(string sessionId, Transaction transaction, TransactionType type)
     {
-        return Services.GetInstance().CheckCompleteTransaction(sessionId, transaction, Database.TransactionType.SELL);
-    }
-
-    public bool InsertBuyTransaction(string sessionId, Transaction transaction)
-    {
-        return Services.GetInstance().InsertTransaction(sessionId, transaction, Database.TransactionType.BUY);
-    }
-
-    public bool InsertSellTransaction(string sessionId, Transaction transaction)
-    {
-        return Services.GetInstance().InsertTransaction(sessionId, transaction, Database.TransactionType.SELL);
+        return Services.GetInstance().InsertTransaction(sessionId, transaction, type);
     }
 }
