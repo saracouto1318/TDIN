@@ -8,32 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BankClient
+namespace BankClient.src
 {
-    public partial class CreateEditOrder : Form
+    public partial class EditOrder : Form
     {
-        public bool type;
-        public int ID;
-        public CreateEditOrder(bool type, int ID)
+        public EditOrder(int ID, int numDiginotes)
         {
-            this.type = type;
-            this.ID = ID;
-            if (this.type)
-            {
-                this.label5.Visible = false;
-                this.textBox2.Visible = true;
-                this.button3.Visible = true;
-                this.button1.Visible = false;
-            }
-            else
-            {
-                this.textBox2.Visible = false;
-                this.label5.Visible = true;
-                this.button1.Visible = true;
-                this.button3.Visible = false;
-            }
-                
             InitializeComponent();
+            this.diginotes.Text = numDiginotes.ToString();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -53,8 +35,9 @@ namespace BankClient
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string message = "Are you sure you want to edit the quotation of your diginotes?";
-            string caption = "Error Detected in Input";
+            float quote = float.Parse(this.quote.Text, System.Globalization.CultureInfo.InvariantCulture);
+            string message = "Are you sure you want to edit the quotation?";
+            string caption = "Edit Quotation";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             DialogResult result;
 
@@ -68,9 +51,14 @@ namespace BankClient
             }
             else
             {
-
+                //Edit quote
             }
-
         }
-    }  
+
+        private void price_Change(object sender, EventArgs e)
+        {
+            float price = float.Parse(this.diginotes.Text, System.Globalization.CultureInfo.InvariantCulture) * float.Parse(this.quote.Text, System.Globalization.CultureInfo.InvariantCulture);
+            this.price.Text = price.ToString() + " $";
+        }
+    }
 }

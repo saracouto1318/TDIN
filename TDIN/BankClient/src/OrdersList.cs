@@ -34,7 +34,7 @@ namespace BankClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Program.context.ChangeForm(this, new CreateEditOrder(false, 1)); //Mudar para o ID da Transação
+            Program.context.ChangeForm(this, new CreateOrder(false, 1)); //Mudar para o ID da Transação
         }
 
         private void button2_Click(object sender, EventArgs e)
