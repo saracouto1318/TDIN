@@ -149,6 +149,7 @@
             this.PasswordBtn.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.PasswordBtn.FlatAppearance.BorderSize = 0;
             this.PasswordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PasswordBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PasswordBtn.Location = new System.Drawing.Point(276, 248);
             this.PasswordBtn.Margin = new System.Windows.Forms.Padding(2);
             this.PasswordBtn.Name = "PasswordBtn";
@@ -163,6 +164,7 @@
             this.usernameBtn.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.usernameBtn.FlatAppearance.BorderSize = 0;
             this.usernameBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.usernameBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.usernameBtn.Location = new System.Drawing.Point(548, 100);
             this.usernameBtn.Margin = new System.Windows.Forms.Padding(2);
             this.usernameBtn.Name = "usernameBtn";
@@ -177,6 +179,7 @@
             this.nameBtn.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.nameBtn.FlatAppearance.BorderSize = 0;
             this.nameBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.nameBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nameBtn.Location = new System.Drawing.Point(548, 47);
             this.nameBtn.Margin = new System.Windows.Forms.Padding(2);
             this.nameBtn.Name = "nameBtn";
@@ -228,32 +231,38 @@
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(1, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(260, 50);
             this.button1.TabIndex = 11;
             this.button1.Text = "Main Page";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(272, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(260, 50);
             this.button2.TabIndex = 12;
             this.button2.Text = "Orders";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
+            this.button3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.Location = new System.Drawing.Point(540, 3);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(260, 50);
             this.button3.TabIndex = 13;
             this.button3.Text = "Statistics";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // panel1

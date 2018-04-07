@@ -47,11 +47,17 @@ namespace BankClient
             userName.Text = user.name;
             nDiginotes.Text = user.availableDiginotes + "/" + user.totalDiginotes;
             quotation.Text = power + "$";
+            balance.Text = user.balance + "$";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new EditProfile());
+        }
+
+        private void addFunds_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new AddFunds());
         }
     }
 }

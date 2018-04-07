@@ -122,6 +122,12 @@ public class Services {
         return _db.ChangePassword(nPassHash, username);
     }
 
+    public bool AddingFunds(string sessionId, float funds)
+    {
+        string username = _db.GetUsernameBySession(sessionId);
+        return _db.AddingFunds(username, funds);
+    }
+
     #endregion
 
     #region Diginotes

@@ -150,6 +150,15 @@ namespace BankClient
             return false;
         }
 
+        public bool AddingFunds(float funds)
+        {
+            if (Program.virtualUser.AddingFunds(session.sessionId, funds))
+            {
+                return true;
+            }
+            return false;
+        }
+
         #endregion
 
         #region Transaction

@@ -16,6 +16,7 @@ public interface IUser
     bool ChangeUsername(string sessionId, string nUsername);
     bool ChangeName(string sessionId, string nName);
     bool ChangePassowrd(string sessionId, string password, string nPassword);
+    bool AddingFunds(string sessionId, float funds);
 
 }
 

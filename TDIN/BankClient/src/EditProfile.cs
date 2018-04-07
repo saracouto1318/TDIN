@@ -50,7 +50,7 @@ namespace BankClient
             }
 
             string message = "Are you sure you want to edit your password?";
-            string caption = "Error Detected in Input";
+            string caption = "Edit Password";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             DialogResult result;
 
@@ -89,7 +89,7 @@ namespace BankClient
             }
 
             string message = "Are you sure you want to edit your username?";
-            string caption = "Error Detected in Input";
+            string caption = "Edit Username";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             DialogResult result;
 
@@ -128,7 +128,7 @@ namespace BankClient
             }
 
             string message = "Are you sure you want to edit your name?";
-            string caption = "Error Detected in Input";
+            string caption = "Edit Name";
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             DialogResult result;
 
