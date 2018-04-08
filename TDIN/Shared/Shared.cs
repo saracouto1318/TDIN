@@ -22,11 +22,13 @@ public interface ITransaction
     event ValueHandler UpdatePower;
     
     float GetPower();
+    void SetPower(float power);
+    Dictionary<float, int> GetQuotationFlutuation();
     List<Transaction> GetMyTransactions(string sessionId, TransactionType type, bool open);
     List<Transaction> GetOtherTransactions(string sessionId);
     int CheckCompleteTransaction(string sessionId, Transaction transaction, TransactionType type);
     int InsertTransaction(string sessionId, Transaction transaction, TransactionType type);
-    Dictionary<float, int> GetQuotationFlutuation();
+    bool ActivateTransation(string sessionId, bool activate, string transactionID);
 }
 
 public class Intermediate : MarshalByRefObject

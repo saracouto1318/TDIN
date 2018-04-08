@@ -26,6 +26,7 @@ CREATE TABLE Transactions(
     buyer varchar(50),
 	dateTime datetime NOT NULL,
 	quantity int NOT NULL,
+	isTransactable int NOT NULL,
     FOREIGN KEY (seller) REFERENCES User(nickname)
         ON DELETE SET NULL
         ON UPDATE CASCADE, 

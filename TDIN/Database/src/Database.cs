@@ -86,7 +86,13 @@ namespace Database
         
         public bool DeleteDB()
         {
-            _command.CommandText = "DELETE FROM User; DELETE FROM Value; DELETE FROM Diginote; DELETE FROM Transactions; DELETE FROM TransactionDiginote; DELETE FROM Session";
+            _command.CommandText = 
+                "DELETE FROM User; " +
+                "DELETE FROM Value; " +
+                "DELETE FROM Diginote; " +
+                "DELETE FROM Transactions; " +
+                "DELETE FROM TransactionDiginote; " +
+                "DELETE FROM Session";
 
             try
             {
@@ -178,12 +184,16 @@ namespace Database
         {
             User userInfo = new User();
 
-            _command.CommandText = "SELECT name, availableDig, totalDig, balance FROM User " +
-                "INNER JOIN(SELECT COUNT(*) as availableDig FROM Diginote WHERE owner = @nick AND serialNumber NOT IN ( " + 
-                    "SELECT diginoteID FROM TransactionDiginote, Transactions " +
-                        "WHERE Transactions.transactionID = TransactionDiginote.transactionID " +
-                        "AND((seller IS NULL AND buyer IS NOT NULL) OR(buyer IS NULL AND seller IS NOT NULL)))) " +
-                "INNER JOIN(SELECT COUNT(*) AS totalDig FROM Diginote WHERE owner = @nick) " +
+            _command.CommandText = 
+                "SELECT name, availableDig, totalDig, balance FROM User " +
+                "INNER JOIN(" +
+                    "SELECT COUNT(*) as availableDig FROM Diginote " +
+                        "WHERE owner = @nick AND serialNumber NOT IN ( " + 
+                            "SELECT diginoteID FROM TransactionDiginote, Transactions " +
+                            "WHERE Transactions.transactionID = TransactionDiginote.transactionID " +
+                            "AND((seller IS NULL AND buyer IS NOT NULL) OR(buyer IS NULL AND seller IS NOT NULL)))) " +
+                "INNER JOIN(" +
+                    "SELECT COUNT(*) AS totalDig FROM Diginote WHERE owner = @nick) " +
                 "WHERE nickname = @nick ";
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
 
@@ -371,6 +381,30 @@ namespace Database
             }
         }
 
+        public Dictionary<float, int> GetQuotes()
+        {
+            Dictionary<float, int> quotes = new Dictionary<float, int>();
+
+            _command.CommandText = "SELECT power, quantity FROM Value";
+            try
+            {
+                _reader = _command.ExecuteReader();
+
+                while (_reader.Read())
+                    quotes.Add(_reader.GetFloat(0), _reader.GetInt32(1));
+                _reader.Close();
+            }
+            catch (SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                _reader.Close();
+            }
+
+            return quotes;
+        }
+
         public bool IncrementQuantity()
         {
             try
@@ -464,14 +498,14 @@ namespace Database
                         _command.CommandText =
                             "SELECT transactionID, seller, buyer, dateTime, quantity " +
                             "FROM Transactions " +
-                            "WHERE buyer IS NULL " +
+                            "WHERE buyer IS NULL AND isAvailable = 1 " +
                             "ORDER BY dateTime LIMIT @limit";
                         break;
                     case TransactionType.SELL:
                         _command.CommandText =
                             "SELECT transactionID, seller, buyer, dateTime, quantity " +
                             "FROM Transactions " +
-                            "WHERE seller IS NULL " +
+                            "WHERE seller IS NULL AND isAvailable = 1 " +
                             "ORDER BY dateTime LIMIT @limit";
                         break;
                     default:
@@ -597,11 +631,179 @@ namespace Database
             }
         }
 
+        public List<Transaction> GetTransactions(TransactionType type, bool open, string username)
+        {
+            List<Transaction> transactions = new List<Transaction>();
+            if (type == TransactionType.ALL)
+                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick OR seller = @nick";
+            else if (type == TransactionType.BUY && open)
+                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NULL";
+            else if (type == TransactionType.BUY && !open)
+                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NOT NULL";
+            else if (type == TransactionType.SELL && open)
+                _command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NULL";
+            else if (type == TransactionType.SELL && !open)
+                _command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller = @nick AND buyer IS NOT NULL";
+            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+
+            try
+            {
+                _reader = _command.ExecuteReader();
+
+                while (_reader.Read())
+                {
+                    Transaction info = new Transaction
+                    {
+                        ID = _reader.GetInt32(0),
+                        seller = SafeGetString(_reader, 1),
+                        buyer = SafeGetString(_reader, 2),
+                        date = _reader.GetDateTime(3),
+                        quantity = _reader.GetInt32(4)
+                    };
+
+                    transactions.Add(info);
+                }
+
+                _reader.Close();
+                return transactions;
+            }
+            catch (SQLiteException)
+            {
+                _reader.Close();
+                return null;
+            }
+        }
+        
+        public List<Transaction> GetOtherTransactions(TransactionType type, bool open, string username)
+        {
+            List<Transaction> transactions = new List<Transaction>();
+            if (type == TransactionType.ALL)
+                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller != @nick LIMIT Transaction.quantity";
+            else if (type == TransactionType.BUY && open)
+                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller IS NULL";
+            else if (type == TransactionType.BUY && !open)
+                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller IS NOT NULL AND seller != @nick";
+            else if (type == TransactionType.SELL && open)
+                _command.CommandText = "SELECT * FROM Transactions WHERE seller != @nick AND buyer IS NULL";
+            else if (type == TransactionType.SELL && !open)
+                _command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller != @nick AND buyer IS NOT NULL AND buyer != @nick";
+            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+
+            try
+            {
+                _reader = _command.ExecuteReader();
+
+                while (_reader.Read())
+                {
+                    Transaction info = new Transaction
+                    {
+                        ID = _reader.GetInt32(0),
+                        seller = SafeGetString(_reader, 1),
+                        buyer = SafeGetString(_reader, 2),
+                        date = _reader.GetDateTime(3),
+                        quantity = _reader.GetInt32(4)
+                    };
+
+                    transactions.Add(info);
+                }
+
+                _reader.Close();
+                return transactions;
+            }
+            catch (SQLiteException)
+            {
+                _reader.Close();
+                return null;
+            }
+        }
+
+        public void SetActiveTransactions(bool active, List<Transaction> ignoreTransactions)
+        {
+            try
+            {
+                string sqlCommand = 
+                    "UPDATE Transactions SET isAvailable=@active " +
+                    "WHERE transactionID NOT IN ({0})";
+
+                List<string> idParameters = new List<string>();
+                int index = 0;
+                foreach (Transaction t in ignoreTransactions)
+                {
+                    string paramName = "@idIgnoreTransaction" + index;
+                    _command.Parameters.Add(new SQLiteParameter(paramName, t.ID));
+                    idParameters.Add(paramName);
+                    index++;
+                }
+
+                _command.CommandText = String.Format(sqlCommand, string.Join(",", idParameters));
+                int rows = _command.ExecuteNonQuery();
+            } catch(SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
+        }
+
+        public void SetActiveTransaction(bool active, string transactionID)
+        {
+            try
+            {
+                _command.CommandText =
+                    "UPDATE Transactions SET isAvailable=@active " +
+                    "WHERE transactionID=@id";
+                _command.Parameters.Add(new SQLiteParameter("@id", transactionID));
+                int rows = _command.ExecuteNonQuery();
+            }
+            catch (SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
+        }
+
+        public bool DeleteTransactions(string transactionID)
+        {
+            try
+            {
+               _command.CommandText = 
+                    "DELETE FROM TransactionDiginote WHERE transactionID=@ID; " +
+                    "DELETE FROM Transactions WHERE transactionID=@ID";
+               _command.Parameters.Add(new SQLiteParameter("@ID", transactionID));
+               _command.ExecuteNonQuery();
+                
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteAllInactiveTransactions()
+        {
+            try
+            {
+                _command.CommandText =
+                     "DELETE FROM TransactionDiginote " +
+                        "WHERE transactionID IN (" +
+                            "SELECT transactionID FROM Transactions WHERE isActive=0); " +
+                     "DELETE FROM Transactions WHERE isActive=0";
+                _command.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                return false;
+            }
+        }
+
         private bool InsertTransactionDirect(Transaction transaction)
         {
             try
             {
-                _command.CommandText = "INSERT INTO Transactions(seller, buyer, dateTime, quantity) VALUES (@seller, @buyer, @time, @quantity)";
+                _command.CommandText = 
+                    "INSERT INTO Transactions(seller, buyer, dateTime, quantity, isAvailable) VALUES (@seller, @buyer, @time, @quantity, 1)";
                 _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
                 _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
                 _command.Parameters.Add(new SQLiteParameter("@time", transaction.date));
@@ -747,132 +949,6 @@ namespace Database
 
                 return 0;
             }
-        }
-
-        public List<Transaction> GetTransactions(TransactionType type, bool open, string username)
-        {
-            List<Transaction> transactions = new List<Transaction>();
-            if (type == TransactionType.ALL)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick OR seller = @nick LIMIT Transaction.quantity";
-            else if (type == TransactionType.BUY && open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NULL";
-            else if (type == TransactionType.BUY && !open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NOT NULL";
-            else if (type == TransactionType.SELL && open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NULL";
-            else if (type == TransactionType.SELL && !open)
-                _command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller = @nick AND buyer IS NOT NULL";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
-
-            try
-            {
-                _reader = _command.ExecuteReader();
-
-                while (_reader.Read())
-                {
-                    Transaction info = new Transaction
-                    {
-                        ID = _reader.GetInt32(0),
-                        seller = SafeGetString(_reader, 1),
-                        buyer = SafeGetString(_reader, 2),
-                        date = _reader.GetDateTime(3),
-                        quantity = _reader.GetInt32(4)
-                    };
-
-                    transactions.Add(info);
-                }
-
-                _reader.Close();
-                return transactions;
-            }
-            catch (SQLiteException)
-            {
-                _reader.Close();
-                return null;
-            }
-        }
-        
-        public List<Transaction> GetOtherTransactions(TransactionType type, bool open, string username)
-        {
-            List<Transaction> transactions = new List<Transaction>();
-            if (type == TransactionType.ALL)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller != @nick LIMIT Transaction.quantity";
-            else if (type == TransactionType.BUY && open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller IS NULL";
-            else if (type == TransactionType.BUY && !open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller IS NOT NULL AND seller != @nick";
-            else if (type == TransactionType.SELL && open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE seller != @nick AND buyer IS NULL";
-            else if (type == TransactionType.SELL && !open)
-                _command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller != @nick AND buyer IS NOT NULL AND buyer != @nick";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
-
-            try
-            {
-                _reader = _command.ExecuteReader();
-
-                while (_reader.Read())
-                {
-                    Transaction info = new Transaction
-                    {
-                        ID = _reader.GetInt32(0),
-                        seller = SafeGetString(_reader, 1),
-                        buyer = SafeGetString(_reader, 2),
-                        date = _reader.GetDateTime(3),
-                        quantity = _reader.GetInt32(4)
-                    };
-
-                    transactions.Add(info);
-                }
-
-                _reader.Close();
-                return transactions;
-            }
-            catch (SQLiteException)
-            {
-                _reader.Close();
-                return null;
-            }
-        }
-
-        public bool DeleteTransactions(int transactionID)
-        {
-            try
-            {
-               _command.CommandText += "DELETE FROM TransactionDiginote WHERE transactionID=@ID; DELETE FROM Transactions WHERE transactionID=@ID";
-               _command.Parameters.Add(new SQLiteParameter("@ID", transactionID));
-               _command.ExecuteNonQuery();
-                
-                return true;
-            }
-            catch (SQLiteException)
-            {
-                return false;
-            }
-        }
-
-        public Dictionary<float, int> GetQuotes()
-        {
-            Dictionary<float, int> quotes = new Dictionary<float, int>();
-
-            _command.CommandText = "SELECT power, quantity FROM Value";
-            try
-            {
-                _reader = _command.ExecuteReader();
-
-                while (_reader.Read())
-                    quotes.Add(_reader.GetFloat(0), _reader.GetInt32(1));
-                _reader.Close();
-            }
-            catch (SQLiteException e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-
-                _reader.Close();
-            }
-
-            return quotes;
         }
 
         #endregion

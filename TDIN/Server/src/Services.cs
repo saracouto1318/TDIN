@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 public class Services {
     private static Services _instance;
     private Database.Database _db;
+
+    private Task waitActiveTransactions;
 
     private Services() {
         _db = Database.Database.Initialize();
@@ -134,17 +137,33 @@ public class Services {
 
     public bool ChangeDiginoteValue(float power)
     {
+        if (!waitActiveTransactions.IsCompleted)
+            return false;
+
         bool success = _db.ChangeDiginoteValue(power);
         if(success)
         {
-            //Notify every subscribed client
+            _db.SetActiveTransactions(false, new List<Transaction>());
+            waitActiveTransactions = WaitForAcceptTransactions();
+            return true;
         }
-        return success;
+        return false;
     }
-
+    
+    private async Task WaitForAcceptTransactions()
+    {
+        await Task.Delay(5000);
+        _db.DeleteAllInactiveTransactions();
+    }
+    
     public float GetDiginoteValue()
     {
         return _db.GetValue();
+    }
+
+    public Dictionary<float, int> GetQuotationFlutuation()
+    {
+        return _db.GetQuotes();
     }
 
     #endregion
@@ -214,9 +233,16 @@ public class Services {
         return (int)_db.InsertTransaction(transaction, type);
     }
 
-    public Dictionary<float, int> GetQuotationFlutuation()
+    public bool ActivateTransaction(string sessionId, bool active, string transactionID)
     {
-        return _db.GetQuotes();
+        string username = _db.GetUsername(sessionId);
+        if(username == null)
+            return false;
+        if (active)
+            _db.SetActiveTransaction(active, transactionID);
+        else
+            _db.DeleteTransactions(transactionID);
+            return true;
     }
 
     #endregion
