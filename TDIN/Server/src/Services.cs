@@ -152,7 +152,7 @@ public class Services {
     
     private async Task WaitForAcceptTransactions()
     {
-        await Task.Delay(5000);
+        await Task.Delay(8000);
         _db.SetActiveTransactions(true, new List<Transaction>());
     }
     
