@@ -111,9 +111,9 @@ namespace BankClient
             this.panel.Controls.Add(new Label() { Text = "Quotation", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 1, 0);
             this.panel.Controls.Add(new Label() { Text = "Price", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 2, 0);
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < transactions.Count; i++)
             {
-                this.panel.Controls.Add(new Label() { Text = "1", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 0, i + 1);
+                this.panel.Controls.Add(new Label() { Text = transactions[i].quantity.ToString(), TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 0, i + 1);
                 this.panel.Controls.Add(new Label() { Text = "2", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 1, i + 1);
                 this.panel.Controls.Add(new Label() { Text = "3", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 2, i + 1);
             }
