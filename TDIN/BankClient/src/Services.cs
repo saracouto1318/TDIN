@@ -21,6 +21,7 @@ namespace BankClient
         public float power = -1f;
         public List<Transaction> myTransactions;
         public List<Transaction> otherTransactions;
+        public Dictionary<float, int> quotationFlutuation;
 
         private Services() { }
 
@@ -154,13 +155,13 @@ namespace BankClient
             this.power = power;
         }
         
-        public List<Transaction> GetMyTransactions()
+        public List<Transaction> GetMyTransactions(TransactionType type, bool open)
         {
             if (session == null)
             {
                 throw new NotAuthorizedOperationException();
             }
-            return Program.virtualTransaction.GetMyTransactions(session.sessionId);
+            return Program.virtualTransaction.GetMyTransactions(session.sessionId, type, open);
         }
 
         public List<Transaction> GetOtherTransactions()
@@ -217,6 +218,12 @@ namespace BankClient
                     return null;
             }
             return t;
+        }
+
+        public Dictionary<float, int> GetQuotationFlutuation()
+        {
+            quotationFlutuation = Program.virtualTransaction.GetQuotationFlutuation();
+            return quotationFlutuation;
         }
 
         #endregion

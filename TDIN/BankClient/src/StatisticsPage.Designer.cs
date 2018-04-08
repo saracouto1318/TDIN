@@ -77,35 +77,35 @@ namespace BankClient
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(428, 240);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(205, 20);
+            this.label3.Size = new System.Drawing.Size(291, 20);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Number of Transactions:";
+            this.label3.Text = "Number of Transactions Completed";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(428, 278);
+            this.label4.Location = new System.Drawing.Point(505, 278);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(219, 20);
+            this.label4.Size = new System.Drawing.Size(214, 20);
             this.label4.TabIndex = 6;
-            this.label4.Text = "Number of Diginotes Sold:";
+            this.label4.Text = "Number of Diginotes Sold";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(428, 316);
+            this.label5.Location = new System.Drawing.Point(483, 316);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(241, 20);
+            this.label5.Size = new System.Drawing.Size(236, 20);
             this.label5.TabIndex = 7;
-            this.label5.Text = "Number of Diginotes Bought:";
+            this.label5.Text = "Number of Diginotes Bought";
             // 
             // nTransactions
             // 
             this.nTransactions.AutoSize = true;
             this.nTransactions.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nTransactions.Location = new System.Drawing.Point(640, 240);
+            this.nTransactions.Location = new System.Drawing.Point(752, 240);
             this.nTransactions.Name = "nTransactions";
             this.nTransactions.Size = new System.Drawing.Size(18, 20);
             this.nTransactions.TabIndex = 8;
@@ -115,7 +115,7 @@ namespace BankClient
             // 
             this.digiSold.AutoSize = true;
             this.digiSold.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.digiSold.Location = new System.Drawing.Point(653, 278);
+            this.digiSold.Location = new System.Drawing.Point(752, 278);
             this.digiSold.Name = "digiSold";
             this.digiSold.Size = new System.Drawing.Size(18, 20);
             this.digiSold.TabIndex = 9;
@@ -125,7 +125,7 @@ namespace BankClient
             // 
             this.digiBought.AutoSize = true;
             this.digiBought.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.digiBought.Location = new System.Drawing.Point(676, 316);
+            this.digiBought.Location = new System.Drawing.Point(752, 316);
             this.digiBought.Name = "digiBought";
             this.digiBought.Size = new System.Drawing.Size(18, 20);
             this.digiBought.TabIndex = 10;

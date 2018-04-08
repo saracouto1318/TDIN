@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Windows.Forms;
 
 namespace BankClient
 {
@@ -50,6 +51,7 @@ namespace BankClient
             this.labelQuotation = new System.Windows.Forms.Label();
             this.quotation = new System.Windows.Forms.Label();
             this.label = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.SuspendLayout();
             // 
             // all
@@ -294,11 +296,27 @@ namespace BankClient
             this.label.TabIndex = 33;
             this.label.Text = "There is no orders registered";
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(286, 99);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
+            this.tableLayoutPanel1.TabIndex = 34;
+            // 
             // OrdersList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(812, 500);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.label);
             this.Controls.Add(this.quotation);
             this.Controls.Add(this.labelQuotation);
@@ -348,5 +366,6 @@ namespace BankClient
         private System.Windows.Forms.Label quotation;
         private System.Windows.Forms.Label label;
         private ArrayList labels = new ArrayList(50);
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

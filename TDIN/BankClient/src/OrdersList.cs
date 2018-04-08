@@ -123,6 +123,11 @@ namespace BankClient
 
         private void close_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            
+        }
+
+        private void CreateTable(List<Transaction> transactions)
+        {
 
         }
     }

@@ -30,32 +30,32 @@ namespace BankClient
 
         private void UpdateChart()
         {
-            /*Dictionary<float, int> quotes = Services.GetInstance().GetQuotationFlutuation();
+            Dictionary<float, int> quotes = Services.GetInstance().GetQuotationFlutuation();
 
             foreach (var pair in quotes)
             {
                 this.chart1.Series["Quote"].Points.AddXY(pair.Key, pair.Value);
-            }*/
+            }
         }
 
         private void UpdateTransactionsInfo()
         {
-            /*this.nTransactions.Text = Services.GetInstance().GetMyTransactions(TransactionType.ALL).Count.ToString();
+            this.nTransactions.Text = Services.GetInstance().GetMyTransactions(TransactionType.ALL, false).Count.ToString();
 
             int quantity = 0;
-            List<Transaction> transactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL);
+            List<Transaction> transactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL, false);
             foreach (Transaction t in transactions)
                 quantity += t.quantity;
 
             this.digiSold.Text = quantity.ToString();
 
-            transactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY);
+            transactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY, false);
 
             quantity = 0;
             foreach (Transaction t in transactions)
                 quantity += t.quantity;
 
-            this.digiBought.Text = quantity.ToString();*/
+            this.digiBought.Text = quantity.ToString();
         }
     }
 }

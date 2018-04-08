@@ -151,12 +151,12 @@ public class Services {
 
     #region Transaction
 
-    public List<Transaction> GetMyTransactions(string sessionId)
+    public List<Transaction> GetMyTransactions(string sessionId, TransactionType type, bool open)
     {
         string username = _db.GetUsername(sessionId);
         if (username == null)
             return null;
-        return _db.GetTransactions(TransactionType.ALL, true, username);
+        return _db.GetTransactions(type, open, username);
     }
 
     public List<Transaction> GetOtherTransactions(string sessionId)
@@ -212,6 +212,11 @@ public class Services {
         if (username == null)
             return -1;
         return (int)_db.InsertTransaction(transaction, type);
+    }
+
+    public Dictionary<float, int> GetQuotationFlutuation()
+    {
+        return _db.GetQuotes();
     }
 
     #endregion
