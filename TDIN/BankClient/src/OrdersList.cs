@@ -16,7 +16,6 @@ namespace BankClient
         {
             InitializeComponent();
             ExistTransactions();
-            CreateTable(null);
         }
 
         private void Button5_Click(object sender, EventArgs e)
@@ -64,67 +63,16 @@ namespace BankClient
         {
             if(Services.GetInstance().GetMyTransactions(TransactionType.ALL, false) == null || Services.GetInstance().GetMyTransactions(TransactionType.ALL, true) == null)
             {
-                this.all.Visible = false;
-                this.bought.Visible = false;
-                this.sold.Visible = false;
-                this.open.Visible = false;
-                this.close.Visible = false;
-                this.IDlabel.Visible = false;
-                this.labelDiginote.Visible = false;
-                this.labelQuotation.Visible = false;
-                this.labelValue.Visible = false;
-                this.transactionID.Visible = false;
-                this.value.Visible = false;
-                this.nDiginotes.Visible = false;
-                this.quotation.Visible = false;
-                this.editButton.Visible = false;
-                this.deleteButton.Visible = false;
+                this.label2.Visible = false;
+                this.comboBox1.Visible = false;
+                this.tableLayoutPanel1.Visible = false;
                 this.label.Visible = true;
             }
             else
             {
                 this.label.Visible = false;
+                CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.ALL, true));
             }
-        }
-
-        private void all_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            List<Label> labels = new List<Label>();
-
-            for (int i = 0; i < this.labels.Count; i++)
-            {
-                var temp = new Label();
-
-                temp.Location = new Point(0, 0);
-                temp.Text = "o";
-
-                temp.BackColor = System.Drawing.Color.White;
-
-                this.Controls.Add(temp);
-
-                temp.Show();
-                labels.Add(temp);
-            }
-        }
-
-        private void bought_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
-        }
-
-        private void sold_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
-        }
-
-        private void open_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
-        }
-
-        private void close_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            
         }
 
         private void CreateTable(List<Transaction> transactions)
@@ -135,10 +83,41 @@ namespace BankClient
             //add a new RowStyle as a copy of the previous one
             this.tableLayoutPanel1.RowStyles.Add(new RowStyle(temp.SizeType, temp.Height));
             //add your three controls
-            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "ID" }, 0, this.tableLayoutPanel1.RowCount - 1);
-            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Diginotes" }, 1, this.tableLayoutPanel1.RowCount - 1);
-            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Quotation" }, 2, this.tableLayoutPanel1.RowCount - 1);
-            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Price" }, 2, this.tableLayoutPanel1.RowCount - 1);
+            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "ID", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Diginotes", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Quotation", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Price", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 3, 0);
+
+            for(int i=0; i<transactions.Count; i++)
+            {
+                this.tableLayoutPanel1.Controls.Add(new Label() { Text = transactions[i].ID.ToString(), TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 0, i+1);
+                this.tableLayoutPanel1.Controls.Add(new Label() { Text = transactions[i].quantity.ToString(), TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 1, i+1);
+                this.tableLayoutPanel1.Controls.Add(new Label() { Text = "2", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 2, i+1);
+                this.tableLayoutPanel1.Controls.Add(new Label() { Text = "3", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 3, i+1);
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (this.comboBox1.SelectedItem)
+            {
+                case "All":
+                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.ALL, true));
+                    break;
+                case "Purchase Orders - Open":
+                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.BUY, true));
+                    break;
+                case "Purchase Orders - Close":
+                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.BUY, false));
+                    break;
+                case "Selling Orders - Open":
+                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.SELL, true));
+                    break;
+                case "Selling Orders - Close":
+                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.SELL, false));
+                    break;
+            }
+               
         }
     }
 }

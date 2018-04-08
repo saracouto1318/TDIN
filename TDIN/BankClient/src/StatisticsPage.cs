@@ -49,7 +49,7 @@ namespace BankClient
             List<Transaction> transactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL, false);
 
             if (transactions == null)
-                this.digiSold.Text = quantity.ToString();
+                this.digiSold.Text = "0";
             else
             {
                 foreach (Transaction t in transactions)
@@ -61,7 +61,7 @@ namespace BankClient
             transactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY, false);
 
             if (transactions == null)
-                this.digiSold.Text = quantity.ToString();
+                this.digiSold.Text = "0";
             else
             {
                 quantity = 0;
