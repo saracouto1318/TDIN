@@ -9,10 +9,10 @@ namespace BankClient
         public EditProfile()
         {
             InitializeComponent();
-            GetUserInforamtionAsync();
+            GetUserInformationAsync();
         }
         
-        private async void GetUserInforamtionAsync()
+        private async void GetUserInformationAsync()
         {
             User user = null;
             await Task.Run(() =>

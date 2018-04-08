@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace BankClient
 {
@@ -16,6 +17,36 @@ namespace BankClient
             this.nDiginotes = nDiginotes;
             this.type = type;
             diginotes.Text = nDiginotes.ToString();
+            GetUserInformationAsync();
+        }
+
+        private async void GetUserInformationAsync()
+        {
+            User user = null;
+            float power = 1f;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    user = Services.GetInstance().GetUserInformation();
+                    power = Services.GetInstance().GetPower();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Program.context.ChangeForm(this, new AuthenticationPage());
+                }
+            });
+            UpdateUserInformation(user, power);
+        }
+
+        private void UpdateUserInformation(User user, float power)
+        {
+            if (user == null)
+            {
+                return;
+            }
+            userName.Text = user.name;
         }
 
         private void MainPage_Click(object sender, EventArgs e)

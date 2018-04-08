@@ -16,6 +16,34 @@ namespace BankClient
         {
             InitializeComponent();
             ExistTransactions();
+            GetUserInforamtionAsync();
+        }
+
+        private async void GetUserInforamtionAsync()
+        {
+            User user = null;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    user = Services.GetInstance().GetUserInformation();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Program.context.ChangeForm(this, new AuthenticationPage());
+                }
+            });
+            UpdateUserProfile(user);
+        }
+
+        private void UpdateUserProfile(User user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+            userName.Text = user.name;
         }
 
         private void Button5_Click(object sender, EventArgs e)

@@ -15,6 +15,34 @@ namespace BankClient
         public AddFunds()
         {
             InitializeComponent();
+            GetUserInformationAsync();
+        }
+
+        private async void GetUserInformationAsync()
+        {
+            User user = null;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    user = Services.GetInstance().GetUserInformation();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Program.context.ChangeForm(this, new AuthenticationPage());
+                }
+            });
+            UpdateUserProfile(user);
+        }
+
+        private void UpdateUserProfile(User user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+            userName.Text = user.name;
         }
 
         private void Button6_Click(object sender, EventArgs e)

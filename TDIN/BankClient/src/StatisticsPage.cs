@@ -1,6 +1,7 @@
-﻿using System.Windows.Forms;
-using System;
+﻿using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BankClient
 {
@@ -11,6 +12,34 @@ namespace BankClient
             InitializeComponent();
             UpdateChart();
             UpdateTransactionsInfo();
+            GetUserInformationAsync();
+        }
+
+        private async void GetUserInformationAsync()
+        {
+            User user = null;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    user = Services.GetInstance().GetUserInformation();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Program.context.ChangeForm(this, new AuthenticationPage());
+                }
+            });
+            UpdateUserProfile(user);
+        }
+
+        private void UpdateUserProfile(User user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+            userName.Text = user.name;
         }
 
         private void button2_Click(object sender, System.EventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace BankClient
 {
@@ -12,6 +13,34 @@ namespace BankClient
             InitializeComponent();
             this.type = type;
             quote.Text = Services.GetInstance().GetPower().ToString() + " $";
+            GetUserInforamtionAsync();
+        }
+
+        private async void GetUserInformationAsync()
+        {
+            User user = null;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    user = Services.GetInstance().GetUserInformation();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Program.context.ChangeForm(this, new AuthenticationPage());
+                }
+            });
+            UpdateUserProfile(user);
+        }
+
+        private void UpdateUserProfile(User user)
+        {
+            if (user == null)
+            {
+                return;
+            }
+            userName.Text = user.name;
         }
 
         private void MainPage_Click(object sender, EventArgs e)
