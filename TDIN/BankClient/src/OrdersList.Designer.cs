@@ -35,7 +35,6 @@ namespace BankClient
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.label = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.userName = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -99,25 +98,7 @@ namespace BankClient
             this.label.Size = new System.Drawing.Size(318, 25);
             this.label.TabIndex = 33;
             this.label.Text = "There is no orders registered";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.tableLayoutPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.tableLayoutPanel1.ColumnCount = 4;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(202, 221);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.61404F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 54.38596F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(420, 57);
-            this.tableLayoutPanel1.TabIndex = 34;
+
             // 
             // comboBox1
             // 
@@ -132,6 +113,7 @@ namespace BankClient
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(132, 21);
             this.comboBox1.TabIndex = 35;
+            this.comboBox1.SelectedItem = "All";
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // userName
@@ -165,7 +147,6 @@ namespace BankClient
             this.Controls.Add(this.label2);
             this.Controls.Add(this.userName);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.label);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button6);
@@ -184,7 +165,6 @@ namespace BankClient
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Label label;
         private ArrayList labels = new ArrayList(50);
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label userName;
         private System.Windows.Forms.Label label2;

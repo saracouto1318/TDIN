@@ -12,6 +12,7 @@ namespace BankClient
 {
     public partial class OrdersList : Form
     {
+        TableLayoutPanel panel = new TableLayoutPanel();
         public OrdersList()
         {
             InitializeComponent();
@@ -89,11 +90,11 @@ namespace BankClient
 
         private void ExistTransactions()
         {
-            if(Services.GetInstance().GetMyTransactions(TransactionType.ALL, false) == null || Services.GetInstance().GetMyTransactions(TransactionType.ALL, true) == null)
+            if (Services.GetInstance().GetMyTransactions(TransactionType.ALL, false).Count == 0)
             {
                 this.label2.Visible = false;
                 this.comboBox1.Visible = false;
-                this.tableLayoutPanel1.Visible = false;
+                this.panel.Visible = false;
                 this.label.Visible = true;
             }
             else
@@ -105,23 +106,16 @@ namespace BankClient
 
         private void CreateTable(List<Transaction> transactions)
         {
-            RowStyle temp = this.tableLayoutPanel1.RowStyles[this.tableLayoutPanel1.RowCount - 1];
-            //increase panel rows count by one
-            this.tableLayoutPanel1.RowCount++;
-            //add a new RowStyle as a copy of the previous one
-            this.tableLayoutPanel1.RowStyles.Add(new RowStyle(temp.SizeType, temp.Height));
-            //add your three controls
-            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "ID", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Diginotes", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Quotation", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Price", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 3, 0);
+            CreatePanel();
+            this.panel.Controls.Add(new Label() { Text = "Diginotes", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 0, 0);
+            this.panel.Controls.Add(new Label() { Text = "Quotation", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 1, 0);
+            this.panel.Controls.Add(new Label() { Text = "Price", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 2, 0);
 
-            for(int i=0; i<transactions.Count; i++)
+            for (int i = 0; i < 5; i++)
             {
-                this.tableLayoutPanel1.Controls.Add(new Label() { Text = transactions[i].ID.ToString(), TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 0, i+1);
-                this.tableLayoutPanel1.Controls.Add(new Label() { Text = transactions[i].quantity.ToString(), TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 1, i+1);
-                this.tableLayoutPanel1.Controls.Add(new Label() { Text = "2", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 2, i+1);
-                this.tableLayoutPanel1.Controls.Add(new Label() { Text = "3", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 3, i+1);
+                this.panel.Controls.Add(new Label() { Text = "1", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 0, i + 1);
+                this.panel.Controls.Add(new Label() { Text = "2", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 1, i + 1);
+                this.panel.Controls.Add(new Label() { Text = "3", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 2, i + 1);
             }
         }
 
@@ -145,7 +139,28 @@ namespace BankClient
                     CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.SELL, false));
                     break;
             }
-               
+        }
+
+        private void CreatePanel()
+        {
+            this.panel.Dispose();
+            this.panel = new TableLayoutPanel();
+
+            this.panel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.panel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.panel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.panel.ColumnCount = 3;
+            this.panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.panel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel.Location = new System.Drawing.Point(202, 221);
+            this.panel.Name = "tableLayoutPanel1";
+            this.panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize, 50F));
+            this.panel.Size = new System.Drawing.Size(420, 141);
+            this.panel.TabIndex = 34;
+
+            this.Controls.Add(this.panel);
         }
     }
 }
