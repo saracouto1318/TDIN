@@ -173,7 +173,7 @@ namespace BankClient
             // 
             // button4
             // 
-            this.button4.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button4.BackColor = System.Drawing.Color.DarkSalmon;
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.Location = new System.Drawing.Point(540, 82);
             this.button4.Name = "button4";

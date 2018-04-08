@@ -100,6 +100,7 @@ namespace BankClient
             // 
             this.IDlabel.AutoSize = true;
             this.IDlabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.IDlabel.ForeColor = System.Drawing.SystemColors.ControlText;
             this.IDlabel.Location = new System.Drawing.Point(33, 240);
             this.IDlabel.Name = "IDlabel";
             this.IDlabel.Size = new System.Drawing.Size(28, 20);
@@ -119,18 +120,22 @@ namespace BankClient
             // transactionID
             // 
             this.transactionID.AutoSize = true;
-            this.transactionID.Location = new System.Drawing.Point(31, 281);
+            this.transactionID.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.transactionID.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.transactionID.Location = new System.Drawing.Point(25, 281);
             this.transactionID.Name = "transactionID";
-            this.transactionID.Size = new System.Drawing.Size(35, 13);
+            this.transactionID.Size = new System.Drawing.Size(41, 13);
             this.transactionID.TabIndex = 8;
             this.transactionID.Text = "label3";
             // 
             // value
             // 
             this.value.AutoSize = true;
+            this.value.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.value.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.value.Location = new System.Drawing.Point(327, 281);
             this.value.Name = "value";
-            this.value.Size = new System.Drawing.Size(35, 13);
+            this.value.Size = new System.Drawing.Size(41, 13);
             this.value.TabIndex = 9;
             this.value.Text = "label4";
             // 
@@ -201,9 +206,11 @@ namespace BankClient
             // nDiginotes
             // 
             this.nDiginotes.AutoSize = true;
-            this.nDiginotes.Location = new System.Drawing.Point(122, 281);
+            this.nDiginotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nDiginotes.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.nDiginotes.Location = new System.Drawing.Point(113, 281);
             this.nDiginotes.Name = "nDiginotes";
-            this.nDiginotes.Size = new System.Drawing.Size(35, 13);
+            this.nDiginotes.Size = new System.Drawing.Size(41, 13);
             this.nDiginotes.TabIndex = 17;
             this.nDiginotes.Text = "label6";
             // 
@@ -245,7 +252,7 @@ namespace BankClient
             // 
             // button7
             // 
-            this.button7.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button7.BackColor = System.Drawing.Color.DarkSalmon;
             this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.Location = new System.Drawing.Point(278, 91);
             this.button7.Name = "button7";
@@ -268,9 +275,11 @@ namespace BankClient
             // quotation
             // 
             this.quotation.AutoSize = true;
+            this.quotation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.quotation.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.quotation.Location = new System.Drawing.Point(222, 281);
             this.quotation.Name = "quotation";
-            this.quotation.Size = new System.Drawing.Size(35, 13);
+            this.quotation.Size = new System.Drawing.Size(41, 13);
             this.quotation.TabIndex = 32;
             this.quotation.Text = "label9";
             // 
@@ -289,7 +298,7 @@ namespace BankClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(812, 450);
+            this.ClientSize = new System.Drawing.Size(812, 500);
             this.Controls.Add(this.label);
             this.Controls.Add(this.quotation);
             this.Controls.Add(this.labelQuotation);
