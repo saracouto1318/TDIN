@@ -851,8 +851,32 @@ namespace Database
             }
         }
 
+        public Dictionary<float, int> GetQuotes()
+        {
+            Dictionary<float, int> quotes = new Dictionary<float, int>();
+
+            _command.CommandText = "SELECT power, quantity FROM Value";
+            try
+            {
+                _reader = _command.ExecuteReader();
+
+                while (_reader.Read())
+                    quotes.Add(_reader.GetFloat(0), _reader.GetInt32(1));
+                _reader.Close();
+            }
+            catch (SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                _reader.Close();
+            }
+
+            return quotes;
+        }
+
         #endregion
-        
+
         #region Funds
 
         public bool AddingFunds(string username, double funds)

@@ -1,4 +1,8 @@
-﻿namespace BankClient
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms.DataVisualization.Charting;
+
+namespace BankClient
 {
     partial class StatisticsPage
     {
@@ -131,13 +135,13 @@
             // 
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
+            legend1.Name = "Quotation Flutuation";
             this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(12, 211);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
+            series1.Legend = "Quotation Flutuation";
+            series1.Name = "Quote";
             this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(362, 300);
             this.chart1.TabIndex = 11;
@@ -216,6 +220,7 @@
             this.PerformLayout();
 
         }
+
 
         #endregion
         private System.Windows.Forms.Label label1;
