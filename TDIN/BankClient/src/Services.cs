@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace BankClient
 {
@@ -150,8 +151,26 @@ namespace BankClient
         public void OnPowerChange(float power)
         {
             this.power = power;
+
+            string message = "The diginotes quotation will change to " + this.power.ToString() + "\nWill you accept the new quotation?";
+            string caption = "Accept New Quotation";
+            uint timeout = 6000;
+
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            result = MessageBoxTimeout.Show(message, caption, buttons, timeout);
+
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                Program.virtualTransaction.ActivateTransation(session.sessionId, true);
+            }
+            else
+            {
+                Program.virtualTransaction.ActivateTransation(session.sessionId, false);
+            }
         }
-        
+
         public List<Transaction> GetMyTransactions(TransactionType type, bool open)
         {
             if (session == null)
