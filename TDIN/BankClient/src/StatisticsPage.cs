@@ -40,22 +40,36 @@ namespace BankClient
 
         private void UpdateTransactionsInfo()
         {
-            this.nTransactions.Text = Services.GetInstance().GetMyTransactions(TransactionType.ALL, false).Count.ToString();
+            if (Services.GetInstance().GetMyTransactions(TransactionType.ALL, false) == null)
+                this.nTransactions.Text = "0";
+            else
+                this.nTransactions.Text = Services.GetInstance().GetMyTransactions(TransactionType.ALL, false).Count.ToString();
 
             int quantity = 0;
             List<Transaction> transactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL, false);
-            foreach (Transaction t in transactions)
-                quantity += t.quantity;
 
-            this.digiSold.Text = quantity.ToString();
+            if (transactions == null)
+                this.digiSold.Text = quantity.ToString();
+            else
+            {
+                foreach (Transaction t in transactions)
+                    quantity += t.quantity;
 
+                this.digiSold.Text = quantity.ToString();
+            }
+           
             transactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY, false);
 
-            quantity = 0;
-            foreach (Transaction t in transactions)
-                quantity += t.quantity;
+            if (transactions == null)
+                this.digiSold.Text = quantity.ToString();
+            else
+            {
+                quantity = 0;
+                foreach (Transaction t in transactions)
+                    quantity += t.quantity;
 
-            this.digiBought.Text = quantity.ToString();
+                this.digiBought.Text = quantity.ToString();
+            }
         }
     }
 }

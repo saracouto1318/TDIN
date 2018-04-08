@@ -124,9 +124,9 @@ public class TransactionManager : MarshalByRefObject, ITransaction
         return Services.GetInstance().GetDiginoteValue();
     }
 
-    public List<Transaction> GetMyTransactions(string sessionId)
+    public List<Transaction> GetMyTransactions(string sessionId, TransactionType type, bool open)
     {
-        return Services.GetInstance().GetMyTransactions(sessionId);
+        return Services.GetInstance().GetMyTransactions(sessionId, type, open);
     }
 
     public List<Transaction> GetOtherTransactions(string sessionId)
@@ -142,5 +142,10 @@ public class TransactionManager : MarshalByRefObject, ITransaction
     public int InsertTransaction(string sessionId, Transaction transaction, TransactionType type)
     {
         return Services.GetInstance().InsertTransaction(sessionId, transaction, type);
+    }
+
+    public Dictionary<float, int> GetQuotationFlutuation()
+    {
+        return Services.GetInstance().GetQuotationFlutuation();
     }
 }

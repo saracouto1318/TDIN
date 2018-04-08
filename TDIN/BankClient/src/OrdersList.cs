@@ -16,6 +16,7 @@ namespace BankClient
         {
             InitializeComponent();
             ExistTransactions();
+            CreateTable(null);
         }
 
         private void Button5_Click(object sender, EventArgs e)
@@ -61,7 +62,7 @@ namespace BankClient
 
         private void ExistTransactions()
         {
-            if(Services.GetInstance().GetMyTransactions() == null)
+            if(Services.GetInstance().GetMyTransactions(TransactionType.ALL, false) == null || Services.GetInstance().GetMyTransactions(TransactionType.ALL, true) == null)
             {
                 this.all.Visible = false;
                 this.bought.Visible = false;
@@ -128,7 +129,16 @@ namespace BankClient
 
         private void CreateTable(List<Transaction> transactions)
         {
-
+            RowStyle temp = this.tableLayoutPanel1.RowStyles[this.tableLayoutPanel1.RowCount - 1];
+            //increase panel rows count by one
+            this.tableLayoutPanel1.RowCount++;
+            //add a new RowStyle as a copy of the previous one
+            this.tableLayoutPanel1.RowStyles.Add(new RowStyle(temp.SizeType, temp.Height));
+            //add your three controls
+            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "ID" }, 0, this.tableLayoutPanel1.RowCount - 1);
+            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Diginotes" }, 1, this.tableLayoutPanel1.RowCount - 1);
+            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Quotation" }, 2, this.tableLayoutPanel1.RowCount - 1);
+            this.tableLayoutPanel1.Controls.Add(new Label() { Text = "Price" }, 2, this.tableLayoutPanel1.RowCount - 1);
         }
     }
 }
