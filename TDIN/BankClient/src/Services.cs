@@ -68,12 +68,6 @@ namespace BankClient
 
         public void OnAuthentication()
         {
-            // Get all the information necessary
-            GetUserInformation();
-            GetPower();
-            GetMyTransactions();
-            GetOtherTransactions();
-
             // Subscribe to events
             inter = new Intermediate();
             inter.UpdatePower += OnPowerChange;
@@ -99,12 +93,7 @@ namespace BankClient
                 throw new NotAuthorizedOperationException();
             }
 
-            if(user == null)
-            {
-                user = Program.virtualUser.UserInformation(session.sessionId);
-                Console.WriteLine("{0} has {1}/{2} diginotes", user.name, user.availableDiginotes, user.totalDiginotes);
-            }
-
+            user = Program.virtualUser.UserInformation(session.sessionId);
             return user;
         }
 
@@ -157,11 +146,7 @@ namespace BankClient
 
         public float GetPower()
         {
-            if(power < 0)
-            {
-                power = Program.virtualTransaction.GetPower();
-            }
-            return power;
+            return Program.virtualTransaction.GetPower();
         }
 
         public void OnPowerChange(float power)
@@ -197,7 +182,7 @@ namespace BankClient
             Transaction t = NewTransaction(nDiginotes, type);
             if (t == null)
                 return nDiginotes;
-            return Program.virtualTransaction.CheckCompleteTransaction(session.sessionId, t, type);
+            return Program.virtualTransaction.CheckCompleteTransaction(session.sessionId, t, type);     break;
         }
 
         public int InsertTransaction(int nDiginotes, TransactionType type)
