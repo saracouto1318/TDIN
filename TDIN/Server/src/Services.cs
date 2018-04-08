@@ -153,7 +153,7 @@ public class Services {
     private async Task WaitForAcceptTransactions()
     {
         await Task.Delay(5000);
-        _db.DeleteAllInactiveTransactions();
+        _db.SetActiveTransactions(true, new List<Transaction>());
     }
     
     public float GetDiginoteValue()
@@ -233,16 +233,16 @@ public class Services {
         return (int)_db.InsertTransaction(transaction, type);
     }
 
-    public bool ActivateTransaction(string sessionId, bool active, string transactionID)
+    public bool ActivateTransaction(string sessionId, bool active)
     {
         string username = _db.GetUsername(sessionId);
         if(username == null)
             return false;
         if (active)
-            _db.SetActiveTransaction(active, transactionID);
+            _db.SetActiveMyTransaction(active, username);
         else
-            _db.DeleteTransactions(transactionID);
-            return true;
+            _db.DeleteMyInactiveTransactions(username);
+        return true;
     }
 
     #endregion

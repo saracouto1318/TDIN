@@ -191,7 +191,7 @@ namespace Database
                         "WHERE owner = @nick AND serialNumber NOT IN ( " + 
                             "SELECT diginoteID FROM TransactionDiginote, Transactions " +
                             "WHERE Transactions.transactionID = TransactionDiginote.transactionID " +
-                            "AND((seller IS NULL AND buyer IS NOT NULL) OR(buyer IS NULL AND seller IS NOT NULL)))) " +
+                            "AND ((seller IS NULL AND buyer IS NOT NULL) OR (buyer IS NULL AND seller IS NOT NULL)))) " +
                 "INNER JOIN(" +
                     "SELECT COUNT(*) AS totalDig FROM Diginote WHERE owner = @nick) " +
                 "WHERE nickname = @nick ";
@@ -723,7 +723,7 @@ namespace Database
             {
                 string sqlCommand = 
                     "UPDATE Transactions SET isAvailable=@active " +
-                    "WHERE transactionID NOT IN ({0})";
+                    "WHERE transactionID NOT IN ({0}) AND ((seller IS NULL AND buyer IS NOT NULL) OR (buyer IS NULL AND seller IS NOT NULL))";
 
                 List<string> idParameters = new List<string>();
                 int index = 0;
@@ -744,14 +744,14 @@ namespace Database
             }
         }
 
-        public void SetActiveTransaction(bool active, string transactionID)
+        public void SetActiveMyTransaction(bool active, string username)
         {
             try
             {
                 _command.CommandText =
                     "UPDATE Transactions SET isAvailable=@active " +
-                    "WHERE transactionID=@id";
-                _command.Parameters.Add(new SQLiteParameter("@id", transactionID));
+                    "WHERE buyer = @nick OR seller = @nick";
+                _command.Parameters.Add(new SQLiteParameter("@nick", username));
                 int rows = _command.ExecuteNonQuery();
             }
             catch (SQLiteException e)
@@ -761,35 +761,16 @@ namespace Database
             }
         }
 
-        public bool DeleteTransactions(string transactionID)
+        public bool DeleteMyInactiveTransactions(string username)
         {
             try
             {
-               _command.CommandText = 
-                    "DELETE FROM TransactionDiginote WHERE transactionID=@ID; " +
-                    "DELETE FROM Transactions WHERE transactionID=@ID";
-               _command.Parameters.Add(new SQLiteParameter("@ID", transactionID));
+               _command.CommandText =
+                    "DELETE FROM TransactionDiginote WHERE transactionID IN (SELECT transactionID FROM Transactions WHERE buyer = @nick OR seller = @nick; " +
+                    "DELETE FROM Transactions WHERE buyer = @nick OR seller = @nick";
+               _command.Parameters.Add(new SQLiteParameter("@nick", username));
                _command.ExecuteNonQuery();
                 
-                return true;
-            }
-            catch (SQLiteException)
-            {
-                return false;
-            }
-        }
-
-        public bool DeleteAllInactiveTransactions()
-        {
-            try
-            {
-                _command.CommandText =
-                     "DELETE FROM TransactionDiginote " +
-                        "WHERE transactionID IN (" +
-                            "SELECT transactionID FROM Transactions WHERE isActive=0); " +
-                     "DELETE FROM Transactions WHERE isActive=0";
-                _command.ExecuteNonQuery();
-
                 return true;
             }
             catch (SQLiteException)

@@ -157,8 +157,8 @@ public class TransactionManager : MarshalByRefObject, ITransaction
         return Services.GetInstance().GetQuotationFlutuation();
     }
 
-    public bool ActivateTransation(string sessionId, bool activate, string transactionID)
+    public bool ActivateTransation(string sessionId, bool activate)
     {
-        return Services.GetInstance().ActivateTransaction(sessionId, activate, transactionID);
+        return Services.GetInstance().ActivateTransaction(sessionId, activate);
     }
 }
