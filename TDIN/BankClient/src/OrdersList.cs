@@ -85,5 +85,45 @@ namespace BankClient
                 this.label.Visible = false;
             }
         }
+
+        private void all_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            List<Label> labels = new List<Label>();
+
+            for (int i = 0; i < this.labels.Count; i++)
+            {
+                var temp = new Label();
+
+                temp.Location = new Point(0, 0);
+                temp.Text = "o";
+
+                temp.BackColor = System.Drawing.Color.White;
+
+                this.Controls.Add(temp);
+
+                temp.Show();
+                labels.Add(temp);
+            }
+        }
+
+        private void bought_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void sold_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void open_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void close_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
     }
 }

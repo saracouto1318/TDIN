@@ -1,4 +1,6 @@
-﻿namespace BankClient
+﻿using System.Collections;
+
+namespace BankClient
 {
     partial class OrdersList
     {
@@ -62,6 +64,7 @@
             this.all.TabIndex = 3;
             this.all.TabStop = true;
             this.all.Text = "All";
+            this.all.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.all_LinkClicked);
             // 
             // bought
             // 
@@ -76,6 +79,7 @@
             this.bought.TabIndex = 4;
             this.bought.TabStop = true;
             this.bought.Text = "Bought";
+            this.bought.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.bought_LinkClicked);
             // 
             // sold
             // 
@@ -90,6 +94,7 @@
             this.sold.TabIndex = 5;
             this.sold.TabStop = true;
             this.sold.Text = "Sold";
+            this.sold.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.sold_LinkClicked);
             // 
             // IDlabel
             // 
@@ -166,6 +171,7 @@
             this.open.TabIndex = 12;
             this.open.TabStop = true;
             this.open.Text = "Open";
+            this.open.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.open_LinkClicked);
             // 
             // close
             // 
@@ -180,6 +186,7 @@
             this.close.TabIndex = 13;
             this.close.TabStop = true;
             this.close.Text = "Close";
+            this.close.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.close_LinkClicked);
             // 
             // labelDiginote
             // 
@@ -331,5 +338,6 @@
         private System.Windows.Forms.Label labelQuotation;
         private System.Windows.Forms.Label quotation;
         private System.Windows.Forms.Label label;
+        private ArrayList labels = new ArrayList(50);
     }
 }
