@@ -182,7 +182,7 @@ namespace BankClient
             Transaction t = NewTransaction(nDiginotes, type);
             if (t == null)
                 return nDiginotes;
-            return Program.virtualTransaction.CheckCompleteTransaction(session.sessionId, t, type);     break;
+            return Program.virtualTransaction.CheckCompleteTransaction(session.sessionId, t, type);
         }
 
         public int InsertTransaction(int nDiginotes, TransactionType type)

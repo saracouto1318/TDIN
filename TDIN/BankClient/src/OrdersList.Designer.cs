@@ -28,87 +28,88 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.all = new System.Windows.Forms.LinkLabel();
+            this.bought = new System.Windows.Forms.LinkLabel();
+            this.sold = new System.Windows.Forms.LinkLabel();
+            this.IDlabel = new System.Windows.Forms.Label();
+            this.labelValue = new System.Windows.Forms.Label();
             this.transactionID = new System.Windows.Forms.Label();
             this.value = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.linkLabel4 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel5 = new System.Windows.Forms.LinkLabel();
-            this.label5 = new System.Windows.Forms.Label();
+            this.editButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.open = new System.Windows.Forms.LinkLabel();
+            this.close = new System.Windows.Forms.LinkLabel();
+            this.labelDiginote = new System.Windows.Forms.Label();
             this.nDiginotes = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
+            this.labelQuotation = new System.Windows.Forms.Label();
             this.quotation = new System.Windows.Forms.Label();
+            this.label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // linkLabel1
+            // all
             // 
-            this.linkLabel1.ActiveLinkColor = System.Drawing.Color.OrangeRed;
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.LinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel1.Location = new System.Drawing.Point(32, 174);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(34, 24);
-            this.linkLabel1.TabIndex = 3;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "All";
+            this.all.ActiveLinkColor = System.Drawing.Color.OrangeRed;
+            this.all.AutoSize = true;
+            this.all.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.all.LinkColor = System.Drawing.Color.IndianRed;
+            this.all.Location = new System.Drawing.Point(32, 174);
+            this.all.Name = "all";
+            this.all.Size = new System.Drawing.Size(34, 24);
+            this.all.TabIndex = 3;
+            this.all.TabStop = true;
+            this.all.Text = "All";
             // 
-            // linkLabel2
+            // bought
             // 
-            this.linkLabel2.ActiveLinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel2.ForeColor = System.Drawing.Color.IndianRed;
-            this.linkLabel2.LinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel2.Location = new System.Drawing.Point(121, 174);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(76, 24);
-            this.linkLabel2.TabIndex = 4;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "Bought";
+            this.bought.ActiveLinkColor = System.Drawing.Color.IndianRed;
+            this.bought.AutoSize = true;
+            this.bought.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bought.ForeColor = System.Drawing.Color.IndianRed;
+            this.bought.LinkColor = System.Drawing.Color.IndianRed;
+            this.bought.Location = new System.Drawing.Point(121, 174);
+            this.bought.Name = "bought";
+            this.bought.Size = new System.Drawing.Size(76, 24);
+            this.bought.TabIndex = 4;
+            this.bought.TabStop = true;
+            this.bought.Text = "Bought";
             // 
-            // linkLabel3
+            // sold
             // 
-            this.linkLabel3.ActiveLinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel3.ForeColor = System.Drawing.Color.IndianRed;
-            this.linkLabel3.LinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel3.Location = new System.Drawing.Point(257, 174);
-            this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(52, 24);
-            this.linkLabel3.TabIndex = 5;
-            this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "Sold";
+            this.sold.ActiveLinkColor = System.Drawing.Color.IndianRed;
+            this.sold.AutoSize = true;
+            this.sold.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sold.ForeColor = System.Drawing.Color.IndianRed;
+            this.sold.LinkColor = System.Drawing.Color.IndianRed;
+            this.sold.Location = new System.Drawing.Point(257, 174);
+            this.sold.Name = "sold";
+            this.sold.Size = new System.Drawing.Size(52, 24);
+            this.sold.TabIndex = 5;
+            this.sold.TabStop = true;
+            this.sold.Text = "Sold";
             // 
-            // label1
+            // IDlabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(33, 240);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 20);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "ID";
+            this.IDlabel.AutoSize = true;
+            this.IDlabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.IDlabel.Location = new System.Drawing.Point(33, 240);
+            this.IDlabel.Name = "IDlabel";
+            this.IDlabel.Size = new System.Drawing.Size(28, 20);
+            this.IDlabel.TabIndex = 6;
+            this.IDlabel.Text = "ID";
             // 
-            // label2
+            // labelValue
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(317, 240);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 20);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Value";
+            this.labelValue.AutoSize = true;
+            this.labelValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelValue.Location = new System.Drawing.Point(317, 240);
+            this.labelValue.Name = "labelValue";
+            this.labelValue.Size = new System.Drawing.Size(55, 20);
+            this.labelValue.TabIndex = 7;
+            this.labelValue.Text = "Value";
             // 
             // transactionID
             // 
@@ -128,67 +129,67 @@
             this.value.TabIndex = 9;
             this.value.Text = "label4";
             // 
-            // button1
+            // editButton
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(413, 281);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Edit";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.editButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.editButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.editButton.Location = new System.Drawing.Point(413, 281);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(75, 23);
+            this.editButton.TabIndex = 10;
+            this.editButton.Text = "Edit";
+            this.editButton.UseVisualStyleBackColor = false;
+            this.editButton.Click += new System.EventHandler(this.Button1_Click);
             // 
-            // button2
+            // deleteButton
             // 
-            this.button2.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(509, 281);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Delete";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
+            this.deleteButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.deleteButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.deleteButton.Location = new System.Drawing.Point(509, 281);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(75, 23);
+            this.deleteButton.TabIndex = 11;
+            this.deleteButton.Text = "Delete";
+            this.deleteButton.UseVisualStyleBackColor = false;
+            this.deleteButton.Click += new System.EventHandler(this.Button2_Click);
             // 
-            // linkLabel4
+            // open
             // 
-            this.linkLabel4.ActiveLinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel4.AutoSize = true;
-            this.linkLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel4.ForeColor = System.Drawing.Color.IndianRed;
-            this.linkLabel4.LinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel4.Location = new System.Drawing.Point(614, 174);
-            this.linkLabel4.Name = "linkLabel4";
-            this.linkLabel4.Size = new System.Drawing.Size(62, 24);
-            this.linkLabel4.TabIndex = 12;
-            this.linkLabel4.TabStop = true;
-            this.linkLabel4.Text = "Open";
+            this.open.ActiveLinkColor = System.Drawing.Color.IndianRed;
+            this.open.AutoSize = true;
+            this.open.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.open.ForeColor = System.Drawing.Color.IndianRed;
+            this.open.LinkColor = System.Drawing.Color.IndianRed;
+            this.open.Location = new System.Drawing.Point(614, 174);
+            this.open.Name = "open";
+            this.open.Size = new System.Drawing.Size(62, 24);
+            this.open.TabIndex = 12;
+            this.open.TabStop = true;
+            this.open.Text = "Open";
             // 
-            // linkLabel5
+            // close
             // 
-            this.linkLabel5.ActiveLinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel5.AutoSize = true;
-            this.linkLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel5.ForeColor = System.Drawing.Color.IndianRed;
-            this.linkLabel5.LinkColor = System.Drawing.Color.IndianRed;
-            this.linkLabel5.Location = new System.Drawing.Point(714, 174);
-            this.linkLabel5.Name = "linkLabel5";
-            this.linkLabel5.Size = new System.Drawing.Size(63, 24);
-            this.linkLabel5.TabIndex = 13;
-            this.linkLabel5.TabStop = true;
-            this.linkLabel5.Text = "Close";
+            this.close.ActiveLinkColor = System.Drawing.Color.IndianRed;
+            this.close.AutoSize = true;
+            this.close.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.close.ForeColor = System.Drawing.Color.IndianRed;
+            this.close.LinkColor = System.Drawing.Color.IndianRed;
+            this.close.Location = new System.Drawing.Point(714, 174);
+            this.close.Name = "close";
+            this.close.Size = new System.Drawing.Size(63, 24);
+            this.close.TabIndex = 13;
+            this.close.TabStop = true;
+            this.close.Text = "Close";
             // 
-            // label5
+            // labelDiginote
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(95, 240);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(85, 20);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "Diginotes";
+            this.labelDiginote.AutoSize = true;
+            this.labelDiginote.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDiginote.Location = new System.Drawing.Point(95, 240);
+            this.labelDiginote.Name = "labelDiginote";
+            this.labelDiginote.Size = new System.Drawing.Size(85, 20);
+            this.labelDiginote.TabIndex = 16;
+            this.labelDiginote.Text = "Diginotes";
             // 
             // nDiginotes
             // 
@@ -247,15 +248,15 @@
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.Button7_Click);
             // 
-            // label8
+            // labelQuotation
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(199, 240);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(88, 20);
-            this.label8.TabIndex = 31;
-            this.label8.Text = "Quotation";
+            this.labelQuotation.AutoSize = true;
+            this.labelQuotation.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelQuotation.Location = new System.Drawing.Point(199, 240);
+            this.labelQuotation.Name = "labelQuotation";
+            this.labelQuotation.Size = new System.Drawing.Size(88, 20);
+            this.labelQuotation.TabIndex = 31;
+            this.labelQuotation.Text = "Quotation";
             // 
             // quotation
             // 
@@ -266,30 +267,42 @@
             this.quotation.TabIndex = 32;
             this.quotation.Text = "label9";
             // 
+            // label
+            // 
+            this.label.AutoSize = true;
+            this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label.ForeColor = System.Drawing.Color.IndianRed;
+            this.label.Location = new System.Drawing.Point(256, 253);
+            this.label.Name = "label";
+            this.label.Size = new System.Drawing.Size(318, 25);
+            this.label.TabIndex = 33;
+            this.label.Text = "There is no orders registered";
+            // 
             // OrdersList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(812, 450);
+            this.Controls.Add(this.label);
             this.Controls.Add(this.quotation);
-            this.Controls.Add(this.label8);
+            this.Controls.Add(this.labelQuotation);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.nDiginotes);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.linkLabel5);
-            this.Controls.Add(this.linkLabel4);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.labelDiginote);
+            this.Controls.Add(this.close);
+            this.Controls.Add(this.open);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.editButton);
             this.Controls.Add(this.value);
             this.Controls.Add(this.transactionID);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.linkLabel3);
-            this.Controls.Add(this.linkLabel2);
-            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.labelValue);
+            this.Controls.Add(this.IDlabel);
+            this.Controls.Add(this.sold);
+            this.Controls.Add(this.bought);
+            this.Controls.Add(this.all);
             this.Name = "OrdersList";
             this.Text = "OrdersList";
             this.ResumeLayout(false);
@@ -298,24 +311,25 @@
         }
 
         #endregion
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.LinkLabel linkLabel2;
-        private System.Windows.Forms.LinkLabel linkLabel3;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.LinkLabel all;
+        private System.Windows.Forms.LinkLabel bought;
+        private System.Windows.Forms.LinkLabel sold;
+        private System.Windows.Forms.Label IDlabel;
+        private System.Windows.Forms.Label labelValue;
         private System.Windows.Forms.Label transactionID;
         private System.Windows.Forms.Label value;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.LinkLabel linkLabel4;
-        private System.Windows.Forms.LinkLabel linkLabel5;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button editButton;
+        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.LinkLabel open;
+        private System.Windows.Forms.LinkLabel close;
+        private System.Windows.Forms.Label labelDiginote;
         private System.Windows.Forms.Label nDiginotes;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label labelQuotation;
         private System.Windows.Forms.Label quotation;
+        private System.Windows.Forms.Label label;
     }
 }

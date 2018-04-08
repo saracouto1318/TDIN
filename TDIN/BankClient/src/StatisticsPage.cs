@@ -30,12 +30,12 @@ namespace BankClient
 
         private void UpdateChart()
         {
-            Dictionary<float, int> quotes = Services.GetInstance().GetQuotationFlutuation();
+            /*Dictionary<float, int> quotes = Services.GetInstance().GetQuotationFlutuation();
 
             foreach (var pair in quotes)
             {
                 this.chart1.Series["Quote"].Points.AddXY(pair.Key, pair.Value);
-            }
+            }*/
         }
 
         private void UpdateTransactionsInfo()

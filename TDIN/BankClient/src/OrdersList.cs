@@ -15,6 +15,7 @@ namespace BankClient
         public OrdersList()
         {
             InitializeComponent();
+            ExistTransactions();
         }
 
         private void Button5_Click(object sender, EventArgs e)
@@ -55,6 +56,33 @@ namespace BankClient
             else
             {
 
+            }
+        }
+
+        private void ExistTransactions()
+        {
+            if(Services.GetInstance().GetMyTransactions() == null)
+            {
+                this.all.Visible = false;
+                this.bought.Visible = false;
+                this.sold.Visible = false;
+                this.open.Visible = false;
+                this.close.Visible = false;
+                this.IDlabel.Visible = false;
+                this.labelDiginote.Visible = false;
+                this.labelQuotation.Visible = false;
+                this.labelValue.Visible = false;
+                this.transactionID.Visible = false;
+                this.value.Visible = false;
+                this.nDiginotes.Visible = false;
+                this.quotation.Visible = false;
+                this.editButton.Visible = false;
+                this.deleteButton.Visible = false;
+                this.label.Visible = true;
+            }
+            else
+            {
+                this.label.Visible = false;
             }
         }
     }
