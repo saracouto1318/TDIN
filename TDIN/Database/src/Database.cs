@@ -368,7 +368,7 @@ namespace Database
                 if (_reader.Read())
                     value = _reader.GetFloat(0);
                 _reader.Close();
-                Console.WriteLine("diginite value {0}", value);
+                Console.WriteLine("diginote value {0}", value);
                 return value;
             }
             catch (SQLiteException e)
@@ -720,26 +720,15 @@ namespace Database
             }
         }
 
-        public void SetActiveTransactions(bool active, List<Transaction> ignoreTransactions)
+        public void SetActiveTransactions(bool active)
         {
             try
             {
-                string sqlCommand = 
+                _command.CommandText = 
                     "UPDATE Transactions SET isTransactable=@active " +
-                    "WHERE transactionID NOT IN ({0}) AND ((seller IS NULL AND buyer IS NOT NULL) OR (buyer IS NULL AND seller IS NOT NULL))";
-
-                List<string> idParameters = new List<string>();
-                int index = 0;
-                foreach (Transaction t in ignoreTransactions)
-                {
-                    string paramName = "@idIgnoreTransaction" + index;
-                    _command.Parameters.Add(new SQLiteParameter(paramName, t.ID));
-                    idParameters.Add(paramName);
-                    index++;
-                }
-
-                _command.CommandText = String.Format(sqlCommand, string.Join(",", idParameters));
-                int rows = _command.ExecuteNonQuery();
+                    "WHERE ((seller IS NULL AND buyer IS NOT NULL) OR (buyer IS NULL AND seller IS NOT NULL))";
+                _command.Parameters.Add(new SQLiteParameter("@active", active));
+                _command.ExecuteNonQuery();
             } catch(SQLiteException e)
             {
                 Console.WriteLine(e.Message);
@@ -753,7 +742,8 @@ namespace Database
             {
                 _command.CommandText =
                     "UPDATE Transactions SET isTransactable=@active " +
-                    "WHERE buyer = @nick OR seller = @nick";
+                    "WHERE (buyer = @nick AND seller IS NULL) OR (seller = @nick AND buyer IS NULL)";
+                _command.Parameters.Add(new SQLiteParameter("@active", active ? 1 : 0));
                 _command.Parameters.Add(new SQLiteParameter("@nick", username));
                 int rows = _command.ExecuteNonQuery();
             }
@@ -769,15 +759,17 @@ namespace Database
             try
             {
                _command.CommandText =
-                    "DELETE FROM TransactionDiginote WHERE transactionID IN (SELECT transactionID FROM Transactions WHERE buyer = @nick OR seller = @nick; " +
-                    "DELETE FROM Transactions WHERE buyer = @nick OR seller = @nick";
+                    "DELETE FROM Transactions WHERE isTransactable=0 AND (buyer = @nick OR seller = @nick)";
                _command.Parameters.Add(new SQLiteParameter("@nick", username));
                _command.ExecuteNonQuery();
                 
                 return true;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 return false;
             }
         }

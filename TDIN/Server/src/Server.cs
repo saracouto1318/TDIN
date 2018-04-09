@@ -12,22 +12,6 @@ public class Server {
         Console.WriteLine("Press any key to exit...");
         Console.Read();
     }
-
-    static void SetDiginoteValue()
-    {
-        Services services = Services.GetInstance();
-        while (true)
-        {
-            Console.Write("Diginote: ");
-            string line = Console.ReadLine();
-            if (float.TryParse(line, out float nValue) && nValue > 0f)
-            {
-                bool success = services.ChangeDiginoteValue(nValue);
-                Console.Write("{1} setting value to {0}", nValue, success ? "success" : "failure");
-            }
-            Console.WriteLine("Diginote Value: {0}", services.GetDiginoteValue());
-        }
-    }
 }
 public class UserManager : MarshalByRefObject, IUser
 {
@@ -124,9 +108,14 @@ public class TransactionManager : MarshalByRefObject, ITransaction
         return Services.GetInstance().GetDiginoteValue();
     }
 
-    public void SetPower(float power)
+    public void SetPower(string sessionId, float power)
     {
-        if(Services.GetInstance().ChangeDiginoteValue(power))
+        Console.WriteLine("Power change to {0}", power);
+        if (power <= 0)
+        {
+            return;
+        }
+        if (Services.GetInstance().ChangeDiginoteValue(sessionId, power))
         {
             UpdatePower(power);
         }

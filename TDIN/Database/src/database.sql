@@ -42,7 +42,7 @@ CREATE TABLE TransactionDiginote(
         ON DELETE SET NULL
         ON UPDATE CASCADE, 
     FOREIGN KEY (transactionID) REFERENCES Transactions(transactionID)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 

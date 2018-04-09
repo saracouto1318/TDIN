@@ -103,6 +103,7 @@
     <Compile Include="src\UserMainPage.Designer.cs">
       <DependentUpon>UserMainPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="WaitQuotationAnswer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
