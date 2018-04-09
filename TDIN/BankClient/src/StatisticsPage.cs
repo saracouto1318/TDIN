@@ -61,10 +61,23 @@ namespace BankClient
         {
             Dictionary<float, int> quotes = Services.GetInstance().GetQuotationFlutuation();
 
+            bool success = false;
+
             foreach (var pair in quotes)
             {
-                chart1.Series["Quote"].Points.AddXY(pair.Key, pair.Value);
+                if(pair.Value != 0) { 
+                    chart1.Series["Quote"].Points.AddXY(pair.Key, pair.Value);
+                    success = true;
+                    chart1.Visible = true;
+                    label.Visible = false;
+                }
             }
+
+            if (!success)
+            {
+                chart1.Visible = false;
+                label.Visible = true;
+            }     
         }
 
         private void UpdateTransactionsInfo()
@@ -80,7 +93,14 @@ namespace BankClient
                 return;
             }
             else
+            {
                 nTransactions.Text = myTransactions.Count.ToString();
+
+                int open = myTransactions.Count - mySelltransactions.Count - myBuyTransactions.Count;
+                int close = mySelltransactions.Count + myBuyTransactions.Count;
+                tOpen.Text = open.ToString();
+                tClose.Text = close.ToString();
+            }
 
             int quantity = 0;       
             foreach (Transaction t in mySelltransactions)

@@ -93,12 +93,11 @@ namespace BankClient
             this.label.AutoSize = true;
             this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label.ForeColor = System.Drawing.Color.IndianRed;
-            this.label.Location = new System.Drawing.Point(256, 253);
+            this.label.Location = new System.Drawing.Point(246, 254);
             this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(318, 25);
+            this.label.Size = new System.Drawing.Size(334, 25);
             this.label.TabIndex = 33;
-            this.label.Text = "There is no orders registered";
-
+            this.label.Text = "There are no orders registered";
             // 
             // comboBox1
             // 
@@ -113,7 +112,6 @@ namespace BankClient
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(132, 21);
             this.comboBox1.TabIndex = 35;
-            this.comboBox1.SelectedItem = "All";
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
             // userName
