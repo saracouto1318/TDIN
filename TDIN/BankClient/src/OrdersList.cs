@@ -12,7 +12,9 @@ namespace BankClient
 {
     public partial class OrdersList : Form
     {
-        TableLayoutPanel panel = new TableLayoutPanel();
+        private TableLayoutPanel panel = new TableLayoutPanel();
+        private List<Transaction> transactions;
+
         public OrdersList()
         {
             InitializeComponent();
@@ -62,105 +64,194 @@ namespace BankClient
             Program.context.ChangeForm(this, new StatisticsPage());
         }
 
-        private void Button1_Click(object sender, EventArgs e)
-        {
-            //Program.context.ChangeForm(this, new CreateOrder(false));
-        }
-
-        private void Button2_Click(object sender, EventArgs e)
-        {
-            string message = "Are you sure you want to delete this order?";
-            string caption = "Error Detected in Input";
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result;
-
-            // Displays the MessageBox.
-            result = MessageBox.Show(message, caption, buttons);
-
-            if (result == System.Windows.Forms.DialogResult.No)
-            {
-                // Closes the parent form.
-                this.Close();
-            }
-            else
-            {
-
-            }
-        }
-
         private void ExistTransactions()
         {
             if (Services.GetInstance().GetMyTransactions(TransactionType.ALL, false).Count == 0)
             {
-                this.label2.Visible = false;
-                this.comboBox1.Visible = false;
-                this.panel.Visible = false;
-                this.label.Visible = true;
+                label2.Visible = false;
+                comboBox1.Visible = false;
+                panel.Visible = false;
+                label.Visible = true;
             }
             else
             {
-                this.label.Visible = false;
-                CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.ALL, true));
+                label.Visible = false;
+                transactions = Services.GetInstance().GetMyTransactions(TransactionType.ALL, true);
+                CreateTable();
             }
         }
 
-        private void CreateTable(List<Transaction> transactions)
+        private TransactionType GetTransactionType(Transaction transaction)
         {
-            CreatePanel();
-            this.panel.Controls.Add(new Label() { Text = "Diginotes", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 0, 0);
-            this.panel.Controls.Add(new Label() { Text = "Quotation", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 1, 0);
-            this.panel.Controls.Add(new Label() { Text = "Price", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Black, Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold) }, 2, 0);
-
-            for (int i = 0; i < transactions.Count; i++)
+            if(transaction.buyer != null && transaction.buyer == Services.GetInstance().GetUserInformation().username)
             {
-                this.panel.Controls.Add(new Label() { Text = transactions[i].quantity.ToString(), TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 0, i + 1);
-                this.panel.Controls.Add(new Label() { Text = "2", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 1, i + 1);
-                this.panel.Controls.Add(new Label() { Text = "3", TextAlign = ContentAlignment.MiddleCenter, ForeColor = Color.Gray, Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold) }, 2, i + 1);
+                return TransactionType.BUY;
+            }
+            else
+            {
+                return TransactionType.SELL;
+            }
+        }
+ 
+
+        private void CreateTable()
+        {
+            if (transactions == null)
+            {
+                Services.GetInstance().OnExit();
+                Program.context.ChangeForm(this, new AuthenticationPage());
+                return;
+            }
+
+            if(transactions.Count == 0)
+            {
+                label.Visible = true;
+                return;
+            }
+
+            label.Visible = false;
+
+            CreatePanel();
+            panel.Controls.Add(new Label()
+            {
+                Text = "Diginotes",
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.Black,
+                Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
+            }, 0, 0);
+            panel.Controls.Add(new Label()
+            {
+                Text = "Price",
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.Black,
+                Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
+            }, 1, 0);
+            panel.Controls.Add(new Label()
+            {
+                Text = "Quotation",
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.Black,
+                Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
+            }, 2, 0);
+            panel.Controls.Add(new Label()
+            {
+                Text = "Status",
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.Black,
+                Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
+            }, 3, 0);
+
+            int index = 0;
+            foreach (Transaction t in transactions)
+            {
+                int quantity = t.quantity;
+                string buyer = t.buyer;
+                string seller = t.seller;
+
+                Label labelTmp = new Label()
+                {
+                    Text = quantity.ToString(),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    ForeColor = Color.Gray,
+                    Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
+                };
+                labelTmp.Click += (object sender, EventArgs e) =>
+                {
+                    Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                };
+                panel.Controls.Add(labelTmp, 0, index + 1);
+
+                labelTmp = new Label()
+                {
+                    Text = "2",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    ForeColor = Color.Gray,
+                    Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
+                };
+                labelTmp.Click += (object sender, EventArgs e) =>
+                {
+                    Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                };
+                panel.Controls.Add(labelTmp, 1, index + 1);
+
+                labelTmp = new Label()
+                {
+                    Text = "3",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    ForeColor = Color.Gray,
+                    Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
+                };
+                labelTmp.Click += (object sender, EventArgs e) =>
+                {
+                    Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                };
+                panel.Controls.Add(labelTmp, 2, index + 1);
+
+                labelTmp = new Label()
+                {
+                    Text = (buyer == null || seller == null) ? "Open" : "Closed",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    ForeColor = Color.Gray,
+                    Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
+                };
+                labelTmp.Click += (object sender, EventArgs e) =>
+                {
+                    Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                };
+                panel.Controls.Add(labelTmp, 3, index + 1);
+
+                index++;
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (this.comboBox1.SelectedItem)
+            switch (comboBox1.SelectedItem)
             {
                 case "All":
-                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.ALL, true));
+                    transactions = Services.GetInstance().GetMyTransactions(TransactionType.ALL, true);
+                    CreateTable();
                     break;
                 case "Purchase Orders - Open":
-                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.BUY, true));
+                    transactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY, true);
+                    CreateTable();
                     break;
                 case "Purchase Orders - Close":
-                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.BUY, false));
+                    transactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY, false);
+                    CreateTable();
                     break;
                 case "Selling Orders - Open":
-                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.SELL, true));
+                    transactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL, true);
+                    CreateTable();
                     break;
                 case "Selling Orders - Close":
-                    CreateTable(Services.GetInstance().GetMyTransactions(TransactionType.SELL, false));
+                    transactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL, false);
+                    CreateTable();
                     break;
             }
         }
 
         private void CreatePanel()
         {
-            this.panel.Dispose();
-            this.panel = new TableLayoutPanel();
+            panel.Dispose();
+            panel = new TableLayoutPanel
+            {
+                BackColor = SystemColors.ButtonHighlight,
+                BackgroundImageLayout = ImageLayout.Center,
+                CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
+                ColumnCount = 4
+            };
 
-            this.panel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.panel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.panel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.panel.ColumnCount = 3;
-            this.panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.panel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.panel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel.Location = new System.Drawing.Point(202, 221);
-            this.panel.Name = "tableLayoutPanel1";
-            this.panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize, 50F));
-            this.panel.Size = new System.Drawing.Size(420, 141);
-            this.panel.TabIndex = 34;
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            panel.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point, (0));
+            panel.Location = new Point(202, 221);
+            panel.Name = "tableLayoutPanel1";
+            panel.AutoSize = true;
 
-            this.Controls.Add(this.panel);
+            Controls.Add(panel);
         }
     }
 }

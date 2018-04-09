@@ -42,17 +42,17 @@ namespace BankClient
             userName.Text = user.name;
         }
 
-        private void button2_Click(object sender, System.EventArgs e)
+        private void Button2_Click(object sender, System.EventArgs e)
         {
             Program.context.ChangeForm(this, new UserMainPage());
         }
 
-        private void button4_Click(object sender, System.EventArgs e)
+        private void Button4_Click(object sender, System.EventArgs e)
         {
             Program.context.ChangeForm(this, new OrdersList());
         }
 
-        private void button5_Click(object sender, System.EventArgs e)
+        private void Button5_Click(object sender, System.EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }
@@ -63,42 +63,36 @@ namespace BankClient
 
             foreach (var pair in quotes)
             {
-                this.chart1.Series["Quote"].Points.AddXY(pair.Key, pair.Value);
+                chart1.Series["Quote"].Points.AddXY(pair.Key, pair.Value);
             }
         }
 
         private void UpdateTransactionsInfo()
         {
-            if (Services.GetInstance().GetMyTransactions(TransactionType.ALL, false) == null)
-                this.nTransactions.Text = "0";
-            else
-                this.nTransactions.Text = Services.GetInstance().GetMyTransactions(TransactionType.ALL, false).Count.ToString();
+            List<Transaction> myTransactions = Services.GetInstance().GetMyTransactions(TransactionType.ALL, false);
+            List<Transaction> mySelltransactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL, false);
+            List<Transaction> myBuyTransactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY, false);
 
-            int quantity = 0;
-            List<Transaction> transactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL, false);
-
-            if (transactions == null)
-                this.digiSold.Text = "0";
-            else
+            if (myTransactions == null || mySelltransactions == null || myBuyTransactions == null)
             {
-                foreach (Transaction t in transactions)
-                    quantity += t.quantity;
-
-                this.digiSold.Text = quantity.ToString();
+                Services.GetInstance().OnExit();
+                Program.context.ChangeForm(this, new AuthenticationPage());
+                return;
             }
-           
-            transactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY, false);
-
-            if (transactions == null)
-                this.digiSold.Text = "0";
             else
-            {
-                quantity = 0;
-                foreach (Transaction t in transactions)
-                    quantity += t.quantity;
+                nTransactions.Text = myTransactions.Count.ToString();
 
-                this.digiBought.Text = quantity.ToString();
-            }
+            int quantity = 0;       
+            foreach (Transaction t in mySelltransactions)
+                quantity += t.quantity;
+
+            digiSold.Text = quantity.ToString();
+            
+            quantity = 0;
+            foreach (Transaction t in myBuyTransactions)
+                quantity += t.quantity;
+
+            digiBought.Text = quantity.ToString();
         }
     }
 }

@@ -67,8 +67,9 @@ namespace BankClient
         private void EditOrder_Click(object sender, EventArgs e)
         {
             float quote = float.Parse(this.quote.Text, System.Globalization.CultureInfo.InvariantCulture);
+            float currentQuote = Services.GetInstance().GetPower();
 
-            if (quote <= 0)
+            if (quote <= 0 || (type == TransactionType.SELL && quote > currentQuote) || (type == TransactionType.BUY && quote < currentQuote))
             {
                 CreateOkBox("Invalid quotation", "Error");
                 Program.context.ChangeForm(this, new UserMainPage());
@@ -85,6 +86,11 @@ namespace BankClient
                 //Edit quote
                 if(id < 0)
                 {
+                    if (quote != currentQuote)
+                    {
+                        Services.GetInstance().SetPower(quote);
+                    }
+
                     int insertedId = Services.GetInstance().InsertTransaction(nDiginotes, type);
                     if(insertedId < 0)
                     {
@@ -93,8 +99,7 @@ namespace BankClient
                     }
                     else
                     {
-                        CreateOkBox("Success", "Create transaction");
-                        Program.context.ChangeForm(this, new UserMainPage());
+                        Program.context.ChangeForm(this, new OrdersList());
                     }
                 }
             }

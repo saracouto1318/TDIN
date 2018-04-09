@@ -169,7 +169,7 @@ namespace BankClient
             this.button2.TabIndex = 23;
             this.button2.Text = "Main Page";
             this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // button4
             // 
@@ -181,7 +181,7 @@ namespace BankClient
             this.button4.TabIndex = 25;
             this.button4.Text = "Statistics";
             this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
             // button5
             // 
@@ -193,7 +193,7 @@ namespace BankClient
             this.button5.TabIndex = 24;
             this.button5.Text = "Orders";
             this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // StatisticsPage
             // 

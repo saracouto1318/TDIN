@@ -16,7 +16,7 @@ namespace BankClient
         public UserSession session;
         public User user;
         public Intermediate inter;
-        public float power = -1f;
+        public float power = 1f;
         public List<Transaction> myTransactions;
         public List<Transaction> otherTransactions;
         public Dictionary<float, int> quotationFlutuation;
@@ -145,12 +145,22 @@ namespace BankClient
 
         public float GetPower()
         {
-            return Program.virtualTransaction.GetPower();
+            if(power < 0)
+                power = Program.virtualTransaction.GetPower();
+            return power;
+        }
+
+        public void SetPower(float power)
+        {
+            Program.virtualTransaction.SetPower(power);
         }
 
         public void OnPowerChange(float power)
         {
             this.power = power;
+
+            if (GetMyTransactions(TransactionType.ALL, true).Count == 0)
+                return;
 
             string message = "The diginotes quotation will change to " + this.power.ToString() + "\nWill you accept the new quotation?";
             string caption = "Accept New Quotation";

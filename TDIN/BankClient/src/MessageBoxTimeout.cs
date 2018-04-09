@@ -184,7 +184,7 @@ namespace BankClient
             if (nIDEvent == (UIntPtr)TimerID)
             {
                 short dw = (short)SendMessage(hWnd, DM_GETDEFID, IntPtr.Zero, IntPtr.Zero);
-
+                Console.WriteLine("End dialogue");
                 EndDialog(hWnd, (IntPtr)dw);
             }
         }

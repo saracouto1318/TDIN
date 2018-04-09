@@ -498,14 +498,14 @@ namespace Database
                         _command.CommandText =
                             "SELECT transactionID, seller, buyer, dateTime, quantity " +
                             "FROM Transactions " +
-                            "WHERE buyer IS NULL AND isAvailable = 1 " +
+                            "WHERE buyer IS NULL AND isTransactable = 1 " +
                             "ORDER BY dateTime LIMIT @limit";
                         break;
                     case TransactionType.SELL:
                         _command.CommandText =
                             "SELECT transactionID, seller, buyer, dateTime, quantity " +
                             "FROM Transactions " +
-                            "WHERE seller IS NULL AND isAvailable = 1 " +
+                            "WHERE seller IS NULL AND isTransactable = 1 " +
                             "ORDER BY dateTime LIMIT @limit";
                         break;
                     default:
@@ -643,7 +643,7 @@ namespace Database
             else if (type == TransactionType.SELL && open)
                 _command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NULL";
             else if (type == TransactionType.SELL && !open)
-                _command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller = @nick AND buyer IS NOT NULL";
+                _command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NOT NULL";
             _command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
@@ -667,8 +667,11 @@ namespace Database
                 _reader.Close();
                 return transactions;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 _reader.Close();
                 return null;
             }
@@ -722,7 +725,7 @@ namespace Database
             try
             {
                 string sqlCommand = 
-                    "UPDATE Transactions SET isAvailable=@active " +
+                    "UPDATE Transactions SET isTransactable=@active " +
                     "WHERE transactionID NOT IN ({0}) AND ((seller IS NULL AND buyer IS NOT NULL) OR (buyer IS NULL AND seller IS NOT NULL))";
 
                 List<string> idParameters = new List<string>();
@@ -749,7 +752,7 @@ namespace Database
             try
             {
                 _command.CommandText =
-                    "UPDATE Transactions SET isAvailable=@active " +
+                    "UPDATE Transactions SET isTransactable=@active " +
                     "WHERE buyer = @nick OR seller = @nick";
                 _command.Parameters.Add(new SQLiteParameter("@nick", username));
                 int rows = _command.ExecuteNonQuery();
@@ -784,7 +787,7 @@ namespace Database
             try
             {
                 _command.CommandText = 
-                    "INSERT INTO Transactions(seller, buyer, dateTime, quantity, isAvailable) VALUES (@seller, @buyer, @time, @quantity, 1)";
+                    "INSERT INTO Transactions(seller, buyer, dateTime, quantity, isTransactable) VALUES (@seller, @buyer, @time, @quantity, 1)";
                 _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
                 _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
                 _command.Parameters.Add(new SQLiteParameter("@time", transaction.date));

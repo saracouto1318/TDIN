@@ -13,7 +13,7 @@ namespace BankClient
             InitializeComponent();
             this.type = type;
             quote.Text = Services.GetInstance().GetPower().ToString() + " $";
-            GetUserInforamtionAsync();
+            GetUserInformationAsync();
         }
 
         private async void GetUserInformationAsync()
@@ -92,7 +92,7 @@ namespace BankClient
             {
                 price = 
                     float.Parse(numDiginotes.Text, System.Globalization.CultureInfo.InvariantCulture) * 
-                    Services.GetInstance().power;
+                    Services.GetInstance().GetPower();
             } catch(Exception)
             {
                 price = 0;

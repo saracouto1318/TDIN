@@ -137,7 +137,7 @@ public class Services {
 
     public bool ChangeDiginoteValue(float power)
     {
-        if (!waitActiveTransactions.IsCompleted)
+        if (waitActiveTransactions != null && !waitActiveTransactions.IsCompleted)
             return false;
 
         bool success = _db.ChangeDiginoteValue(power);
