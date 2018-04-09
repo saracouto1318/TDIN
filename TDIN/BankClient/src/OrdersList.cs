@@ -256,6 +256,7 @@ namespace BankClient
             panel.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point, (0));
             panel.Location = new Point(202, 221);
             panel.Name = "tableLayoutPanel1";
+            panel.Size = new Size(100, 40);
             panel.AutoSize = true;
 
             Controls.Add(panel);
