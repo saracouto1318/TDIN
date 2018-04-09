@@ -119,6 +119,7 @@
             this.nPassText.Name = "nPassText";
             this.nPassText.Size = new System.Drawing.Size(381, 26);
             this.nPassText.TabIndex = 8;
+            this.nPassText.PasswordChar = '*';
             // 
             // oldPassText
             // 
@@ -127,6 +128,7 @@
             this.oldPassText.Name = "oldPassText";
             this.oldPassText.Size = new System.Drawing.Size(381, 26);
             this.oldPassText.TabIndex = 7;
+            this.oldPassText.PasswordChar = '*';
             // 
             // usernameText
             // 

@@ -165,6 +165,11 @@ namespace BankClient
             Program.virtualTransaction.SetPower(session.sessionId, power);
         }
 
+        public List<int> GetDiginotes(string sessionID)
+        {
+            return Program.virtualUser.GetDiginotes(sessionID);
+        }
+
         public void OnPowerChange(float power)
         {
             this.power = power;

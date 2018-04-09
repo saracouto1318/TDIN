@@ -151,6 +151,7 @@ namespace BankClient
             this.Controls.Add(this.button7);
             this.Name = "OrdersList";
             this.Text = "OrdersList";
+            this.Load += new System.EventHandler(this.OrdersList_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

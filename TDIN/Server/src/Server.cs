@@ -92,6 +92,11 @@ public class UserManager : MarshalByRefObject, IUser
     {
         return Services.GetInstance().AddingFunds(sessionId, funds);
     }
+
+    public List<int> GetDiginotes(string sessionID)
+    {
+        return Services.GetInstance().GetDiginotes(sessionID);
+    }
 }
 
 public class TransactionManager : MarshalByRefObject, ITransaction

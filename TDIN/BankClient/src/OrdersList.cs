@@ -93,7 +93,6 @@ namespace BankClient
             }
         }
  
-
         private void CreateTable()
         {
             if (transactions == null)
@@ -260,6 +259,17 @@ namespace BankClient
             panel.AutoSize = true;
 
             Controls.Add(panel);
+        }
+
+        private void OrdersList_Load(object sender, EventArgs e)
+        {
+            this.MinimumSize = new System.Drawing.Size(this.Width, this.Height);
+
+            // no larger than screen size
+            MaximumSize = new Size(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+
+            this.AutoSize = true;
+            this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         }
     }
 }

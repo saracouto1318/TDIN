@@ -70,14 +70,24 @@ namespace BankClient
             Program.context.ChangeForm(this, new CreateOrder(TransactionType.SELL));
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void Button5_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new OrdersList());
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
+        }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            Program.context.ChangeForm(this, new Wallet());
+        }
+
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            //.GetInstance().DeleteSession()
         }
     }
 }

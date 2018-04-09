@@ -428,6 +428,31 @@ namespace Database
 
         #region Diginote
 
+        public List<int> GetDiginotes(string sessionID)
+        {
+            string username = GetUsername(sessionID);
+            List<int> diginotes = new List<int>();
+
+            try
+            {
+                _command.CommandText = "SELECT serialNumber FROM Diginote WHERE owner = @source";
+                _command.Parameters.Add(new SQLiteParameter("@source", username));
+                _reader = _command.ExecuteReader();
+
+                while (_reader.Read())
+                    diginotes.Add(_reader.GetInt32(0));
+                _reader.Close();
+                return diginotes;
+            }
+            catch (SQLiteException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                _reader.Close();
+                return diginotes;
+            }
+        }
         public List<int> GetAvailableDiginotes(string username, int nDiginotes)
         {
             List<int> diginotes = new List<int>();

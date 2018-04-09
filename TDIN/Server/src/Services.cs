@@ -177,6 +177,10 @@ public class Services {
         return _db.GetQuotes();
     }
 
+    public List<int> GetDiginotes(string sessionID)
+    {
+        return _db.GetDiginotes(sessionID);
+    }
     #endregion
 
     #region Transaction
