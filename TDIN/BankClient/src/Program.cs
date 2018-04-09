@@ -5,8 +5,14 @@ using System.Windows.Forms;
 
 namespace BankClient
 {
+    public delegate void OnAuthentication();
+    public delegate void OnExit();
+
     static class Program
     {
+        public static OnExit exit;
+        public static OnAuthentication authentication;
+
         public static IUser virtualUser;
         public static ITransaction virtualTransaction;
         public static MyApplicationContext context;
@@ -30,6 +36,7 @@ namespace BankClient
 
     class MyApplicationContext : ApplicationContext
     {
+        public WaitQuotationAnswer waitMessageBox;
         private int formsCount;
 
         public MyApplicationContext()
@@ -49,13 +56,13 @@ namespace BankClient
             ShowForm(changeToForm);
             activeForm.Close();
         }
-
+        
         private void OnCloseForm(object sender, EventArgs e)
         {
             formsCount--;
             if (Application.OpenForms.Count == 0)
             {
-                Services.GetInstance().OnExit();
+                Program.exit();
                 Application.Exit();
             }
         }

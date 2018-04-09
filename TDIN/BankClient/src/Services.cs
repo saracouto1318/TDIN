@@ -4,6 +4,8 @@ using System.Windows.Forms;
 
 namespace BankClient
 {
+
+
     public class NotAuthorizedOperationException : Exception
     {
         public override string Message => "That operation requires the user to be logged in";
@@ -16,12 +18,20 @@ namespace BankClient
         public UserSession session;
         public User user;
         public Intermediate inter;
-        public float power = 1f;
+        public float power = -1f;
         public List<Transaction> myTransactions;
         public List<Transaction> otherTransactions;
         public Dictionary<float, int> quotationFlutuation;
+        public WaitQuotationAnswer waitQuotationAnswer;
 
-        private Services() { }
+        private Services()
+        {
+            inter = new Intermediate();
+
+            Program.exit += OnExit;
+            Program.authentication += OnAuthentication;
+            WaitQuotationAnswer waitQuotationAnswer = new WaitQuotationAnswer();
+        }
 
         public static Services GetInstance()
         {
@@ -39,7 +49,7 @@ namespace BankClient
             if (uSession != null)
             {
                 session = uSession;
-                OnAuthentication();
+                Program.authentication();
                 return true;
             }
             return false;
@@ -58,7 +68,7 @@ namespace BankClient
             if (uSession != null)
             {
                 session = uSession;
-                OnAuthentication();
+                Program.authentication();
                 return true;
             }
 
@@ -141,7 +151,7 @@ namespace BankClient
 
         #endregion
 
-        #region Transaction
+        #region Diginotes
 
         public float GetPower()
         {
@@ -152,34 +162,17 @@ namespace BankClient
 
         public void SetPower(float power)
         {
-            Program.virtualTransaction.SetPower(power);
+            Program.virtualTransaction.SetPower(session.sessionId, power);
         }
 
         public void OnPowerChange(float power)
         {
             this.power = power;
-
-            if (GetMyTransactions(TransactionType.ALL, true).Count == 0)
-                return;
-
-            string message = "The diginotes quotation will change to " + this.power.ToString() + "\nWill you accept the new quotation?";
-            string caption = "Accept New Quotation";
-            uint timeout = 6000;
-
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult result;
-
-            result = MessageBoxTimeout.Show(message, caption, buttons, timeout);
-
-            if (result == System.Windows.Forms.DialogResult.Yes)
-            {
-                Program.virtualTransaction.ActivateTransation(session.sessionId, true);
-            }
-            else
-            {
-                Program.virtualTransaction.ActivateTransation(session.sessionId, false);
-            }
         }
+
+        #endregion
+
+        #region Transaction
 
         public List<Transaction> GetMyTransactions(TransactionType type, bool open)
         {

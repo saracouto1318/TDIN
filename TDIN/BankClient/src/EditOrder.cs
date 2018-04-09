@@ -83,14 +83,14 @@ namespace BankClient
 
             if (result == DialogResult.Yes)
             {
+                if (quote != currentQuote)
+                {
+                    Services.GetInstance().SetPower(quote);
+                }
+
                 //Edit quote
                 if(id < 0)
                 {
-                    if (quote != currentQuote)
-                    {
-                        Services.GetInstance().SetPower(quote);
-                    }
-
                     int insertedId = Services.GetInstance().InsertTransaction(nDiginotes, type);
                     if(insertedId < 0)
                     {

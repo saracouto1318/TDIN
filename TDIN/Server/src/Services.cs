@@ -135,15 +135,26 @@ public class Services {
 
     #region Diginotes
 
-    public bool ChangeDiginoteValue(float power)
+    public bool ChangeDiginoteValue(string sessionId, float power)
     {
-        if (waitActiveTransactions != null && !waitActiveTransactions.IsCompleted)
+        string username = _db.GetUsername(sessionId);
+        if (username == null)
+        {
+            Console.WriteLine("Null username");
             return false;
+        }
+
+        if (waitActiveTransactions != null && !waitActiveTransactions.IsCompleted)
+        {
+            Console.WriteLine("Wait Active Transactions is not over");
+            return false;
+        }
 
         bool success = _db.ChangeDiginoteValue(power);
-        if(success)
+        Console.WriteLine("Change diginote is {0}", success);
+        if (success)
         {
-            _db.SetActiveTransactions(false, new List<Transaction>());
+            _db.SetActiveTransactions(false);
             waitActiveTransactions = WaitForAcceptTransactions();
             return true;
         }
@@ -153,7 +164,7 @@ public class Services {
     private async Task WaitForAcceptTransactions()
     {
         await Task.Delay(8000);
-        _db.SetActiveTransactions(true, new List<Transaction>());
+        _db.SetActiveTransactions(true);
     }
     
     public float GetDiginoteValue()

@@ -22,7 +22,7 @@ public interface ITransaction
     event ValueHandler UpdatePower;
     
     float GetPower();
-    void SetPower(float power);
+    void SetPower(string sessionId, float power);
     Dictionary<float, int> GetQuotationFlutuation();
     List<Transaction> GetMyTransactions(string sessionId, TransactionType type, bool open);
     List<Transaction> GetOtherTransactions(string sessionId);
