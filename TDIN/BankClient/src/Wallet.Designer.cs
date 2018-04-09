@@ -33,6 +33,7 @@
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.label = new System.Windows.Forms.Label();
+            this.logout = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // userName
@@ -95,11 +96,24 @@
             this.label.Text = "You don\'t have any diginote";
             this.label.Visible = false;
             // 
+            // logout
+            // 
+            this.logout.BackColor = System.Drawing.Color.SandyBrown;
+            this.logout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logout.Location = new System.Drawing.Point(685, 30);
+            this.logout.Name = "logout";
+            this.logout.Size = new System.Drawing.Size(89, 31);
+            this.logout.TabIndex = 42;
+            this.logout.Text = "Logout";
+            this.logout.UseVisualStyleBackColor = false;
+            this.logout.Click += new System.EventHandler(this.Logout_Click);
+            // 
             // Wallet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 312);
+            this.ClientSize = new System.Drawing.Size(800, 432);
+            this.Controls.Add(this.logout);
             this.Controls.Add(this.label);
             this.Controls.Add(this.userName);
             this.Controls.Add(this.button5);
@@ -120,5 +134,6 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Label label;
+        private System.Windows.Forms.Button logout;
     }
 }

@@ -87,6 +87,11 @@ public class Services {
         return _db.InsertSession(username, sessionId);
     }
 
+    public void DeleteSession(string username)
+    {
+        _db.DeleteSession(username);
+    }
+
     #endregion
 
     #region User

@@ -46,6 +46,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.logout = new System.Windows.Forms.Button();
             this.ProfielPanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -117,18 +118,18 @@
             this.nPassText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nPassText.Location = new System.Drawing.Point(276, 217);
             this.nPassText.Name = "nPassText";
+            this.nPassText.PasswordChar = '*';
             this.nPassText.Size = new System.Drawing.Size(381, 26);
             this.nPassText.TabIndex = 8;
-            this.nPassText.PasswordChar = '*';
             // 
             // oldPassText
             // 
             this.oldPassText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.oldPassText.Location = new System.Drawing.Point(276, 185);
             this.oldPassText.Name = "oldPassText";
+            this.oldPassText.PasswordChar = '*';
             this.oldPassText.Size = new System.Drawing.Size(381, 26);
             this.oldPassText.TabIndex = 7;
-            this.oldPassText.PasswordChar = '*';
             // 
             // usernameText
             // 
@@ -277,11 +278,24 @@
             this.panel1.Size = new System.Drawing.Size(800, 56);
             this.panel1.TabIndex = 11;
             // 
+            // logout
+            // 
+            this.logout.BackColor = System.Drawing.Color.SandyBrown;
+            this.logout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logout.Location = new System.Drawing.Point(689, 30);
+            this.logout.Name = "logout";
+            this.logout.Size = new System.Drawing.Size(89, 31);
+            this.logout.TabIndex = 35;
+            this.logout.Text = "Logout";
+            this.logout.UseVisualStyleBackColor = false;
+            this.logout.Click += new System.EventHandler(this.Logout_Click);
+            // 
             // EditProfile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.logout);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.ProfielPanel);
             this.Controls.Add(this.userName);
@@ -315,5 +329,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button logout;
     }
 }

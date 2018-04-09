@@ -271,5 +271,12 @@ namespace BankClient
             this.AutoSize = true;
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         }
+
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            Services.GetInstance().DeleteSession();
+            Program.context.ChangeForm(this, new AuthenticationPage());
+            Program.exit();
+        }
     }
 }

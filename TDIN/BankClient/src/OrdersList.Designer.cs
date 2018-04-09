@@ -38,6 +38,7 @@ namespace BankClient
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.userName = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.logout = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label7
@@ -93,7 +94,7 @@ namespace BankClient
             this.label.AutoSize = true;
             this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label.ForeColor = System.Drawing.Color.IndianRed;
-            this.label.Location = new System.Drawing.Point(246, 254);
+            this.label.Location = new System.Drawing.Point(241, 254);
             this.label.Name = "label";
             this.label.Size = new System.Drawing.Size(334, 25);
             this.label.TabIndex = 33;
@@ -137,11 +138,24 @@ namespace BankClient
             this.label2.TabIndex = 37;
             this.label2.Text = "Orders Type";
             // 
+            // logout
+            // 
+            this.logout.BackColor = System.Drawing.Color.SandyBrown;
+            this.logout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logout.Location = new System.Drawing.Point(695, 30);
+            this.logout.Name = "logout";
+            this.logout.Size = new System.Drawing.Size(89, 31);
+            this.logout.TabIndex = 38;
+            this.logout.Text = "Logout";
+            this.logout.UseVisualStyleBackColor = false;
+            this.logout.Click += new System.EventHandler(this.Logout_Click);
+            // 
             // OrdersList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(812, 500);
+            this.Controls.Add(this.logout);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.userName);
             this.Controls.Add(this.comboBox1);
@@ -167,5 +181,6 @@ namespace BankClient
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label userName;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button logout;
     }
 }

@@ -108,5 +108,12 @@ namespace BankClient
             // Displays the MessageBox.
             result = MessageBox.Show(message, caption, buttons);
         }
+
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            Services.GetInstance().DeleteSession();
+            Program.context.ChangeForm(this, new AuthenticationPage());
+            Program.exit();
+        }
     }  
 }

@@ -134,5 +134,12 @@ namespace BankClient
             }
             this.price.Text = price.ToString() + " $";
         }
+
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            Services.GetInstance().DeleteSession();
+            Program.context.ChangeForm(this, new AuthenticationPage());
+            Program.exit();
+        }
     }
 }

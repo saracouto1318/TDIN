@@ -87,7 +87,9 @@ namespace BankClient
 
         private void Logout_Click(object sender, EventArgs e)
         {
-            //.GetInstance().DeleteSession()
+            Services.GetInstance().DeleteSession();
+            Program.context.ChangeForm(this, new AuthenticationPage());
+            Program.exit();
         }
     }
 }

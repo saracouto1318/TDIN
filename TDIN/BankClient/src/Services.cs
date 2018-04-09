@@ -91,6 +91,11 @@ namespace BankClient
             Program.virtualTransaction.UpdatePower -= inter.FireUpdatePower;
         }
 
+        public void DeleteSession()
+        {
+            Program.virtualUser.DeleteSession(session.username);
+        }
+
         #endregion
 
         #region User

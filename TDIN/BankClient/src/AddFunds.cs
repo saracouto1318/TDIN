@@ -90,5 +90,11 @@ namespace BankClient
             result = MessageBox.Show(message, caption, buttons);
         }
 
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            Services.GetInstance().DeleteSession();
+            Program.context.ChangeForm(this, new AuthenticationPage());
+            Program.exit();
+        }
     }
 }

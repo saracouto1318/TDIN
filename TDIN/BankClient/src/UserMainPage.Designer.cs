@@ -52,7 +52,7 @@
             this.userName.Location = new System.Drawing.Point(0, 0);
             this.userName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.userName.Name = "userName";
-            this.userName.Size = new System.Drawing.Size(800, 32);
+            this.userName.Size = new System.Drawing.Size(800, 58);
             this.userName.TabIndex = 1;
             this.userName.Text = "Nome de utilizador";
             this.userName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -202,7 +202,7 @@
             // 
             this.logout.BackColor = System.Drawing.Color.SandyBrown;
             this.logout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.logout.Location = new System.Drawing.Point(686, 12);
+            this.logout.Location = new System.Drawing.Point(685, 20);
             this.logout.Name = "logout";
             this.logout.Size = new System.Drawing.Size(89, 31);
             this.logout.TabIndex = 15;
