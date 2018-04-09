@@ -106,10 +106,15 @@ namespace BankClient
             if(transactions.Count == 0)
             {
                 label.Visible = true;
+                panel.Visible = false;
                 return;
             }
 
             label.Visible = false;
+            panel.Visible = true;
+
+            float value = 100 / (transactions.Count+1);
+            panel.RowStyles.Add(new RowStyle(SizeType.AutoSize, value));
 
             CreatePanel();
             panel.Controls.Add(new Label()
@@ -147,6 +152,8 @@ namespace BankClient
                 int quantity = t.quantity;
                 string buyer = t.buyer;
                 string seller = t.seller;
+
+                panel.RowStyles.Add(new RowStyle(SizeType.AutoSize, value));
 
                 Label labelTmp = new Label()
                 {
