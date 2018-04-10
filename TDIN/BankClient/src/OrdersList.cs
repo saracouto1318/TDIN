@@ -212,7 +212,7 @@ namespace BankClient
 
                 labelTmp = new Label()
                 {
-                    Text = date.ToLongDateString(),
+                    Text = date.ToString(),
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
