@@ -14,6 +14,8 @@ public interface IUser
     bool ChangeName(string sessionId, string nName);
     bool ChangePassowrd(string sessionId, string password, string nPassword);
     bool AddingFunds(string sessionId, float funds);
+    List<int> GetDiginotes(string sessionID);
+    void DeleteSession(string username);
 }
 
 public interface ITransaction

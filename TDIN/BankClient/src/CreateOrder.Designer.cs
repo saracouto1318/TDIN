@@ -39,14 +39,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.quote = new System.Windows.Forms.Label();
+            this.logout = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button3
+            // createButton
             // 
             this.createButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.createButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.createButton.Location = new System.Drawing.Point(366, 356);
-            this.createButton.Name = "button3";
+            this.createButton.Name = "createButton";
             this.createButton.Size = new System.Drawing.Size(89, 38);
             this.createButton.TabIndex = 14;
             this.createButton.Text = "Create Order";
@@ -59,7 +60,6 @@
             this.numDiginotes.Name = "numDiginotes";
             this.numDiginotes.Size = new System.Drawing.Size(100, 20);
             this.numDiginotes.TabIndex = 11;
-            this.numDiginotes.Visible = true;
             this.numDiginotes.TextChanged += new System.EventHandler(this.NumDiginotes_TextChanged);
             // 
             // label2
@@ -72,38 +72,37 @@
             this.label2.TabIndex = 13;
             this.label2.Text = "Number of Diginotes";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label2.Visible = true;
             // 
-            // button2
+            // mainPageButton
             // 
             this.mainPageButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.mainPageButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mainPageButton.Location = new System.Drawing.Point(6, 82);
-            this.mainPageButton.Name = "button2";
+            this.mainPageButton.Name = "mainPageButton";
             this.mainPageButton.Size = new System.Drawing.Size(260, 50);
             this.mainPageButton.TabIndex = 19;
             this.mainPageButton.Text = "Main Page";
             this.mainPageButton.UseVisualStyleBackColor = false;
             this.mainPageButton.Click += new System.EventHandler(this.MainPage_Click);
             // 
-            // button4
+            // statisticsButton
             // 
             this.statisticsButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.statisticsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statisticsButton.Location = new System.Drawing.Point(545, 82);
-            this.statisticsButton.Name = "button4";
+            this.statisticsButton.Name = "statisticsButton";
             this.statisticsButton.Size = new System.Drawing.Size(260, 50);
             this.statisticsButton.TabIndex = 21;
             this.statisticsButton.Text = "Statistics";
             this.statisticsButton.UseVisualStyleBackColor = false;
             this.statisticsButton.Click += new System.EventHandler(this.Statistics_Click);
             // 
-            // button5
+            // ordersButton
             // 
             this.ordersButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.ordersButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ordersButton.Location = new System.Drawing.Point(277, 82);
-            this.ordersButton.Name = "button5";
+            this.ordersButton.Name = "ordersButton";
             this.ordersButton.Size = new System.Drawing.Size(260, 50);
             this.ordersButton.TabIndex = 20;
             this.ordersButton.Text = "Orders";
@@ -143,7 +142,7 @@
             this.label1.TabIndex = 17;
             this.label1.Text = "Current Quotation";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label1.Visible = false;
+            this.label1.Visible = true;
             // 
             // label4
             // 
@@ -155,7 +154,7 @@
             this.label4.TabIndex = 24;
             this.label4.Text = "Price";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label4.Visible = false;
+            this.label4.Visible = true;
             // 
             // quote
             // 
@@ -167,11 +166,24 @@
             this.quote.TabIndex = 25;
             this.quote.Text = "0 $";
             // 
+            // logout
+            // 
+            this.logout.BackColor = System.Drawing.Color.SandyBrown;
+            this.logout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logout.Location = new System.Drawing.Point(694, 30);
+            this.logout.Name = "logout";
+            this.logout.Size = new System.Drawing.Size(89, 31);
+            this.logout.TabIndex = 26;
+            this.logout.Text = "Logout";
+            this.logout.UseVisualStyleBackColor = false;
+            this.logout.Click += new System.EventHandler(this.Logout_Click);
+            // 
             // CreateOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(811, 450);
+            this.Controls.Add(this.logout);
             this.Controls.Add(this.quote);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.price);
@@ -203,5 +215,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button logout;
     }
 }

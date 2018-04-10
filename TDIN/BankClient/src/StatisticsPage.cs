@@ -114,5 +114,12 @@ namespace BankClient
 
             digiBought.Text = quantity.ToString();
         }
+
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            Services.GetInstance().DeleteSession();
+            Program.context.ChangeForm(this, new AuthenticationPage());
+            Program.exit();
+        }
     }
 }

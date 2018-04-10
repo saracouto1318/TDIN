@@ -53,6 +53,7 @@ namespace BankClient
             this.tOpen = new System.Windows.Forms.Label();
             this.tClose = new System.Windows.Forms.Label();
             this.label = new System.Windows.Forms.Label();
+            this.logout = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -149,6 +150,8 @@ namespace BankClient
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Quotation Flutuation";
             series1.Name = "Quote";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Single;
+            series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Single;
             this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(362, 300);
             this.chart1.TabIndex = 11;
@@ -254,11 +257,24 @@ namespace BankClient
             this.label.Text = "The quotation didn\'t change any time";
             this.label.Visible = false;
             // 
+            // logout
+            // 
+            this.logout.BackColor = System.Drawing.Color.SandyBrown;
+            this.logout.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logout.Location = new System.Drawing.Point(681, 30);
+            this.logout.Name = "logout";
+            this.logout.Size = new System.Drawing.Size(89, 31);
+            this.logout.TabIndex = 39;
+            this.logout.Text = "Logout";
+            this.logout.UseVisualStyleBackColor = false;
+            this.logout.Click += new System.EventHandler(this.Logout_Click);
+            // 
             // StatisticsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 523);
+            this.Controls.Add(this.logout);
             this.Controls.Add(this.label);
             this.Controls.Add(this.tClose);
             this.Controls.Add(this.tOpen);
@@ -305,5 +321,6 @@ namespace BankClient
         private System.Windows.Forms.Label tOpen;
         private System.Windows.Forms.Label tClose;
         private System.Windows.Forms.Label label;
+        private System.Windows.Forms.Button logout;
     }
 }

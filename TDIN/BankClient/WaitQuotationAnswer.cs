@@ -39,7 +39,7 @@ namespace BankClient
             uint timeout = 60000;
             await Task.Run(() => {
                 DialogResult result;
-                result = MessageBoxTimeout.Show(message, caption, buttons, timeout);
+                result = MessageBoxEx.Show(message, caption, buttons, timeout);
 
                 if (result == DialogResult.Yes)
                 {

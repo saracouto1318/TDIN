@@ -89,6 +89,11 @@ namespace BankClient
             Program.virtualTransaction.UpdatePower -= inter.FireUpdatePower;
         }
 
+        public void DeleteSession()
+        {
+            Program.virtualUser.DeleteSession(session.username);
+        }
+
         #endregion
 
         #region User
@@ -161,6 +166,11 @@ namespace BankClient
         public void SetPower(float power)
         {
             Program.virtualTransaction.SetPower(session.sessionId, power);
+        }
+
+        public List<int> GetDiginotes(string sessionID)
+        {
+            return Program.virtualUser.GetDiginotes(sessionID);
         }
 
         public void OnPowerChange(float power)

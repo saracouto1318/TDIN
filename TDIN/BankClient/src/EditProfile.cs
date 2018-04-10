@@ -160,5 +160,12 @@ namespace BankClient
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }
+
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            Services.GetInstance().DeleteSession();
+            Program.context.ChangeForm(this, new AuthenticationPage());
+            Program.exit();
+        }
     }
 }

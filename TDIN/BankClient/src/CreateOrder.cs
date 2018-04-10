@@ -66,7 +66,7 @@ namespace BankClient
             nDiginotes = Services.GetInstance().CheckCompleteTransaction(nDiginotes, type);
             if(nDiginotes < 0)
             {
-                CreateOkBox("You don't have the required funds to execute this transactions", "Error");
+                CreateOkBox("You don't have the required funds or diginotes to execute this transactions", "Error");
                 Program.context.ChangeForm(this, new UserMainPage());
             }
             else if(nDiginotes == 0)
@@ -107,6 +107,13 @@ namespace BankClient
 
             // Displays the MessageBox.
             result = MessageBox.Show(message, caption, buttons);
+        }
+
+        private void Logout_Click(object sender, EventArgs e)
+        {
+            Services.GetInstance().DeleteSession();
+            Program.context.ChangeForm(this, new AuthenticationPage());
+            Program.exit();
         }
     }  
 }
