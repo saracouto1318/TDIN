@@ -27,6 +27,7 @@ CREATE TABLE Transactions(
 	dateTime datetime NOT NULL,
 	quantity int NOT NULL,
 	isTransactable int NOT NULL,
+	quotation int,
     FOREIGN KEY (seller) REFERENCES User(nickname)
         ON DELETE SET NULL
         ON UPDATE CASCADE, 

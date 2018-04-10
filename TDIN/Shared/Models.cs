@@ -18,15 +18,6 @@ public class User : MarshalByRefObject {
         totalDiginotes = 0;
         balance = 0;
     }
-
-    public User(string username, string password, string name, int availableDiginotes, int totalDiginotes, int numTransactions, float balance) {
-        this.name = name;
-        this.username = username;
-        this.password = password;
-        this.availableDiginotes = availableDiginotes;
-        this.totalDiginotes = totalDiginotes;
-        this.balance = balance;
-    }
 }
 
 public class UserSession : MarshalByRefObject {
@@ -48,6 +39,7 @@ public class Transaction : MarshalByRefObject
     public string buyer;
     public string seller;
     public DateTime date;
+    public float quotation;
 
     public Transaction()
     {
@@ -55,14 +47,6 @@ public class Transaction : MarshalByRefObject
         quantity = 0;
         buyer = null;
         seller = null;
-    }
-
-    public Transaction(int ID, string buyer, string seller, int quantity, DateTime date)
-    {
-        this.ID = ID;
-        this.quantity = quantity;
-        this.buyer = buyer;
-        this.seller = seller;
-        this.date = date;
+        quotation = -1f;
     }
 }

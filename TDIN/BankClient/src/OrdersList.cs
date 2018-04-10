@@ -152,6 +152,7 @@ namespace BankClient
                 Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
             }, 3, 0);
 
+            float cQuote = Services.GetInstance().GetPower();
             int index = 0;
             foreach (Transaction t in transactions)
             {
@@ -159,6 +160,7 @@ namespace BankClient
                 string buyer = t.buyer;
                 string seller = t.seller;
                 DateTime date = t.date;
+                float quotation = t.quotation;
 
                 panel.RowStyles.Add(new RowStyle(SizeType.AutoSize, value));
 
@@ -180,7 +182,7 @@ namespace BankClient
 
                 labelTmp = new Label()
                 {
-                    Text = "price",
+                    Text = (quotation == -1f ? cQuote : quotation).ToString(),
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
@@ -196,7 +198,7 @@ namespace BankClient
 
                 labelTmp = new Label()
                 {
-                    Text = "quote",
+                    Text = ((quotation == -1f ? cQuote : quotation) * quantity).ToString(),
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)

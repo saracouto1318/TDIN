@@ -115,6 +115,13 @@ namespace Database
             return null;
         }
 
+        public static float SafeGetFloat(SQLiteDataReader reader, int colIndex)
+        {
+            if (!reader.IsDBNull(colIndex))
+                return reader.GetFloat(colIndex);
+            return -1f;
+        }
+
         #region User
 
         public bool UserExists(string username)
@@ -702,7 +709,8 @@ namespace Database
                         seller = SafeGetString(_reader, 1),
                         buyer = SafeGetString(_reader, 2),
                         date = _reader.GetDateTime(3),
-                        quantity = _reader.GetInt32(4)
+                        quantity = _reader.GetInt32(4),
+                        quotation = SafeGetFloat(_reader, 6)
                     };
 
                     transactions.Add(info);
@@ -878,6 +886,7 @@ namespace Database
             try
             {
                 bool isInsertTransaction = false;
+                float quotation = GetValue();
                 string sqlCommand = "UPDATE Transactions";
 
                 switch (type)
@@ -906,9 +915,10 @@ namespace Database
                     isInsertTransaction = true;
                 }
 
-                sqlCommand += " WHERE transactionID = @orderID";
+                sqlCommand += ", quotation=@quotation WHERE transactionID = @orderID";
 
                 _command.CommandText = sqlCommand;
+                _command.Parameters.Add(new SQLiteParameter("@quotation", quotation));
                 _command.Parameters.Add(new SQLiteParameter("@orderID", transaction.ID));
                 Console.WriteLine("ID:" + transaction.ID);
                 int rows = _command.ExecuteNonQuery();
