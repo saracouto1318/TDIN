@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Database
 {
@@ -756,8 +757,11 @@ namespace Database
                 _reader.Close();
                 return transactions;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 _reader.Close();
                 return null;
             }
@@ -936,12 +940,6 @@ namespace Database
             }
             catch(SQLiteException e)
             {
-                Console.WriteLine(transaction.ID);
-                Console.WriteLine(transaction.seller);
-                Console.WriteLine(transaction.buyer);
-                Console.WriteLine(transaction.date);
-                Console.WriteLine(transaction.quantity);
-
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
@@ -959,12 +957,11 @@ namespace Database
                 int changedRows = _command.ExecuteNonQuery();
 
                 return changedRows;
-            } catch(SQLiteException e)
+            }
+            catch (SQLiteException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
-                Console.WriteLine(orderID);
-                Console.WriteLine(username);
 
                 return 0;
             }
