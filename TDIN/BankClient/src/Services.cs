@@ -4,8 +4,6 @@ using System.Windows.Forms;
 
 namespace BankClient
 {
-
-
     public class NotAuthorizedOperationException : Exception
     {
         public override string Message => "That operation requires the user to be logged in";

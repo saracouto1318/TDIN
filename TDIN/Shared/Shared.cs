@@ -14,7 +14,6 @@ public interface IUser
     bool ChangeName(string sessionId, string nName);
     bool ChangePassowrd(string sessionId, string password, string nPassword);
     bool AddingFunds(string sessionId, float funds);
-
 }
 
 public interface ITransaction
