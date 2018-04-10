@@ -158,52 +158,64 @@ namespace BankClient
                 {
                     Text = quantity.ToString(),
                     TextAlign = ContentAlignment.MiddleCenter,
-                    ForeColor = Color.Gray,
+                    ForeColor = (buyer == null || seller == null) ? Color.DarkGray: Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
                 };
-                labelTmp.Click += (object sender, EventArgs e) =>
-                {
-                    Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
-                };
+
+                if (buyer == null || seller == null)
+                    labelTmp.Click += (object sender, EventArgs e) =>
+                    {
+                        Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                    };
+
                 panel.Controls.Add(labelTmp, 0, index + 1);
 
                 labelTmp = new Label()
                 {
                     Text = "2",
                     TextAlign = ContentAlignment.MiddleCenter,
-                    ForeColor = Color.Gray,
+                    ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
                 };
-                labelTmp.Click += (object sender, EventArgs e) =>
-                {
-                    Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
-                };
+
+                if (buyer == null || seller == null)
+                    labelTmp.Click += (object sender, EventArgs e) =>
+                    {
+                        Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                    };
+
                 panel.Controls.Add(labelTmp, 1, index + 1);
 
                 labelTmp = new Label()
                 {
                     Text = "3",
                     TextAlign = ContentAlignment.MiddleCenter,
-                    ForeColor = Color.Gray,
+                    ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
                 };
-                labelTmp.Click += (object sender, EventArgs e) =>
-                {
-                    Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
-                };
+
+                if (buyer == null || seller == null)
+                    labelTmp.Click += (object sender, EventArgs e) =>
+                    {
+                        Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                    };
+
                 panel.Controls.Add(labelTmp, 2, index + 1);
 
                 labelTmp = new Label()
                 {
                     Text = (buyer == null || seller == null) ? "Open" : "Closed",
                     TextAlign = ContentAlignment.MiddleCenter,
-                    ForeColor = Color.Gray,
+                    ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
                 };
-                labelTmp.Click += (object sender, EventArgs e) =>
-                {
-                    Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
-                };
+
+                if (buyer == null || seller == null)
+                    labelTmp.Click += (object sender, EventArgs e) =>
+                    {
+                        Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                    };
+
                 panel.Controls.Add(labelTmp, 3, index + 1);
 
                 index++;
