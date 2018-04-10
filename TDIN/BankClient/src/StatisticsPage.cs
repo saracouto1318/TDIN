@@ -11,7 +11,6 @@ namespace BankClient
         {
             InitializeComponent();
             UpdateChart();
-            UpdateTransactionsInfo();
             GetUserInformationAsync();
         }
 
@@ -49,12 +48,12 @@ namespace BankClient
 
         private void Button4_Click(object sender, System.EventArgs e)
         {
-            Program.context.ChangeForm(this, new OrdersList());
+            Program.context.ChangeForm(this, new StatisticsPage());
         }
 
         private void Button5_Click(object sender, System.EventArgs e)
         {
-            Program.context.ChangeForm(this, new StatisticsPage());
+            Program.context.ChangeForm(this, new OrdersList());
         }
 
         private void UpdateChart()
@@ -78,41 +77,6 @@ namespace BankClient
                 chart1.Visible = false;
                 label.Visible = true;
             }     
-        }
-
-        private void UpdateTransactionsInfo()
-        {
-            List<Transaction> myTransactions = Services.GetInstance().GetMyTransactions(TransactionType.ALL, false);
-            List<Transaction> mySelltransactions = Services.GetInstance().GetMyTransactions(TransactionType.SELL, false);
-            List<Transaction> myBuyTransactions = Services.GetInstance().GetMyTransactions(TransactionType.BUY, false);
-
-            if (myTransactions == null || mySelltransactions == null || myBuyTransactions == null)
-            {
-                Services.GetInstance().OnExit();
-                Program.context.ChangeForm(this, new AuthenticationPage());
-                return;
-            }
-            else
-            {
-                nTransactions.Text = myTransactions.Count.ToString();
-
-                int open = myTransactions.Count - mySelltransactions.Count - myBuyTransactions.Count;
-                int close = mySelltransactions.Count + myBuyTransactions.Count;
-                tOpen.Text = open.ToString();
-                tClose.Text = close.ToString();
-            }
-
-            int quantity = 0;       
-            foreach (Transaction t in mySelltransactions)
-                quantity += t.quantity;
-
-            digiSold.Text = quantity.ToString();
-            
-            quantity = 0;
-            foreach (Transaction t in myBuyTransactions)
-                quantity += t.quantity;
-
-            digiBought.Text = quantity.ToString();
         }
 
         private void Logout_Click(object sender, EventArgs e)
