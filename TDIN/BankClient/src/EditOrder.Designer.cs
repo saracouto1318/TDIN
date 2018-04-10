@@ -141,7 +141,7 @@
             this.label2.TabIndex = 29;
             this.label2.Text = "Number of Diginotes";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label2.Visible = false;
+            this.label2.Visible = true;
             // 
             // label4
             // 
@@ -153,7 +153,7 @@
             this.label4.TabIndex = 33;
             this.label4.Text = "Price";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label4.Visible = false;
+            this.label4.Visible = true;
             // 
             // price
             // 

@@ -142,7 +142,7 @@
             this.label1.TabIndex = 17;
             this.label1.Text = "Current Quotation";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label1.Visible = false;
+            this.label1.Visible = true;
             // 
             // label4
             // 
@@ -154,7 +154,7 @@
             this.label4.TabIndex = 24;
             this.label4.Text = "Price";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label4.Visible = false;
+            this.label4.Visible = true;
             // 
             // quote
             // 

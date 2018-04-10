@@ -831,10 +831,11 @@ namespace Database
         {
             try
             {
-                _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
+                _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID, price) VALUES (@transactionID, @diginoteID, @price)";
                 foreach(int diginote in diginotes)
                 {
                     _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
+                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
                     _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
 
                     _command.ExecuteNonQuery();
