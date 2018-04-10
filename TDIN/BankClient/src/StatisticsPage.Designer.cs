@@ -150,6 +150,8 @@ namespace BankClient
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Quotation Flutuation";
             series1.Name = "Quote";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Single;
+            series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Single;
             this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(362, 300);
             this.chart1.TabIndex = 11;
