@@ -136,21 +136,21 @@ namespace BankClient
                 TextAlign = ContentAlignment.MiddleCenter,
                 ForeColor = Color.Black,
                 Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
-            }, 2, 0);
+            }, 1, 0);
             panel.Controls.Add(new Label()
             {
                 Text = "Date",
                 TextAlign = ContentAlignment.MiddleCenter,
                 ForeColor = Color.Black,
                 Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
-            }, 3, 0);
+            }, 2, 0);
             panel.Controls.Add(new Label()
             {
                 Text = "Status",
                 TextAlign = ContentAlignment.MiddleCenter,
                 ForeColor = Color.Black,
                 Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
-            }, 4, 0);
+            }, 3, 0);
 
             int index = 0;
             foreach (Transaction t in transactions)
@@ -180,7 +180,7 @@ namespace BankClient
 
                 labelTmp = new Label()
                 {
-                    Text = "2",
+                    Text = "price",
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
@@ -196,7 +196,7 @@ namespace BankClient
 
                 labelTmp = new Label()
                 {
-                    Text = "3",
+                    Text = "quote",
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
@@ -212,7 +212,7 @@ namespace BankClient
 
                 labelTmp = new Label()
                 {
-                    Text = date.ToString(),
+                    Text = date.ToLongDateString(),
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
@@ -284,11 +284,11 @@ namespace BankClient
                 ColumnCount = 5
             };
 
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 20F));
             panel.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point, (0));
             panel.Location = new Point(150, 221);
             panel.Name = "tableLayoutPanel1";

@@ -391,7 +391,25 @@ namespace Database
                 _reader = _command.ExecuteReader();
 
                 while (_reader.Read())
-                    quotes.Add(_reader.GetFloat(0), _reader.GetInt32(1));
+                {
+                    float quote = _reader.GetFloat(0);
+                    int quantity = _reader.GetInt32(1);
+                    if (quotes.ContainsKey(quote))
+                    {
+                        foreach (var pair in quotes)
+                        {
+                            if (pair.Key == quote)
+                            {
+                                quantity += pair.Value;
+                                quotes.Remove(pair.Key);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        quotes.Add(quote, quantity);
+                }   
+                    
                 _reader.Close();
             }
             catch (SQLiteException e)
@@ -831,11 +849,10 @@ namespace Database
         {
             try
             {
-                _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID, price) VALUES (@transactionID, @diginoteID, @price)";
+                _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
                 foreach(int diginote in diginotes)
                 {
                     _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
-                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
                     _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
 
                     _command.ExecuteNonQuery();
