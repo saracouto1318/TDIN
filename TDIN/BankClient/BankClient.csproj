@@ -82,7 +82,7 @@
     <Compile Include="src\EditProfile.Designer.cs">
       <DependentUpon>EditProfile.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\MessageBoxTimeout.cs" />
+    <Compile Include="src\MessageBoxEx.cs" />
     <Compile Include="src\OrdersList.cs">
       <SubType>Form</SubType>
     </Compile>

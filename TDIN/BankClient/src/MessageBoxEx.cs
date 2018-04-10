@@ -8,7 +8,8 @@ using System.Windows.Forms;
 
 namespace BankClient
 {
-    class MessageBoxTimeout
+    /* Class URL: https://github.com/joeyespo/facebook-photobook/tree/master/Photobook */
+    class MessageBoxEx
     {
         public static DialogResult Show(string text, uint uTimeout)
         {
@@ -133,7 +134,7 @@ namespace BankClient
         private static string hookCaption;
         private static IntPtr hHook;
 
-        static MessageBoxTimeout()
+        static MessageBoxEx()
         {
             hookProc = new HookProc(MessageBoxHookProc);
             hookTimer = new TimerProc(MessageBoxTimerProc);
