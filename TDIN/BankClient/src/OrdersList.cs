@@ -139,11 +139,18 @@ namespace BankClient
             }, 2, 0);
             panel.Controls.Add(new Label()
             {
-                Text = "Status",
+                Text = "Date",
                 TextAlign = ContentAlignment.MiddleCenter,
                 ForeColor = Color.Black,
                 Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
             }, 3, 0);
+            panel.Controls.Add(new Label()
+            {
+                Text = "Status",
+                TextAlign = ContentAlignment.MiddleCenter,
+                ForeColor = Color.Black,
+                Font = new Font("Microsoft Sans Serif", 12, FontStyle.Bold)
+            }, 4, 0);
 
             int index = 0;
             foreach (Transaction t in transactions)
@@ -151,6 +158,7 @@ namespace BankClient
                 int quantity = t.quantity;
                 string buyer = t.buyer;
                 string seller = t.seller;
+                DateTime date = t.date;
 
                 panel.RowStyles.Add(new RowStyle(SizeType.AutoSize, value));
 
@@ -204,7 +212,7 @@ namespace BankClient
 
                 labelTmp = new Label()
                 {
-                    Text = (buyer == null || seller == null) ? "Open" : "Closed",
+                    Text = date.ToString(),
                     TextAlign = ContentAlignment.MiddleCenter,
                     ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
                     Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
@@ -217,6 +225,22 @@ namespace BankClient
                     };
 
                 panel.Controls.Add(labelTmp, 3, index + 1);
+
+                labelTmp = new Label()
+                {
+                    Text = (buyer == null || seller == null) ? "Open" : "Closed",
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    ForeColor = (buyer == null || seller == null) ? Color.DarkGray : Color.DarkBlue,
+                    Font = new Font("Microsoft Sans Serif", 10, FontStyle.Bold)
+                };
+
+                if (buyer == null || seller == null)
+                    labelTmp.Click += (object sender, EventArgs e) =>
+                    {
+                        Program.context.ChangeForm(this, new EditOrder(t.ID, quantity, GetTransactionType(t)));
+                    };
+
+                panel.Controls.Add(labelTmp, 4, index + 1);
 
                 index++;
             }
@@ -257,15 +281,16 @@ namespace BankClient
                 BackColor = SystemColors.ButtonHighlight,
                 BackgroundImageLayout = ImageLayout.Center,
                 CellBorderStyle = TableLayoutPanelCellBorderStyle.Single,
-                ColumnCount = 4
+                ColumnCount = 5
             };
 
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             panel.Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Bold, GraphicsUnit.Point, (0));
-            panel.Location = new Point(202, 221);
+            panel.Location = new Point(150, 221);
             panel.Name = "tableLayoutPanel1";
             panel.Size = new Size(100, 40);
             panel.AutoSize = true;
