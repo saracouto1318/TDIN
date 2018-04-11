@@ -135,7 +135,7 @@
             // 
             this.sellButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.sellButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sellButton.Location = new System.Drawing.Point(475, 389);
+            this.sellButton.Location = new System.Drawing.Point(467, 389);
             this.sellButton.Name = "sellButton";
             this.sellButton.Size = new System.Drawing.Size(94, 31);
             this.sellButton.TabIndex = 9;
