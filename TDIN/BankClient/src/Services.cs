@@ -114,8 +114,6 @@ namespace BankClient
             if (Program.virtualUser.ChangeName(session.sessionId, nName))
             {
                 user.name = nName;
-                // Notify change of name
-
                 return true;
             }
             return false;
@@ -126,8 +124,6 @@ namespace BankClient
             if (Program.virtualUser.ChangeUsername(session.sessionId, nUsername))
             {
                 user.username = nUsername;
-                // Notify change of username
-
                 return true;
             }
             return false;

@@ -57,14 +57,10 @@ namespace BankClient
             // Displays the MessageBox.
             result = MessageBox.Show(message, caption, buttons);
 
-            if (result == System.Windows.Forms.DialogResult.No)
+            if (result == System.Windows.Forms.DialogResult.Yes && Services.GetInstance().ChangePassword(password, nPassowrd))
             {
-                // Closes the parent form.
-                this.Close();
-            }
-            else
-            {
-                Services.GetInstance().ChangePassword(password, nPassowrd);
+                oldPassText.Text = "";
+                nPassText.Text = "";
             } 
         }
 
@@ -96,14 +92,9 @@ namespace BankClient
             // Displays the MessageBox.
             result = MessageBox.Show(message, caption, buttons);
 
-            if (result == System.Windows.Forms.DialogResult.No)
+            if (result == DialogResult.Yes && Services.GetInstance().ChangeUsername(nUsername))
             {
-                // Closes the parent form.
-                this.Close();
-            }
-            else
-            {
-                Services.GetInstance().ChangeUsername(nUsername);
+                usernameText.Text = "";
             }
         }
 
@@ -135,28 +126,24 @@ namespace BankClient
             // Displays the MessageBox.
             result = MessageBox.Show(message, caption, buttons);
 
-            if (result == System.Windows.Forms.DialogResult.No)
+            if (result == DialogResult.Yes && Services.GetInstance().ChangeName(nName))
             {
-                // Closes the parent form.
-                this.Close();
-            }
-            else
-            {
-                Services.GetInstance().ChangeName(nName);
+                userName.Text = nName;
+                nameText.Text = "";
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new UserMainPage());
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Button2_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new OrdersList());
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void Button3_Click(object sender, EventArgs e)
         {
             Program.context.ChangeForm(this, new StatisticsPage());
         }

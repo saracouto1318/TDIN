@@ -65,7 +65,11 @@ namespace BankClient
             try
             {
                 float funds = float.Parse(this.fundsAdded.Text, System.Globalization.CultureInfo.InvariantCulture);
-                if(!Services.GetInstance().AddingFunds(funds))
+                if(funds <= 0)
+                {
+                    CreateOkBox("Invalid number of funds", "Error");
+                }
+                else if(!Services.GetInstance().AddingFunds(funds))
                 {
                     CreateOkBox("Server error while adding funds to your account", "Error");
                 }

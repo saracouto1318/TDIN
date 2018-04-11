@@ -16,7 +16,7 @@ CREATE TABLE Diginote(
     owner varchar(50) NOT NULL,
     facialValue real NOT NULL DEFAULT(1),
     FOREIGN KEY (owner) REFERENCES User(nickname)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE Transactions(
 CREATE TABLE TransactionDiginote(
     transactionID INTEGER NOT NULL,
 	diginoteID INT NOT NULL,
-    FOREIGN KEY (diginoteID) REFERENCES Diginote(nickname)
+    FOREIGN KEY (diginoteID) REFERENCES Diginote(serialNumber)
         ON DELETE SET NULL
         ON UPDATE CASCADE, 
     FOREIGN KEY (transactionID) REFERENCES Transactions(transactionID)
@@ -51,6 +51,6 @@ CREATE TABLE Session(
     sessionID int NOT NULL PRIMARY KEY,
     nickname varchar(50) NOT NULL,
     FOREIGN KEY (nickname) REFERENCES User(nickname)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );

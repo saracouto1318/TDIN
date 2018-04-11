@@ -11,9 +11,6 @@ namespace Database
         public static Database instance;
 
         private SQLiteConnection _conn;
-        private SQLiteCommand _command;
-        private SQLiteTransaction _transaction;
-        private SQLiteDataReader _reader;
 
         public const string DB_PATH = "database.sqlite";
         public const string SQL_PATH = "database.sql";
@@ -43,10 +40,8 @@ namespace Database
                 justCreated = true;
                 SQLiteConnection.CreateFile(DB_PATH);
             }
-            
-            _conn = new SQLiteConnection("Data Source=" + DB_PATH + ";Version=3;");
 
-            _command = new SQLiteCommand(_conn);
+            _conn = new SQLiteConnection("Data Source=" + DB_PATH + ";Version=3;;foreign keys=true;");
             _conn.Open();
 
             if(justCreated)
@@ -57,19 +52,28 @@ namespace Database
 
         private void CreateDB()
         {
-            _command.CommandText = File.ReadAllText(SQL_PATH);
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteTransaction transaction = null;
+            command.CommandText = File.ReadAllText(SQL_PATH);
 
             try
             {
-                _transaction = _conn.BeginTransaction();
-                _command.ExecuteNonQuery();
-                _transaction.Commit();
+                transaction = _conn.BeginTransaction();
+                command.ExecuteNonQuery();
+                transaction.Commit();
             }
             catch(SQLiteException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
-                _transaction.Rollback();
+
+                try
+                {
+                    File.Delete(SQL_PATH);
+                } catch(Exception) { }
+
+                if(transaction != null)
+                    transaction.Rollback();
             }
 
             ChangeDiginoteValue(DEFAULT_VALUE);
@@ -87,7 +91,10 @@ namespace Database
         
         public bool DeleteDB()
         {
-            _command.CommandText = 
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteTransaction transaction = null;
+
+            command.CommandText = 
                 "DELETE FROM User; " +
                 "DELETE FROM Value; " +
                 "DELETE FROM Diginote; " +
@@ -97,13 +104,14 @@ namespace Database
 
             try
             {
-                _transaction = _conn.BeginTransaction();
-                _command.ExecuteNonQuery();
-                _transaction.Commit();
+                transaction = _conn.BeginTransaction();
+                command.ExecuteNonQuery();
+                transaction.Commit();
                 return true;
             }
             catch (SQLiteException) {
-                _transaction.Rollback();
+                if(transaction != null)
+                    transaction.Rollback();
                 return false;
             }
         }
@@ -126,55 +134,73 @@ namespace Database
 
         public bool UserExists(string username)
         {
-            _command.CommandText = "SELECT nickname FROM User WHERE nickname = @nick ";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
+
+            command.CommandText = "SELECT nickname FROM User WHERE nickname = @nick ";
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _reader = _command.ExecuteReader();
+                reader = command.ExecuteReader();
 
-                bool exists = _reader.Read();
-                _reader.Close();
+                bool exists = reader.Read();
+                reader.Close();
                 return exists;
             }
             catch (SQLiteException e)
             {
                 Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                if (reader != null)
+                    reader.Close();
+
                 return false;
             }
         }
 
         public bool ValidateUser(string username, string password)
         {
-            _command.CommandText = "SELECT nickname FROM User WHERE nickname = @nick AND password = @pass ";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
-            _command.Parameters.Add(new SQLiteParameter("@pass", password));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
+
+            command.CommandText = "SELECT nickname FROM User WHERE nickname = @nick AND password = @pass ";
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
+            command.Parameters.Add(new SQLiteParameter("@pass", password));
 
             try
             {
-                _reader = _command.ExecuteReader();
+                reader = command.ExecuteReader();
 
-                bool exists = _reader.Read();
-                _reader.Close();
+                bool exists = reader.Read();
+                reader.Close();
                 return exists;
             }
             catch (SQLiteException e)
             {
                 Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
+                if (reader != null)
+                    reader.Close();
+
                 return false;
             }
         }
 
         public bool InsertUser(string name, string username, string password)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
             try
             {
-                _command.CommandText = "INSERT INTO User(nickname, name, password, balance) VALUES (@nick, @name, @password, 0)";
-                _command.Parameters.Add(new SQLiteParameter("@nick", username));
-                _command.Parameters.Add(new SQLiteParameter("@name", name));
-                _command.Parameters.Add(new SQLiteParameter("@password", password));
+                command.CommandText = "INSERT INTO User(nickname, name, password, balance) VALUES (@nick, @name, @password, 0)";
+                command.Parameters.Add(new SQLiteParameter("@nick", username));
+                command.Parameters.Add(new SQLiteParameter("@name", name));
+                command.Parameters.Add(new SQLiteParameter("@password", password));
 
-                int rowCount = _command.ExecuteNonQuery();
+                int rowCount = command.ExecuteNonQuery();
 
                 InsertDiginotes(username, 10);
 
@@ -184,15 +210,19 @@ namespace Database
             catch (SQLiteException e)
             {
                 Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 return false;
             }
         }
 
         public User GetUser(string username)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
             User userInfo = new User();
 
-            _command.CommandText = 
+            command.CommandText = 
                 "SELECT name, availableDig, totalDig, balance FROM User " +
                 "INNER JOIN(" +
                     "SELECT COUNT(*) as availableDig FROM Diginote " +
@@ -203,79 +233,97 @@ namespace Database
                 "INNER JOIN(" +
                     "SELECT COUNT(*) AS totalDig FROM Diginote WHERE owner = @nick) " +
                 "WHERE nickname = @nick ";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _reader = _command.ExecuteReader();
+                reader = command.ExecuteReader();
 
-                if (_reader.Read())
+                if (reader.Read())
                 {
                     userInfo.username = username;
-                    userInfo.name = SafeGetString(_reader, 0);
-                    userInfo.availableDiginotes = _reader.GetInt32(1);
-                    userInfo.totalDiginotes = _reader.GetInt32(2);
-                    userInfo.balance = _reader.GetFloat(3);
+                    userInfo.name = SafeGetString(reader, 0);
+                    userInfo.availableDiginotes = reader.GetInt32(1);
+                    userInfo.totalDiginotes = reader.GetInt32(2);
+                    userInfo.balance = reader.GetFloat(3);
                 }
 
-                _reader.Close();
+                reader.Close();
                 return userInfo;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
-                _reader.Close();
+
+                if(reader != null)
+                    reader.Close();
+
                 return userInfo;
             }
         }
 
         public bool ChangeName(string name, string username)
         {
-            _command.CommandText = "UPDATE User SET name=@name WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@name", name));
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
+            command.CommandText = "UPDATE User SET name=@name WHERE nickname=@nick";
+            command.Parameters.Add(new SQLiteParameter("@name", name));
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
                 return true;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 return false;
             }
         }
 
         public bool ChangeUsername(string newNickname, string oldNickname)
         {
-            _command.CommandText = "UPDATE User SET nickname=@nickNew WHERE nickname=@nickOld";
-            _command.Parameters.Add(new SQLiteParameter("@nickNew", newNickname));
-            _command.Parameters.Add(new SQLiteParameter("@nickOld", oldNickname));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
+            command.CommandText = "UPDATE User SET nickname=@nickNew WHERE nickname=@nickOld";
+            command.Parameters.Add(new SQLiteParameter("@nickNew", newNickname));
+            command.Parameters.Add(new SQLiteParameter("@nickOld", oldNickname));
             try
             {
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
                 return true;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 return false;
             }
         }
 
         public bool ChangePassword(string password, string username)
         {
-            _command.CommandText = "UPDATE User SET password=@pass WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@pass", password));
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
+            command.CommandText = "UPDATE User SET password=@pass WHERE nickname=@nick";
+            command.Parameters.Add(new SQLiteParameter("@pass", password));
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
                 return true;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 return false;
             }
         }
@@ -286,43 +334,52 @@ namespace Database
 
         public bool InsertSession(string username, string session)
         {
-            _command.CommandText = "INSERT INTO Session(sessionID, nickname) VALUES (@session, @nick)";
-            _command.Parameters.Add(new SQLiteParameter("@session", session));
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
+            command.CommandText = "INSERT INTO Session(sessionID, nickname) VALUES (@session, @nick)";
+            command.Parameters.Add(new SQLiteParameter("@session", session));
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                int rowCount = _command.ExecuteNonQuery();
+                int rowCount = command.ExecuteNonQuery();
                 // If number of affected rows is lower than 1 return false
                 return rowCount >= 1;
             }
-            catch (SQLiteException)
+            catch (SQLiteException e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+
                 return false;
             }
         }
 
         public string GetUsername(string session)
         {
-            _command.CommandText = "SELECT nickname FROM Session WHERE sessionID = @session";
-            _command.Parameters.Add(new SQLiteParameter("@session", session));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
+
+            command.CommandText = "SELECT nickname FROM Session WHERE sessionID = @session";
+            command.Parameters.Add(new SQLiteParameter("@session", session));
 
             try
             {
-                _reader = _command.ExecuteReader();
+                reader = command.ExecuteReader();
                 string username = null;
 
-                if (_reader.Read())
+                if (reader.Read())
                 {
-                    username = SafeGetString(_reader, 0);
+                    username = SafeGetString(reader, 0);
                 }
 
-                _reader.Close();
+                reader.Close();
                 return username;
             }
             catch (Exception)
             {
-                _reader.Close();
+                if(reader != null)
+                    reader.Close();
             }
 
             return null;
@@ -330,12 +387,14 @@ namespace Database
 
         public void DeleteSession(string username)
         {
-            _command.CommandText = "DELETE FROM Session WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
+            command.CommandText = "DELETE FROM Session WHERE nickname=@nick";
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
             }
             catch (SQLiteException)
             {
@@ -348,13 +407,15 @@ namespace Database
 
         public bool ChangeDiginoteValue(float power)
         {
-            _command.CommandText = "INSERT INTO Value(power) VALUES (@power)";
-            _command.Parameters.Add(new SQLiteParameter("@power", power));
-            _command.Parameters.Add(new SQLiteParameter("@quantity", 0));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
+            command.CommandText = "INSERT INTO Value(power) VALUES (@power)";
+            command.Parameters.Add(new SQLiteParameter("@power", power));
+            command.Parameters.Add(new SQLiteParameter("@quantity", 0));
 
             try
             {
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
                 return true;
             }
             catch (SQLiteException e)
@@ -367,15 +428,18 @@ namespace Database
 
         public float GetValue()
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
             float value = 0;
-            _command.CommandText = "SELECT power FROM Value ORDER BY ID DESC LIMIT 1";
+
+            command.CommandText = "SELECT power FROM Value ORDER BY ID DESC LIMIT 1";
             try
             {
-                _reader = _command.ExecuteReader();
+                reader = command.ExecuteReader();
 
-                if (_reader.Read())
-                    value = _reader.GetFloat(0);
-                _reader.Close();
+                if (reader.Read())
+                    value = reader.GetFloat(0);
+                reader.Close();
                 Console.WriteLine("diginote value {0}", value);
                 return value;
             }
@@ -384,24 +448,28 @@ namespace Database
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _reader.Close();
+                if(reader != null)
+                    reader.Close();
                 return value;
             }
         }
 
         public Dictionary<float, int> GetQuotes()
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
+
             Dictionary<float, int> quotes = new Dictionary<float, int>();
 
-            _command.CommandText = "SELECT power, quantity FROM Value";
+            command.CommandText = "SELECT power, quantity FROM Value";
             try
             {
-                _reader = _command.ExecuteReader();
+                reader = command.ExecuteReader();
 
-                while (_reader.Read())
+                while (reader.Read())
                 {
-                    float quote = _reader.GetFloat(0);
-                    int quantity = _reader.GetInt32(1);
+                    float quote = reader.GetFloat(0);
+                    int quantity = reader.GetInt32(1);
                     if (quotes.ContainsKey(quote))
                     {
                         foreach (var pair in quotes)
@@ -418,14 +486,15 @@ namespace Database
                         quotes.Add(quote, quantity);
                 }   
                     
-                _reader.Close();
+                reader.Close();
             }
             catch (SQLiteException e)
             {
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _reader.Close();
+                if(reader != null)
+                    reader.Close();
             }
 
             return quotes;
@@ -433,12 +502,12 @@ namespace Database
 
         public bool IncrementQuantity()
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            command.CommandText = "UPDATE Value SET quantity=quantity+1 WHERE ID IN (SELECT ID FROM Value ORDER BY ID DESC LIMIT 1)";
+
             try
             {
-                _command.CommandText = "UPDATE Value SET quantity=quantity+1 WHERE ID IN (SELECT ID FROM Value ORDER BY ID DESC LIMIT 1)";
-
-                _command.ExecuteNonQuery();
-
+                command.ExecuteNonQuery();
                 return true;
             }
             catch (SQLiteException e)
@@ -456,18 +525,20 @@ namespace Database
 
         public List<int> GetDiginotes(string sessionID)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
             string username = GetUsername(sessionID);
             List<int> diginotes = new List<int>();
 
             try
             {
-                _command.CommandText = "SELECT serialNumber FROM Diginote WHERE owner = @source";
-                _command.Parameters.Add(new SQLiteParameter("@source", username));
-                _reader = _command.ExecuteReader();
+                command.CommandText = "SELECT serialNumber FROM Diginote WHERE owner = @source";
+                command.Parameters.Add(new SQLiteParameter("@source", username));
+                reader = command.ExecuteReader();
 
-                while (_reader.Read())
-                    diginotes.Add(_reader.GetInt32(0));
-                _reader.Close();
+                while (reader.Read())
+                    diginotes.Add(reader.GetInt32(0));
+                reader.Close();
                 return diginotes;
             }
             catch (SQLiteException e)
@@ -475,29 +546,32 @@ namespace Database
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _reader.Close();
+                if(reader != null)
+                    reader.Close();
                 return diginotes;
             }
         }
         public List<int> GetAvailableDiginotes(string username, int nDiginotes)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
             List<int> diginotes = new List<int>();
 
             try
             {
-                _command.CommandText = "SELECT serialNumber FROM Diginote " +
+                command.CommandText = "SELECT serialNumber FROM Diginote " +
                     "WHERE owner = @source AND serialNumber NOT IN ( " +
                     "SELECT diginoteID FROM TransactionDiginote, Transactions " +
                         "WHERE Transactions.transactionID = TransactionDiginote.transactionID " +
                         "AND ((seller IS NULL AND buyer IS NOT NULL) OR (buyer IS NULL AND seller IS NOT NULL))) " +
                     "ORDER BY serialNumber LIMIT @num";
-                _command.Parameters.Add(new SQLiteParameter("@source", username));
-                _command.Parameters.Add(new SQLiteParameter("@num", nDiginotes));
-                _reader = _command.ExecuteReader();
+                command.Parameters.Add(new SQLiteParameter("@source", username));
+                command.Parameters.Add(new SQLiteParameter("@num", nDiginotes));
+                reader = command.ExecuteReader();
 
-                while (_reader.Read())
-                    diginotes.Add(_reader.GetInt32(0));
-                _reader.Close();
+                while (reader.Read())
+                    diginotes.Add(reader.GetInt32(0));
+                reader.Close();
                 return diginotes;
             }
             catch (SQLiteException e)
@@ -505,20 +579,22 @@ namespace Database
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _reader.Close();
+                if(reader != null)
+                    reader.Close();
                 return diginotes;
             }
         }
 
         private bool InsertDiginote(string username)
         {
-            _command.CommandText = "INSERT INTO Diginote(owner, facialValue) VALUES (@owner, @facialValue)";
-            _command.Parameters.Add(new SQLiteParameter("@owner", username));
-            _command.Parameters.Add(new SQLiteParameter("@facialValue", 1));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            command.CommandText = "INSERT INTO Diginote(owner, facialValue) VALUES (@owner, @facialValue)";
+            command.Parameters.Add(new SQLiteParameter("@owner", username));
+            command.Parameters.Add(new SQLiteParameter("@facialValue", 1));
 
             try
             {
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
                 return true;
             }
             catch (SQLiteException)
@@ -540,20 +616,23 @@ namespace Database
         
         public List<Transaction> GetUnfufilledTransactions(int limit, TransactionType type)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
             List<Transaction> transactions = new List<Transaction>();
+
             try
             {
                 switch (type)
                 {
                     case TransactionType.BUY:
-                        _command.CommandText =
+                        command.CommandText =
                             "SELECT transactionID, seller, buyer, dateTime, quantity " +
                             "FROM Transactions " +
                             "WHERE buyer IS NULL AND isTransactable = 1 " +
                             "ORDER BY dateTime LIMIT @limit";
                         break;
                     case TransactionType.SELL:
-                        _command.CommandText =
+                        command.CommandText =
                             "SELECT transactionID, seller, buyer, dateTime, quantity " +
                             "FROM Transactions " +
                             "WHERE seller IS NULL AND isTransactable = 1 " +
@@ -563,22 +642,24 @@ namespace Database
                         return transactions;
                 }
 
-                _command.Parameters.Add(new SQLiteParameter("@limit", limit));
-                _reader = _command.ExecuteReader();
+                command.Parameters.Add(new SQLiteParameter("@limit", limit));
+                reader = command.ExecuteReader();
 
-                while (_reader.Read())
+                while (reader.Read())
                 {
-                    Transaction t = new Transaction();
-                    t.ID = _reader.GetInt32(0);
-                    t.seller = SafeGetString(_reader, 1);
-                    t.buyer = SafeGetString(_reader, 2);
-                    t.date = _reader.GetDateTime(3);
-                    t.quantity = _reader.GetInt32(4);
+                    Transaction t = new Transaction
+                    {
+                        ID = reader.GetInt32(0),
+                        seller = SafeGetString(reader, 1),
+                        buyer = SafeGetString(reader, 2),
+                        date = reader.GetDateTime(3),
+                        quantity = reader.GetInt32(4)
+                    };
 
                     transactions.Add(t);
                 }
 
-                _reader.Close();
+                reader.Close();
                 return transactions;
             }
             catch (SQLiteException e)
@@ -586,56 +667,61 @@ namespace Database
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _reader.Close();
+                if(reader != null)
+                    reader.Close();
                 return transactions;
             }
         }
 
-        public bool CompleteTransaction(Transaction transaction, int nDiginotes, TransactionType type)
+        public bool CompleteTransaction(Transaction t, int nDiginotes, TransactionType type)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteTransaction dbTransaction = null;
+
             try
             {
-                _transaction = _conn.BeginTransaction();
-                bool success = UpdateTransaction(transaction, nDiginotes, type);
+                dbTransaction = _conn.BeginTransaction();
+                bool success = UpdateTransaction(t, nDiginotes, type);
 
                 if (!success)
                 {
                     Console.WriteLine("Error on update");
-                    _transaction.Rollback();
+                    dbTransaction.Rollback();
                     return false;
                 }
 
-                if (type == TransactionType.SELL && !InsertTransactionDiginote(transaction.ID, GetAvailableDiginotes(transaction.seller, nDiginotes)))
+                if (type == TransactionType.SELL && !InsertTransactionDiginote(t.ID, GetAvailableDiginotes(t.seller, nDiginotes)))
                 {
                     Console.WriteLine("Error on inserting transaction diginotes");
-                    _transaction.Rollback();
+                    dbTransaction.Rollback();
                     return false;
                 }
 
-                if (ChangeDiginoteOwner(transaction.ID, transaction.buyer) <= 0)
+                if (ChangeDiginoteOwner(t.ID, t.buyer) <= 0)
                 {
                     Console.WriteLine("Error on change owner");
-                    _transaction.Rollback();
+                    dbTransaction.Rollback();
                     return false;
                 }
 
-                success = AddingFunds(transaction.seller, GetValue() * transaction.quantity);
+                float funds = GetValue() * (t.quantity < nDiginotes ? t.quantity : nDiginotes);
+                success = AddingFunds(t.seller, funds);
                 if (!success)
                 {
                     Console.WriteLine("Error on adding funds");
-                    _transaction.Rollback();
+                    dbTransaction.Rollback();
                     return false;
                 }
 
-                success = RemovingFunds(transaction.buyer, GetValue() * transaction.quantity);
+                success = RemovingFunds(t.buyer, funds);
                 if (!success)
                 {
                     Console.WriteLine("Error on removing funds");
-                    _transaction.Rollback();
+                    dbTransaction.Rollback();
                     return false;
                 }
 
-                _transaction.Commit();
+                dbTransaction.Commit();
 
                 return true;
             }
@@ -644,32 +730,36 @@ namespace Database
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _transaction.Rollback();
+                if(dbTransaction != null)
+                    dbTransaction.Rollback();
                 return false;
             }
         }
 
-        public long InsertTransaction(Transaction transaction, TransactionType type)
+        public long InsertTransaction(Transaction t, TransactionType type)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteTransaction dbTransaction = null;
+
             try
             {
-                _transaction = _conn.BeginTransaction();
+                dbTransaction = _conn.BeginTransaction();
 
-                float value = GetValue() * transaction.quantity;
-                if ((type.Equals(TransactionType.BUY) && GetUser(transaction.buyer).balance >= value) ||
-                    (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(transaction.seller, transaction.quantity).Count >= transaction.quantity))
+                float value = GetValue() * t.quantity;
+                if ((type.Equals(TransactionType.BUY) && GetUser(t.buyer).balance >= value) ||
+                    (type.Equals(TransactionType.SELL) && GetAvailableDiginotes(t.seller, t.quantity).Count >= t.quantity))
                 {
-                    bool success = InsertTransactionDirect(transaction);
+                    bool success = InsertTransactionDirect(t);
                     if (success)
                     {
                         long rowID = _conn.LastInsertRowId;
 
-                        _transaction.Commit();
+                        dbTransaction.Commit();
                         return rowID;
                     }
                 }
 
-                _transaction.Rollback();
+                dbTransaction.Rollback();
                 return -1;
             }
             catch (SQLiteException e)
@@ -677,46 +767,50 @@ namespace Database
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _transaction.Rollback();
+                if(dbTransaction != null)
+                    dbTransaction.Rollback();
                 return -1;
             }
         }
 
         public List<Transaction> GetTransactions(TransactionType type, bool open, string username)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
+
             List<Transaction> transactions = new List<Transaction>();
             if (type == TransactionType.ALL)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick OR seller = @nick";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick OR seller = @nick";
             else if (type == TransactionType.BUY && open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NULL";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NULL";
             else if (type == TransactionType.BUY && !open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NOT NULL";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer = @nick AND seller IS NOT NULL";
             else if (type == TransactionType.SELL && open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NULL";
+                command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NULL";
             else if (type == TransactionType.SELL && !open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NOT NULL";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+                command.CommandText = "SELECT * FROM Transactions WHERE seller = @nick AND buyer IS NOT NULL";
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _reader = _command.ExecuteReader();
+                reader = command.ExecuteReader();
 
-                while (_reader.Read())
+                while (reader.Read())
                 {
                     Transaction info = new Transaction
                     {
-                        ID = _reader.GetInt32(0),
-                        seller = SafeGetString(_reader, 1),
-                        buyer = SafeGetString(_reader, 2),
-                        date = _reader.GetDateTime(3),
-                        quantity = _reader.GetInt32(4),
-                        quotation = SafeGetFloat(_reader, 6)
+                        ID = reader.GetInt32(0),
+                        seller = SafeGetString(reader, 1),
+                        buyer = SafeGetString(reader, 2),
+                        date = reader.GetDateTime(3),
+                        quantity = reader.GetInt32(4),
+                        quotation = SafeGetFloat(reader, 6)
                     };
 
                     transactions.Add(info);
                 }
 
-                _reader.Close();
+                reader.Close();
                 return transactions;
             }
             catch (SQLiteException e)
@@ -724,45 +818,49 @@ namespace Database
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _reader.Close();
+                if(reader != null)
+                    reader.Close();
                 return null;
             }
         }
         
         public List<Transaction> GetOtherTransactions(TransactionType type, bool open, string username)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            SQLiteDataReader reader = null;
+
             List<Transaction> transactions = new List<Transaction>();
             if (type == TransactionType.ALL)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller != @nick LIMIT Transaction.quantity";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller != @nick LIMIT Transaction.quantity";
             else if (type == TransactionType.BUY && open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller IS NULL";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller IS NULL";
             else if (type == TransactionType.BUY && !open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller IS NOT NULL AND seller != @nick";
+                command.CommandText = "SELECT * FROM Transactions WHERE buyer != @nick AND seller IS NOT NULL AND seller != @nick";
             else if (type == TransactionType.SELL && open)
-                _command.CommandText = "SELECT * FROM Transactions WHERE seller != @nick AND buyer IS NULL";
+                command.CommandText = "SELECT * FROM Transactions WHERE seller != @nick AND buyer IS NULL";
             else if (type == TransactionType.SELL && !open)
-                _command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller != @nick AND buyer IS NOT NULL AND buyer != @nick";
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+                command.CommandText = "SELECT transactionID, seller, buyer FROM Transaction WHERE seller != @nick AND buyer IS NOT NULL AND buyer != @nick";
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _reader = _command.ExecuteReader();
+                reader = command.ExecuteReader();
 
-                while (_reader.Read())
+                while (reader.Read())
                 {
                     Transaction info = new Transaction
                     {
-                        ID = _reader.GetInt32(0),
-                        seller = SafeGetString(_reader, 1),
-                        buyer = SafeGetString(_reader, 2),
-                        date = _reader.GetDateTime(3),
-                        quantity = _reader.GetInt32(4)
+                        ID = reader.GetInt32(0),
+                        seller = SafeGetString(reader, 1),
+                        buyer = SafeGetString(reader, 2),
+                        date = reader.GetDateTime(3),
+                        quantity = reader.GetInt32(4)
                     };
 
                     transactions.Add(info);
                 }
 
-                _reader.Close();
+                reader.Close();
                 return transactions;
             }
             catch (SQLiteException e)
@@ -770,20 +868,23 @@ namespace Database
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
 
-                _reader.Close();
+                if(reader != null)
+                    reader.Close();
                 return null;
             }
         }
 
         public void SetActiveTransactions(bool active)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
             try
             {
-                _command.CommandText = 
+                command.CommandText = 
                     "UPDATE Transactions SET isTransactable=@active " +
                     "WHERE ((seller IS NULL AND buyer IS NOT NULL) OR (buyer IS NULL AND seller IS NOT NULL))";
-                _command.Parameters.Add(new SQLiteParameter("@active", active));
-                _command.ExecuteNonQuery();
+                command.Parameters.Add(new SQLiteParameter("@active", active));
+                command.ExecuteNonQuery();
             } catch(SQLiteException e)
             {
                 Console.WriteLine(e.Message);
@@ -793,14 +894,15 @@ namespace Database
 
         public void SetActiveMyTransaction(bool active, string username)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
             try
             {
-                _command.CommandText =
+                command.CommandText =
                     "UPDATE Transactions SET isTransactable=@active " +
                     "WHERE (buyer = @nick AND seller IS NULL) OR (seller = @nick AND buyer IS NULL)";
-                _command.Parameters.Add(new SQLiteParameter("@active", active ? 1 : 0));
-                _command.Parameters.Add(new SQLiteParameter("@nick", username));
-                int rows = _command.ExecuteNonQuery();
+                command.Parameters.Add(new SQLiteParameter("@active", active ? 1 : 0));
+                command.Parameters.Add(new SQLiteParameter("@nick", username));
+                int rows = command.ExecuteNonQuery();
             }
             catch (SQLiteException e)
             {
@@ -811,12 +913,14 @@ namespace Database
 
         public bool DeleteMyInactiveTransactions(string username)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
             try
             {
-               _command.CommandText =
+               command.CommandText =
                     "DELETE FROM Transactions WHERE isTransactable=0 AND (buyer = @nick OR seller = @nick)";
-               _command.Parameters.Add(new SQLiteParameter("@nick", username));
-               _command.ExecuteNonQuery();
+               command.Parameters.Add(new SQLiteParameter("@nick", username));
+               command.ExecuteNonQuery();
                 
                 return true;
             }
@@ -831,16 +935,18 @@ namespace Database
 
         private bool InsertTransactionDirect(Transaction transaction)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
             try
             {
-                _command.CommandText = 
+                command.CommandText = 
                     "INSERT INTO Transactions(seller, buyer, dateTime, quantity, isTransactable) VALUES (@seller, @buyer, @time, @quantity, 1)";
-                _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
-                _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
-                _command.Parameters.Add(new SQLiteParameter("@time", transaction.date));
-                _command.Parameters.Add(new SQLiteParameter("@quantity", transaction.quantity));
+                command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
+                command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
+                command.Parameters.Add(new SQLiteParameter("@time", transaction.date));
+                command.Parameters.Add(new SQLiteParameter("@quantity", transaction.quantity));
 
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
 
                 transaction.ID = (int)_conn.LastInsertRowId;
 
@@ -859,15 +965,17 @@ namespace Database
 
         private bool InsertTransactionDiginote(int transactionID, List<int> diginotes)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
             try
             {
-                _command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
+                command.CommandText = "INSERT INTO TransactionDiginote(transactionID, diginoteID) VALUES (@transactionID, @diginoteID)";
                 foreach(int diginote in diginotes)
                 {
-                    _command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
-                    _command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
+                    command.Parameters.Add(new SQLiteParameter("@transactionID", transactionID));
+                    command.Parameters.Add(new SQLiteParameter("@diginoteID", diginote));
 
-                    _command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
                 }
                 
                 return true;
@@ -883,6 +991,8 @@ namespace Database
 
         private bool UpdateTransaction(Transaction transaction, int nDiginotes, TransactionType type)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
             try
             {
                 bool isInsertTransaction = false;
@@ -894,12 +1004,12 @@ namespace Database
                     case TransactionType.BUY:
                         Console.WriteLine("BUYER:" + transaction.buyer);
                         sqlCommand += " SET buyer=@buyer";
-                        _command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
+                        command.Parameters.Add(new SQLiteParameter("@buyer", transaction.buyer));
                         break;
                     case TransactionType.SELL:
                         Console.WriteLine("SELLER:" + transaction.seller);
                         sqlCommand += " SET seller=@seller";
-                        _command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
+                        command.Parameters.Add(new SQLiteParameter("@seller", transaction.seller));
                         break;
                     default:
                         return false;
@@ -909,7 +1019,7 @@ namespace Database
                 {
                     Console.WriteLine("QUANTITY:" + nDiginotes);
                     sqlCommand += ", quantity=@quantity";
-                    _command.Parameters.Add(new SQLiteParameter("@quantity", nDiginotes));
+                    command.Parameters.Add(new SQLiteParameter("@quantity", nDiginotes));
 
                     // Insert new transaction
                     isInsertTransaction = true;
@@ -917,11 +1027,11 @@ namespace Database
 
                 sqlCommand += ", quotation=@quotation WHERE transactionID = @orderID";
 
-                _command.CommandText = sqlCommand;
-                _command.Parameters.Add(new SQLiteParameter("@quotation", quotation));
-                _command.Parameters.Add(new SQLiteParameter("@orderID", transaction.ID));
+                command.CommandText = sqlCommand;
+                command.Parameters.Add(new SQLiteParameter("@quotation", quotation));
+                command.Parameters.Add(new SQLiteParameter("@orderID", transaction.ID));
                 Console.WriteLine("ID:" + transaction.ID);
-                int rows = _command.ExecuteNonQuery();
+                int rows = command.ExecuteNonQuery();
 
                 if (isInsertTransaction)
                 {
@@ -959,12 +1069,14 @@ namespace Database
 
         private int ChangeDiginoteOwner(int orderID, string username)
         {
+            SQLiteCommand command = new SQLiteCommand(_conn);
+
             try
             {
-                _command.CommandText = "UPDATE Diginote SET owner=@owner WHERE serialNumber IN (SELECT diginoteID FROM TransactionDiginote WHERE transactionID = @orderID)";
-                _command.Parameters.Add(new SQLiteParameter("@owner", username));
-                _command.Parameters.Add(new SQLiteParameter("@orderID", orderID));
-                int changedRows = _command.ExecuteNonQuery();
+                command.CommandText = "UPDATE Diginote SET owner=@owner WHERE serialNumber IN (SELECT diginoteID FROM TransactionDiginote WHERE transactionID = @orderID)";
+                command.Parameters.Add(new SQLiteParameter("@owner", username));
+                command.Parameters.Add(new SQLiteParameter("@orderID", orderID));
+                int changedRows = command.ExecuteNonQuery();
 
                 return changedRows;
             }
@@ -983,13 +1095,14 @@ namespace Database
 
         public bool AddingFunds(string username, double funds)
         {
-            _command.CommandText = "UPDATE User SET balance=balance + @funds WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@funds", funds));
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            command.CommandText = "UPDATE User SET balance=balance + @funds WHERE nickname=@nick";
+            command.Parameters.Add(new SQLiteParameter("@funds", funds));
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
                 return true;
             }
             catch (SQLiteException)
@@ -1000,13 +1113,14 @@ namespace Database
 
         private bool RemovingFunds(string username, double funds)
         {
-            _command.CommandText = "UPDATE User SET balance=balance - @funds WHERE nickname=@nick";
-            _command.Parameters.Add(new SQLiteParameter("@funds", funds));
-            _command.Parameters.Add(new SQLiteParameter("@nick", username));
+            SQLiteCommand command = new SQLiteCommand(_conn);
+            command.CommandText = "UPDATE User SET balance=balance - @funds WHERE nickname=@nick";
+            command.Parameters.Add(new SQLiteParameter("@funds", funds));
+            command.Parameters.Add(new SQLiteParameter("@nick", username));
 
             try
             {
-                _command.ExecuteNonQuery();
+                command.ExecuteNonQuery();
                 return true;
             }
             catch (SQLiteException)

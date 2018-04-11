@@ -132,7 +132,12 @@ public class Services {
 
     public bool AddingFunds(string sessionId, float funds)
     {
+        if (funds <= 0)
+            return false;
+
         string username = _db.GetUsername(sessionId);
+        if (username == null)
+            return false;
         return _db.AddingFunds(username, funds);
     }
 
