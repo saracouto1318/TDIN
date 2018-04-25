@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace BankClient
 {
-    /* Class URL: https://github.com/joeyespo/facebook-photobook/tree/master/Photobook */
+    /* URL: https://www.codeproject.com/Articles/7968/MessageBox-with-a-timeout-for-NET */
     class MessageBoxEx
     {
         public static DialogResult Show(string text, uint uTimeout)
